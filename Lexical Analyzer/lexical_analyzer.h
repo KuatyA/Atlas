@@ -46,6 +46,7 @@ typedef enum Tokens{
     TOKEN_KW_CONTINUE, //skip that specific iteration
     TOKEN_KW_MATCH, //to match the structure of data
 
+    TOKEN_KW_NULL, //null pointer
     TOKEN_KW_ARENA, //alternative to heap memory, an area of data with a bump pointer
     TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
     TOKEN_KW_RESET, //destroy arena
