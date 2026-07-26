@@ -5,97 +5,70 @@
 #include <ctype.h>
 #include "lexical_analyzer.h"
 
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+
+/*Ok so lets start with the main function. Its called the "lexical_parse". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
 
 
-const char *process_identifier(const char *buf){
-    int first_char = (unsigned char)buf[0];
-    if (!is_valid_identifier_start(first_char)) {
-        fprintf(stderr, "ERROR: Invalid starting character for identifier: %s\n", buf);
-        exit(1);
-    }
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
 
-    size_t len = strlen(buf);
-    for (size_t idx = 0; idx < len; idx++) {
-        int ch = (unsigned char)buf[idx];
-        if (!is_valid_char(ch)) {
-            fprintf(stderr, "ERROR: Invalid character at index %zu of identifier: %s\n", idx, buf);
-            exit(1);
-        }
-    }
-
-    return buf;
 }
 
-bool is_valid_char(int ch){
-    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-        return true;
-    }
-    if (ch >= '0' && ch <= '9') {
-        return true;
-    }
-    if (ch == '_') {
-        return true;
-    }
-    return false;
+/*lets continue with the error handler, the name speaks for itself. It will handle errors(shocking!). HJonestly,
+i have NO idea how im gonna do it. It late at night and the possible errors are not coming to mind so the methods im
+gonna use, i will explain(figure out lmao) them tomorrow.*/
+
+int lex_error_handler(){
+
 }
+
+/*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
+just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
+
+
+int generate_token(const char *string_buf){
+
+}
+
+/*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
+identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
+table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
+this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
+
+
+void identifier_handler(const char *string_buf){
+
+}
+
+//the second generate_token function called:
+
+
+int generate_identifier_token(const char *string_buf){
+
+}
+
+//helper functions
 
 bool is_valid_identifier_start(int ch){
-    return (ch >= 'a' && ch <= 'z') || 
-           (ch >= 'A' && ch <= 'Z') || 
-           (ch == '_');
+
+}
+bool is_valid_identifier_character(int ch){
+
 }
 
-void return_token(const char *string_buf){
-    printf("Token: %s\n", string_buf);
+/*ok this one is inbetween but i think its closer to a helper function. So it will handle special formats like:
+"1.5323e-2" this is a float literal but the format of it is basically:
+"TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN_INT_LITERAL" and i dont want to dirty the base generator function
+by handling special cases there.*/
+
+
+int special_format_handler(const char *string_buf){
+
 }
 
-int parse_file(const char *filepath){
-    
-    FILE *atl_file = fopen(filepath, "r");
-    if(atl_file == NULL){
-        perror("Error Opening File!");
-        return 1;
-    }
-
-    char buf[256];
-    int buf_index = 0;
-    int ch;
-    while((ch = fgetc(atl_file)) != EOF){
-        if (isspace(ch)) {
-            if (buf_index > 0) {
-                buf[buf_index] = '\0';
-                const char *string_buf = process_identifier(buf);
-                return_token(string_buf);
-                buf_index = 0;
-            }
-            continue;
-        }
-
-        if (ispunct((unsigned char)ch) && ch != '_') {
-
-            if (buf_index > 0) {
-                buf[buf_index] = '\0';
-                const char *string_buf = process_identifier(buf);
-                return_token(string_buf);
-                buf_index = 0;
-            }
-
-            char op_buf[2] = {(char)ch, '\0'};
-            return_token(op_buf);
-            continue;
-        }
-
-        if (buf_index < sizeof(buf) - 1) {
-            buf[buf_index++] = (char)ch;
-        }
-    }
-
-    if (buf_index > 0) {
-        buf[buf_index] = '\0';
-        const char *string_buf = process_identifier(buf);
-        return_token(string_buf);
-    }
-
-    fclose(atl_file);
-    return 0;
-}
+//wow i talk a lot

@@ -1,12 +1,12 @@
 #ifndef LEXICAL_H
 #define LEXICAL_H
-#include <stdbool.h>
 
-//const char check_illegal_characters(const char *string_buf);
-void return_token(const char *string_buf);
-int parse_file(const char *filepath);
-bool is_valid_char(int ch);
-bool is_valid_identifier_start(int ch);
+//initialize the functions except the helpers here.
+void parse_file(const char *filetype);
+int lex_error_handler();
+int generate_token(const char *string_buf);
+void identifier_handler(const char *string_buf);
+int generate_identifier_token(const char *string_buf);
 
 typedef enum Tokens{
     TOKEN_EOF, //end of file
