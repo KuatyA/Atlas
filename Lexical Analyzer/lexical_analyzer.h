@@ -1,9 +1,13 @@
 #ifndef LEXICAL_H
 #define LEXICAL_H
 #define HASH_TABLE_SIZE 256
+#define NUM_THREADS 4
 
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
+
 
 typedef enum Tokens{
     TOKEN_EOF, //end of file
@@ -144,6 +148,15 @@ typedef enum Character{
     CHAR_OP = (1<<4) //operations
 }CharacterClass;
 
+typedef struct {
+    char **files;
+    int total_files;
+    int next_file_index;
+    pthread_mutex_t lock;
+}FileQueue;
+
+extern FileQueue queue;
+
 //initialize the functions except the helpers here.
 void parse_file(const char *filetype);
 int lex_error_handler();
@@ -156,6 +169,9 @@ static uint32_t hash_string(const char *string);
 static void insert_keyword(const char *key, TokenType token);
 void initialize_hash_table(void);
 void initialize_char_table(void);
+
+//multithreading for reading multiple files
+void *worker_thread(void *arg);
 
 static uint8_t char_table[256];
 static KeywordEntry keyword_table[HASH_TABLE_SIZE];

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "lexical_analyzer.h"
+#include <stdatomic.h>
 
 //initialize the helper functions that will basically never leave this file.
 bool is_valid_identifier_start(int ch);
@@ -23,7 +24,7 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
     //check empty
     if(atl_file == NULL){
         fprintf(stderr, "ERROR: Could not open file!");
-        exit(1);
+        return;
     }
     //initialize string buf and index.
     char string_buf[256];
@@ -35,13 +36,13 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
     fseek(atl_file, 0 , SEEK_SET);
 
     char *src_buf  = malloc(file_size + 1);
-    if (!file_size) { fclose(atl_file); exit(1); }
+    if (!file_size) { fclose(atl_file); return; }
 
     size_t bytes_read = fread(src_buf, 1, file_size, atl_file);
      if (ferror(atl_file)) {
         free(src_buf);
         fclose(atl_file);
-        exit(1);
+        return;
     }
     src_buf[bytes_read] = '\0';
     fclose(atl_file);
@@ -139,6 +140,7 @@ int lex_error_handler(){
 /*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
 just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
 
+static atomic_size_t token_count = 0;
 
 void generate_token(const char *string_buf){
     
@@ -312,4 +314,30 @@ void initialize_char_table(void){
 
 }
 
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+        if(queue.next_file_index < queue.total_files){
+            filename = queue.files[queue.next_file_index];
+            queue.next_file_index++;
+        }
+        pthread_mutex_unlock(&queue.lock);
+
+        if(filename == NULL) break;
+
+        fprintf(stderr, "[Thread %d] Starting: %s\n", thread_id, filename);
+        parse_file(filename);
+        fprintf(stderr, "[Thread %d] Finished: %s\n", thread_id, filename);
+    }
+    return NULL;
+}
 //wow i talk a lot

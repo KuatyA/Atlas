@@ -5,6 +5,8 @@
 #include <string.h>
 #include <time.h>
 
+ FileQueue queue;
+
 int check_file_type(const char *filename){
     const char *dot = strrchr(filename, '.');
     return (dot && strcmp(dot, ".atl") == 0);
@@ -19,18 +21,36 @@ int main(int argc, char* argv[]){
         fprintf(stderr, "ERROR: Unknown file type %s\n Expected file type: \".atl\"\n", argv[1]);
         return 1;
     }
-    
+
     //initialize the tables
     initialize_char_table();
     initialize_hash_table();
 
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
     
-    //for now, only 1 atl file can be executed. It will change.
-    parse_file(argv[1]);
-
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+    }
     clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
 
     // Elapsed time calculation
     double seconds = (end.tv_sec - start.tv_sec) + 
