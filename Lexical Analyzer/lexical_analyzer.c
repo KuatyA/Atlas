@@ -334,9 +334,8 @@ void *worker_thread(void *arg){
 
         if(filename == NULL) break;
 
-        fprintf(stderr, "[Thread %d] Starting: %s\n", thread_id, filename);
         parse_file(filename);
-        fprintf(stderr, "[Thread %d] Finished: %s\n", thread_id, filename);
+        
     }
     return NULL;
 }
