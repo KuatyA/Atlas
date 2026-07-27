@@ -1,0 +1,3 @@
+*.atl linguist-language=Atlas
+*.atl linguist-detectable=true
+*.atl linguist-documentation=false
