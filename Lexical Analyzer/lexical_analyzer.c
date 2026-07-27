@@ -19,7 +19,7 @@ in this function. No error handlings or logic to differentiate identifiers from 
 void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
 
     //open the files
-    FILE *atl_file = fopen(filetype, "r");
+    FILE *atl_file = fopen(filetype, "rb");
     //check empty
     if(atl_file == NULL){
         fprintf(stderr, "ERROR: Could not open file!");
@@ -49,7 +49,7 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
     const char *src = src_buf;
 
     while((*src != '\0')){
-        unsigned char ch = *src++;
+        unsigned char ch = *src;
        uint8_t type = char_table[ch];
 
        if(type & CHAR_WS){
@@ -58,6 +58,7 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
                 generate_token(string_buf);
                 buf_idx = 0;
             }
+        src++;
         continue;
        }
        if(type & CHAR_OP){
@@ -66,109 +67,37 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
                 generate_token(string_buf);
                 buf_idx = 0;
             }
-            if (ch == '<' && src[0] == '<' && src[1] == '=') {
-                src += 2;
-                generate_token("<<=");
-                continue;
+            if (ch == '<' && src[1] == '<' && src[2] == '=') {
+                src += 3; generate_token("<<="); continue;
             }
-            if (ch == '>' && src[0] == '>' && src[1] == '=') {
-                src += 2;
-                generate_token(">>=");
-                continue;
+            if (ch == '>' && src[1] == '>' && src[2] == '=') {
+                src += 3; generate_token(">>="); continue;
             }
-            if(ch == ':' && *src == ':'){
-                src++;
-                generate_token("::");
-                continue;
-            }
-            if(ch == '-' && *src == '>'){
-                src++;
-                generate_token("->");
-                continue;
-            }
-            if(ch == '=' && *src == '='){
-                src++;
-                generate_token("==");
-                continue;
-            }
-            if(ch == '=' && *src == '>'){
-                src++;
-                generate_token("=>");
-                continue;
-            }
-            if(ch == '<' && *src == '-'){
-                src++;
-                generate_token("<-");
-                continue;
-            }
-            if(ch == '+' && *src == '='){
-                src++;
-                generate_token("+=");
-                continue;
-            }
-            if(ch == '-' && *src == '='){
-                src++;
-                generate_token("-=");
-                continue;
-            }
-            if(ch == '*' && *src == '='){
-                src++;
-                generate_token("*=");
-                continue;
-            }
-            if(ch == '/' && *src == '='){
-                src++;
-                generate_token("/=");
-                continue;
-            }
-            if(ch == '%' && *src == '='){
-                src++;
-                generate_token("%=");
-                continue;
-            }
-            if(ch == '<' && *src == '='){
-                src++;
-                generate_token("<=");
-                continue;
-            }
-            if(ch == '>' && *src == '='){
-                src++;
-                generate_token(">=");
-                continue;
-            }
-            if(ch == '!' && *src == '='){
-                src++;
-                generate_token("!=");
-                continue;
-            }
-            if(ch == '&' && *src == '&'){
-                src++;
-                generate_token("&&");
-                continue;
-            }
-            if(ch == '|' && *src == '|'){
-                src++;
-                generate_token("||");
-                continue;
-            }
-            if(ch == '!' && *src == '&'){
-                src++;
-                generate_token("!&");
-                continue;
-            }
-            if(ch == '<' && *src == '<'){
-                src++;
-                generate_token("<<");
-                continue;
-            }
-            if(ch == '>' && *src == '>'){
-                src++;
-                generate_token(">>");
-                continue;
-            }
+
+            // 2-character operators
+            if (ch == ':' && src[1] == ':') { src += 2; generate_token("::"); continue; }
+            if (ch == '-' && src[1] == '>') { src += 2; generate_token("->"); continue; }
+            if (ch == '=' && src[1] == '=') { src += 2; generate_token("=="); continue; }
+            if (ch == '=' && src[1] == '>') { src += 2; generate_token("=>"); continue; }
+            if (ch == '<' && src[1] == '-') { src += 2; generate_token("<-"); continue; }
+            if (ch == '+' && src[1] == '=') { src += 2; generate_token("+="); continue; }
+            if (ch == '-' && src[1] == '=') { src += 2; generate_token("-="); continue; }
+            if (ch == '*' && src[1] == '=') { src += 2; generate_token("*="); continue; }
+            if (ch == '/' && src[1] == '=') { src += 2; generate_token("/="); continue; }
+            if (ch == '%' && src[1] == '=') { src += 2; generate_token("%="); continue; }
+            if (ch == '<' && src[1] == '=') { src += 2; generate_token("<="); continue; }
+            if (ch == '>' && src[1] == '=') { src += 2; generate_token(">="); continue; }
+            if (ch == '!' && src[1] == '=') { src += 2; generate_token("!="); continue; }
+            if (ch == '&' && src[1] == '&') { src += 2; generate_token("&&"); continue; }
+            if (ch == '|' && src[1] == '|') { src += 2; generate_token("||"); continue; }
+            if (ch == '!' && src[1] == '&') { src += 2; generate_token("!&"); continue; }
+            if (ch == '<' && src[1] == '<') { src += 2; generate_token("<<"); continue; }
+            if (ch == '>' && src[1] == '>') { src += 2; generate_token(">>"); continue; }
+
             string_buf[0] = (char)ch;
             string_buf[1] = '\0';
             generate_token(string_buf);
+            src++;
             continue;
        }
 
@@ -181,16 +110,17 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
             string_buf[0] = (char)ch;
             string_buf[1] = '\0';
             generate_token(string_buf);
+            src++;
             continue;
        }
 
        string_buf[buf_idx++] = (char)ch;
+       src++;
     }
     //get the last string of the code.
     if(buf_idx > 0){
         string_buf[buf_idx] = '\0';
         generate_token(string_buf);
-        buf_idx = 0;
     }
 
     generate_token("EOF");
@@ -211,7 +141,7 @@ just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
 
 
 void generate_token(const char *string_buf){
-    printf("Token: %s", string_buf);
+    
 }
 
 /*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1

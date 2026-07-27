@@ -5,20 +5,6 @@
 #include <stdint.h>
 #include <string.h>
 
-
-//initialize the functions except the helpers here.
-void parse_file(const char *filetype);
-int lex_error_handler();
-void generate_token(const char *string_buf);
-void identifier_handler(const char *string_buf);
-int generate_identifier_token(const char *string_buf);
-
-//initialize hashing functions here.
-static uint32_t hash_string(const char *string);
-static void insert_keyword(const char *key, TokenType token);
-void initialize_hash_table(void);
-
-
 typedef enum Tokens{
     TOKEN_EOF, //end of file
     TOKEN_UNKNOWN, //unknown string / character
@@ -157,6 +143,19 @@ typedef enum Character{
     CHAR_DELIM = (1<<3), //delimiters
     CHAR_OP = (1<<4) //operations
 }CharacterClass;
+
+//initialize the functions except the helpers here.
+void parse_file(const char *filetype);
+int lex_error_handler();
+void generate_token(const char *string_buf);
+void identifier_handler(const char *string_buf);
+int generate_identifier_token(const char *string_buf);
+
+//initialize hashing functions here.
+static uint32_t hash_string(const char *string);
+static void insert_keyword(const char *key, TokenType token);
+void initialize_hash_table(void);
+void initialize_char_table(void);
 
 static uint8_t char_table[256];
 static KeywordEntry keyword_table[HASH_TABLE_SIZE];
