@@ -17,5 +17,6 @@ int main(int argc, char* argv[]){
         fprintf(stderr, "ERROR: Unknown file type %s\n Expected file type: \".atl\"\n", argv[1]);
         return 1;
     }
+    //for now, only 1 atl file can be executed. It will change.
     parse_file(argv[1]);
 }

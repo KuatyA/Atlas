@@ -1,12 +1,23 @@
 #ifndef LEXICAL_H
 #define LEXICAL_H
+#define HASH_TABLE_SIZE 256
+
+#include <stdint.h>
+#include <string.h>
+
 
 //initialize the functions except the helpers here.
 void parse_file(const char *filetype);
 int lex_error_handler();
-int generate_token(const char *string_buf);
+void generate_token(const char *string_buf);
 void identifier_handler(const char *string_buf);
 int generate_identifier_token(const char *string_buf);
+
+//initialize hashing functions here.
+static uint32_t hash_string(const char *string);
+static void insert_keyword(const char *key, TokenType token);
+void initialize_hash_table(void);
+
 
 typedef enum Tokens{
     TOKEN_EOF, //end of file
@@ -20,6 +31,7 @@ typedef enum Tokens{
     TOKEN_KW_FLOAT, //float keyword
     TOKEN_KW_DOUBLE, //double keyword
     TOKEN_KW_CHAR, //char keyword
+    TOKEN_KW_STRING,
     TOKEN_KW_BOOL, //bool keyword
     TOKEN_KW_STRUCT, //struct keyword
     TOKEN_KW_ENUM, //enum keyword
@@ -38,13 +50,14 @@ typedef enum Tokens{
     TOKEN_KW_FOR, //for statement block
     TOKEN_KW_SWITCH, //switch statement block
     TOKEN_KW_RETURN, //return statement block
-    TOKEN_KW_PRINT, //print to terminal
+    TOKEN_KW_OUTPUT, //print to terminal
     TOKEN_KW_INPUT, //get input from terminal
     TOKEN_KW_READ_FILE, //read from file
     TOKEN_KW_WRITE_TO_FILE, //write to file
     TOKEN_KW_BREAK, //break a block of code from executing further
     TOKEN_KW_CONTINUE, //skip that specific iteration
     TOKEN_KW_MATCH, //to match the structure of data
+    TOKEN_KW_FUNCTION, //function keyword
 
     TOKEN_KW_NULL, //null pointer
     TOKEN_KW_ARENA, //alternative to heap memory, an area of data with a bump pointer
@@ -60,7 +73,8 @@ typedef enum Tokens{
 
     TOKEN_KW_IMPORT, //import libraries
     TOKEN_KW_MODULE, //declare current files namespace
-    TOKEN_KW_VIS, //default: private
+    TOKEN_KW_PRIVATE,
+    TOKEN_KW_PUBLIC,
 
     TOKEN_KW_TRY, //try/propogate an error
     TOKEN_KW_CATCH, //handle the caught error
@@ -129,5 +143,22 @@ typedef enum Tokens{
     TOKEN_LEFT_ARROW, //use to send or receive on a channel "<-"
     
 }TokenType;
+
+typedef struct Keyword{
+    const char *key;
+    TokenType token;
+}KeywordEntry;
+
+//mapping characters to a bitmask array
+typedef enum Character{
+    CHAR_WS = (1<<0), //whitespace
+    CHAR_ALPHA = (1<<1), //alphanumeric
+    CHAR_DIGIT = (1<<2), //digits
+    CHAR_DELIM = (1<<3), //delimiters
+    CHAR_OP = (1<<4) //operations
+}CharacterClass;
+
+static uint8_t char_table[256];
+static KeywordEntry keyword_table[HASH_TABLE_SIZE];
 
 #endif
