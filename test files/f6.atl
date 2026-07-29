@@ -1,63 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <ctype.h>
-#include "lexical_analyzer.h"
-#include <stdatomic.h>
+import bool func token1 {
+    int var1 = 999;
+    float var2 = 2.445e-8;
+    int 2illegal½token <<= string;
+    string dohickey = "hhhhh";
 
-//initialize the helper functions that will basically never leave this file.
-bool is_valid_identifier_start(int ch);
-bool is_valid_identifier_character(int ch);
-int special_format_handler(const char *string_buf);
-TokenType lookup_token(const char *string);
-
-/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
-make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
-in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
-
-
-void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
-
-    //open the files
-    FILE *atl_file = fopen(filetype, "rb");
-    //check empty
-    if(atl_file == NULL){
-        fprintf(stderr, "ERROR: Could not open file!");
-        return;
+    for(int = 0; get rekt){
+        idek = 111;
     }
-    //initialize string buf and index.
-    char string_buf[256];
-    int buf_idx = 0;
-
-    #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <ctype.h>
-#include "lexical_analyzer.h"
-#include <stdatomic.h>
-
-//initialize the helper functions that will basically never leave this file.
-bool is_valid_identifier_start(int ch);
-bool is_valid_identifier_character(int ch);
-int special_format_handler(const char *string_buf);
-TokenType lookup_token(const char *string);
-
-/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
-make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
-in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
-
-
-void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
-
-    //open the files
-    FILE *atl_file = fopen(filetype, "rb");
-    //check empty
-    if(atl_file == NULL){
-        fprintf(stderr, "ERROR: Could not open file!");
-        return;
-    }
-    //initialize string buf and index.
-    char string_buf[256];
-    int buf_idx = 0;
+    return 0;
+}

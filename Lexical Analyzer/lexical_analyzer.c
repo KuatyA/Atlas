@@ -4,20 +4,22 @@
 #include <ctype.h>
 #include "lexical_analyzer.h"
 #include <stdatomic.h>
+#include <threads.h>
 
 //initialize the helper functions that will basically never leave this file.
-bool is_valid_identifier_start(int ch);
-bool is_valid_identifier_character(int ch);
-int special_format_handler(const char *string_buf);
+int special_format_handler(const char *start, uint32_t *out_len);
 TokenType lookup_token(const char *string, uint32_t len);
 TokenStream create_token_stream(size_t initial_capacity);
 void append_token(TokenStream *stream, TokenStruct token);
+
+static thread_local uint32_t lex_error_count = 0;
 
 /*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
 make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
 in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
 void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
-
+    lex_error_count = 0;
+    LexerContext ctx = {0};
     //open the files
     FILE *atl_file = fopen(filetype, "rb");
     //check empty
@@ -35,10 +37,11 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
     fseek(atl_file, 0 , SEEK_SET);
 
     char *src_buf  = malloc(file_size + 1);
-    if (!file_size) { fclose(atl_file); return; }
+    if (!src_buf) { fclose(atl_file); return; }
 
     size_t bytes_read = fread(src_buf, 1, file_size, atl_file);
-     if (ferror(atl_file)) {
+    src_buf[bytes_read] = '\0';
+    if (ferror(atl_file)) {
         free(src_buf);
         fclose(atl_file);
         return;
@@ -52,7 +55,7 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
     while((*src != '\0')){
 
        if(char_table[(unsigned char)*src] & CHAR_WS){
-            if(src == '\n'){
+            if(*src == '\n'){
                 line++;
                 col = 1;
             }else{
@@ -62,11 +65,24 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
         continue;
        }
        TokenStruct tok = generate_token(&src, &line, &col);
+
+       if(tok.token == TOKEN_UNKNOWN){
+            lex_error_handler(&ctx, tok);
+       }
+
         append_token(&stream, tok);
     }
     //generate eof token.
     TokenStruct eof_tok = { .token = TOKEN_EOF, .lexeme = src, .length = 0, .line = line, .column = col };
     append_token(&stream, eof_tok); 
+
+    int status = lex_error_handler(&ctx, eof_tok);
+
+    if (status != 0) {
+        free(stream.tokens);
+        free(src_buf);
+        return; 
+    }
 
     //free memory(for now).
     free(stream.tokens);
@@ -77,8 +93,24 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
 when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
 will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
 and if the counter is bigger than 0, it will exit with 1.*/
-int lex_error_handler(TokenType kw){
+int lex_error_handler(LexerContext *ctx,TokenStruct tok){
+    ctx->error_count++;
+    if (tok.token == TOKEN_UNKNOWN) {
+        lex_error_count++;
+        fprintf(stderr, "Lexical Error [%u:%u]: Unrecognized character '%.*s' (0x%02X)\n", 
+                tok.line, tok.column, tok.length, tok.lexeme, (unsigned char)*tok.lexeme);
+        return 0;
+    }
 
+    if (tok.token == TOKEN_EOF) {
+        if (lex_error_count > 0) {
+            fprintf(stderr, "Lexing failed with %u errors.\n", lex_error_count);
+            return 1; // Signal failure to the caller
+        }
+        return 0; // Clean exit
+    }
+
+    return 0;
 }
 
 /*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
@@ -179,6 +211,36 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     (*col)++;
                     return tok;
                 break;
+                case '"':
+                   const char *quote_start = *cursor; // Save exact start position
+                    (*cursor)++;
+                    (*col)++;
+                    const char *start_str = *cursor;
+
+                    while (**cursor != '"' && **cursor != '\0' && **cursor != '\n') {
+                        (*cursor)++;
+                        (*col)++;
+                    }
+
+                    if (**cursor == '"') {
+                        tok.token = TOKEN_STRING_LITERAL;
+                        tok.lexeme = start_str;
+                        tok.length = (uint32_t)(*cursor - start_str);
+                        (*cursor)++;
+                        (*col)++;
+                    } else {
+                        tok.token = TOKEN_UNKNOWN;
+                        tok.lexeme = quote_start; // Safe pointer
+                        tok.length = (uint32_t)(*cursor - quote_start);
+                    }
+                    return tok;
+                break;
+                case '#':
+                    tok.token = TOKEN_HASH;
+                    tok.length = 1;
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
                 case '=':
                     if(start[1] == '='){
                         tok.token = TOKEN_EQ;
@@ -248,18 +310,26 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         return tok;
                 break;
                 case '/':
-                    if(start[1] == '='){
-                        tok.token = TOKEN_SLASH_EQ;
-                        tok.length = 2;
-                        *cursor += 2;
-                        *col += 2;
-                        return tok;
-                    }
-                        tok.token = TOKEN_SLASH;
-                        tok.length = 1;
+                    if (start[1] == '=') {
+                    tok.token = TOKEN_SLASH_EQ;
+                    tok.length = 2;
+                    *cursor += 2;
+                    *col += 2;
+                    return tok;
+                } else if (start[1] == '/') {
+                    while (**cursor != '\n' && **cursor != '\0') {
                         (*cursor)++;
                         (*col)++;
-                        return tok;
+                    }
+                    tok.token = TOKEN_COMMENT; 
+                    tok.length = (uint32_t)(*cursor - start);
+                    return tok;
+                }
+                    tok.token = TOKEN_SLASH;
+                    tok.length = 1;
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
                 break;
                 case '%':
                     if(start[1] == '='){
@@ -405,15 +475,36 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         (*col)++;
                         return tok;
                 break;
-                case '\n':
-                (*line)++;
-                *col = 1;
-                (*cursor)++;
+                case '\'':
+                    const char *char_start = *cursor;
+                    (*cursor)++;
+                    (*col)++;
+                    while (**cursor != '\'' && **cursor != '\n' && **cursor != '\0') {
+                        if (**cursor == '\\' && (*cursor)[1] != '\0') {
+                            (*cursor) += 2;
+                            (*col) += 2;
+                        } else {
+                            (*cursor)++;
+                            (*col)++;
+                        }
+                    }
+                    if (**cursor == '\'') {
+                        (*cursor)++;
+                        (*col)++;
+                        tok.token = TOKEN_CHAR_LITERAL;
+                        tok.lexeme = char_start;
+                        tok.length = (size_t)(*cursor - char_start);
+                    } else {
+                        tok.token = TOKEN_UNKNOWN;
+                        tok.lexeme = char_start;
+                        tok.length = 1;
+                    }
+                    return tok;
                 break;
                 default:
                     if(char_table[(unsigned char)c] & CHAR_ALPHA){
                         const char *p = start;
-                        while(char_table[(unsigned char)*p] & (CHAR_ALPHA | CHAR_DELIM)){
+                        while(char_table[(unsigned char)*p] & (CHAR_ALPHA | CHAR_DIGIT)){
                             p++;
                         }
                         uint32_t len = (uint32_t)(p - start);
@@ -425,51 +516,54 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         *col += len;
                         return tok;
                     }
-                    if(char_table[(unsigned char)c] & CHAR_DELIM){
+                    if(char_table[(unsigned char)c] & CHAR_DIGIT){
                         const char *p = start;
-                        while(char_table[(unsigned char)*p] & CHAR_DELIM){
+                        while(char_table[(unsigned char)*p] & CHAR_DIGIT){
                             p++;
                         }
+                        if(*p == '.' || *p == 'e' || *p == 'E'){
+                            uint32_t len = 0;
+                            tok.token = special_format_handler(start, &len);
+                            tok.length = len;
+                            *cursor += len;
+                            *col += len;
+                            return tok;
+                        }
                         uint32_t len = (uint32_t)(p - start);
-                        TokenType kw = lookup_token(start, len);
-                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_INT_LITERAL;
+                        tok.token = TOKEN_INT_LITERAL;
                         tok.length = len;
 
                         *cursor += len;
                         *col += len;
                         return tok;
                     }
+                    unsigned char uc = (unsigned char)(**cursor);
+                    uint32_t char_len = 1;
 
-                    tok.token = TOKEN_UNKNOWN;
-                    tok.length = 1;
-                    (*cursor)++;
-                    (*col)++;
-                    
+                    if ((uc & 0xE0) == 0xC0)      char_len = 2;
+                    else if ((uc & 0xF0) == 0xE0) char_len = 3; 
+                    else if ((uc & 0xF8) == 0xF0) char_len = 4; 
+
+                    for (uint32_t i = 0; i < char_len; i++) {
+                        if ((*cursor)[i] == '\0') {
+                            char_len = i > 0 ? i : 1;
+                            break;
+                        }
+                    }
+
+                        tok.token = TOKEN_UNKNOWN;
+                        tok.lexeme = *cursor;
+                        tok.length = char_len;
+
+                        *cursor += char_len;
+                        *col += 1;
+                        return tok;
                 break;
 
             }
 }
 
-/*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
-identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
-table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
-this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
-void identifier_handler(const char *string_buf){
-
-}
-
-//the second generate_token function called:
-int generate_identifier_token(const char *string_buf){
-
-}
-
 //helper functions
-bool is_valid_identifier_start(int ch){
-
-}
-bool is_valid_identifier_character(int ch){
-
-}
 TokenStream create_token_stream(size_t initial_capacity){
     TokenStream stream;
     stream.capacity = initial_capacity;
@@ -485,11 +579,11 @@ void append_token(TokenStream *stream, TokenStruct token) {
     stream->tokens[stream->count++] = token;
 }
 TokenType lookup_token(const char *string, uint32_t len){
-    uint32_t idx = hash_string(string) % HASH_TABLE_SIZE;
+    uint32_t idx = hash_string(string, len) % HASH_TABLE_SIZE;
 
     while (keyword_table[idx].key != NULL) {
-        if (strcmp(keyword_table[idx].key, string) == 0) {
-            return keyword_table[idx].token; 
+        if (keyword_table[idx].len == len && memcmp(keyword_table[idx].key, string, len) == 0) {
+            return keyword_table[idx].token;
         }
         idx = (idx + 1) % HASH_TABLE_SIZE;
     }
@@ -501,21 +595,47 @@ TokenType lookup_token(const char *string, uint32_t len){
 "1.5323e-2" this is a float literal but the format of it is basically:
 "TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN__LITERAL" and i dont want to dirty the base generator function
 by handling special cases there.*/
-int special_format_handler(const char *string_buf){
+int special_format_handler(const char *start, uint32_t *out_len){
+    const char *p = start;
 
+    while (*p != '\0' && (char_table[(unsigned char)*p] & CHAR_DIGIT)) {
+        p++;
+    }
+    if (*p == '.') {
+        p++;
+        while (*p != '\0' && (char_table[(unsigned char)*p] & CHAR_DIGIT)) {
+            p++;
+        }
+    }
+    if (*p == 'e' || *p == 'E') {
+        const char *e_start = p;
+        p++;
+        if (*p == '+' || *p == '-') {
+            p++;
+        }
+        if (*p != '\0' && (char_table[(unsigned char)*p] & CHAR_DIGIT)) {
+            while (*p != '\0' && (char_table[(unsigned char)*p] & CHAR_DIGIT)) {
+                p++;
+            }
+        } else {
+            p = e_start;
+        }
+    }
+    *out_len = (uint32_t)(p - start);
+    return TOKEN_FLOAT_LITERAL;
 }
 
 //hashing functions to convert strings to integers for assigning tokens from the enum table.
-static uint32_t hash_string(const char *string){
+static uint32_t hash_string(const char *string, uint32_t len){
     uint32_t hash = 2166136261u;
-    while (*string) {
-        hash ^= (uint8_t)*string++;
+    for (uint32_t i = 0; i < len; i++) {
+        hash ^= (uint8_t)string[i];
         hash *= 16777619u;
     }
     return hash;
 }
-static void insert_keyword(const char *key, TokenType token) {
-    uint32_t idx = hash_string(key) % HASH_TABLE_SIZE;
+static void insert_keyword(const char *key, TokenType token, uint32_t len) {
+    uint32_t idx = hash_string(key, len) % HASH_TABLE_SIZE;
 
     //resolve collisions.
     while (keyword_table[idx].key != NULL) {
@@ -524,83 +644,84 @@ static void insert_keyword(const char *key, TokenType token) {
 
     keyword_table[idx].key = key;
     keyword_table[idx].token = token;
+    keyword_table[idx].len = len;
 }
 void initialize_hash_table(void){
 
     memset(keyword_table, 0, sizeof(keyword_table));
 
     //types
-    insert_keyword("int", TOKEN_KW_INT);
-    insert_keyword("short", TOKEN_KW_SHORT);
-    insert_keyword("long", TOKEN_KW_LONG);
-    insert_keyword("byte", TOKEN_KW_BYTE);
-    insert_keyword("float", TOKEN_KW_FLOAT);
-    insert_keyword("double", TOKEN_KW_DOUBLE);
-    insert_keyword("char", TOKEN_KW_CHAR);
-    insert_keyword("string", TOKEN_KW_STRING);
-    insert_keyword("bool", TOKEN_KW_BOOL);
-    insert_keyword("struct", TOKEN_KW_STRUCT);
-    insert_keyword("enum", TOKEN_KW_ENUM);
-    insert_keyword("union", TOKEN_KW_UNION);
+    insert_keyword("int", TOKEN_KW_INT, 3);
+    insert_keyword("short", TOKEN_KW_SHORT, 5);
+    insert_keyword("long", TOKEN_KW_LONG, 4);
+    insert_keyword("byte", TOKEN_KW_BYTE, 4);
+    insert_keyword("float", TOKEN_KW_FLOAT, 5);
+    insert_keyword("double", TOKEN_KW_DOUBLE, 6);
+    insert_keyword("char", TOKEN_KW_CHAR, 4);
+    insert_keyword("string", TOKEN_KW_STRING, 6);
+    insert_keyword("bool", TOKEN_KW_BOOL, 4);
+    insert_keyword("struct", TOKEN_KW_STRUCT, 6);
+    insert_keyword("enum", TOKEN_KW_ENUM, 4);
+    insert_keyword("union", TOKEN_KW_UNION, 5);
 
     //statements and functions
-    insert_keyword("if", TOKEN_KW_IF);
-    insert_keyword("else", TOKEN_KW_ELSE);
-    insert_keyword("while", TOKEN_KW_WHILE);
-    insert_keyword("do", TOKEN_KW_DO);
-    insert_keyword("for", TOKEN_KW_FOR);
-    insert_keyword("switch", TOKEN_KW_SWITCH);
-    insert_keyword("return", TOKEN_KW_RETURN);
-    insert_keyword("out", TOKEN_KW_OUTPUT);
-    insert_keyword("in", TOKEN_KW_INPUT);
-    insert_keyword("read_file", TOKEN_KW_READ_FILE);
-    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE);
-    insert_keyword("break", TOKEN_KW_BREAK);
-    insert_keyword("continue", TOKEN_KW_CONTINUE);
-    insert_keyword("match", TOKEN_KW_MATCH);
-    insert_keyword("func", TOKEN_KW_FUNCTION);
+    insert_keyword("if", TOKEN_KW_IF, 2);
+    insert_keyword("else", TOKEN_KW_ELSE, 4);
+    insert_keyword("while", TOKEN_KW_WHILE, 5);
+    insert_keyword("do", TOKEN_KW_DO, 2);
+    insert_keyword("for", TOKEN_KW_FOR, 3);
+    insert_keyword("switch", TOKEN_KW_SWITCH, 6);
+    insert_keyword("return", TOKEN_KW_RETURN, 6);
+    insert_keyword("out", TOKEN_KW_OUTPUT, 3);
+    insert_keyword("in", TOKEN_KW_INPUT, 2);
+    insert_keyword("read_file", TOKEN_KW_READ_FILE, 9);
+    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE, 10);
+    insert_keyword("break", TOKEN_KW_BREAK, 5);
+    insert_keyword("continue", TOKEN_KW_CONTINUE, 8);
+    insert_keyword("match", TOKEN_KW_MATCH, 5);
+    insert_keyword("func", TOKEN_KW_FUNCTION, 4);
 
     //memory thingys
-    insert_keyword("NULL", TOKEN_KW_NULL);
-    insert_keyword("arena", TOKEN_KW_ARENA);
-    insert_keyword("defer", TOKEN_KW_DEFER);
-    insert_keyword("reset", TOKEN_KW_RESET);
-    insert_keyword("challoc", TOKEN_KW_CHALLOC);
-    insert_keyword("temp", TOKEN_KW_TEMP);
-    insert_keyword("const", TOKEN_KW_CONST);
-    insert_keyword("mutable", TOKEN_KW_MUT);
-    insert_keyword("static", TOKEN_KW_STATIC);
-    insert_keyword("volatile", TOKEN_KW_VOLATILE);
-    insert_keyword("cast", TOKEN_KW_CAST);
-    insert_keyword("typealias", TOKEN_KW_TYPEALIAS);
+    insert_keyword("NULL", TOKEN_KW_NULL, 4);
+    insert_keyword("arena", TOKEN_KW_ARENA, 5);
+    insert_keyword("defer", TOKEN_KW_DEFER, 5);
+    insert_keyword("reset", TOKEN_KW_RESET, 5);
+    insert_keyword("challoc", TOKEN_KW_CHALLOC, 7);
+    insert_keyword("temp", TOKEN_KW_TEMP, 4);
+    insert_keyword("const", TOKEN_KW_CONST, 5);
+    insert_keyword("mutable", TOKEN_KW_MUT, 7);
+    insert_keyword("static", TOKEN_KW_STATIC, 6);
+    insert_keyword("volatile", TOKEN_KW_VOLATILE, 8);
+    insert_keyword("cast", TOKEN_KW_CAST, 4);
+    insert_keyword("typealias", TOKEN_KW_TYPEALIAS, 9);
 
     //modules, visibility, import
-    insert_keyword("import", TOKEN_KW_IMPORT);
-    insert_keyword("module", TOKEN_KW_MODULE);
-    insert_keyword("public", TOKEN_KW_PUBLIC);
-    insert_keyword("private", TOKEN_KW_PRIVATE);
+    insert_keyword("import", TOKEN_KW_IMPORT, 6);
+    insert_keyword("module", TOKEN_KW_MODULE, 6);
+    insert_keyword("public", TOKEN_KW_PUBLIC, 6);
+    insert_keyword("private", TOKEN_KW_PRIVATE, 7);
 
     //error handling
-    insert_keyword("try", TOKEN_KW_TRY);
-    insert_keyword("catch", TOKEN_KW_CATCH);
-    insert_keyword("raise", TOKEN_KW_RAISE);
+    insert_keyword("try", TOKEN_KW_TRY, 3);
+    insert_keyword("catch", TOKEN_KW_CATCH, 5);
+    insert_keyword("raise", TOKEN_KW_RAISE, 5);
 
     //function and multithreading thingys
-    insert_keyword("async", TOKEN_KW_ASYNC);
-    insert_keyword("await", TOKEN_KW_AWAIT);
-    insert_keyword("spawn", TOKEN_KW_SPAWN);
-    insert_keyword("thread", TOKEN_KW_THREAD);
-    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T);
-    insert_keyword("join", TOKEN_KW_JOIN);
-    insert_keyword("channel", TOKEN_KW_CHAN);
-    insert_keyword("select", TOKEN_KW_SELECT);
-    insert_keyword("atomic", TOKEN_KW_ATOMIC);
-    insert_keyword("mutex", TOKEN_KW_MUTEX);
-    insert_keyword("lock", TOKEN_KW_LOCK);
-    insert_keyword("shared", TOKEN_KW_SHARED);
+    insert_keyword("async", TOKEN_KW_ASYNC, 5);
+    insert_keyword("await", TOKEN_KW_AWAIT, 5);
+    insert_keyword("spawn", TOKEN_KW_SPAWN, 5);
+    insert_keyword("thread", TOKEN_KW_THREAD, 6);
+    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T, 13);
+    insert_keyword("join", TOKEN_KW_JOIN, 4);
+    insert_keyword("channel", TOKEN_KW_CHAN, 7);
+    insert_keyword("select", TOKEN_KW_SELECT, 6);
+    insert_keyword("atomic", TOKEN_KW_ATOMIC, 6);
+    insert_keyword("mutex", TOKEN_KW_MUTEX, 5);
+    insert_keyword("lock", TOKEN_KW_LOCK, 4);
+    insert_keyword("shared", TOKEN_KW_SHARED, 6);
 
     //special insert to enforce a "main"
-    insert_keyword("main", TOKEN_MAIN);
+    insert_keyword("main", TOKEN_MAIN, 4);
 
 }
 void initialize_char_table(void){
@@ -616,7 +737,7 @@ void initialize_char_table(void){
 
   char_table['('] = char_table[')'] = CHAR_DELIM;
   char_table['{'] = char_table['}'] = CHAR_DELIM;
-  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table['['] = char_table[']'] = CHAR_DELIM;
   char_table[','] = char_table[';'] = CHAR_DELIM;
 
   char_table['+'] = char_table['-'] = CHAR_OP;

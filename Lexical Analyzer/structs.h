@@ -90,6 +90,9 @@ typedef enum Tokens{
     TOKEN_COLON, // ":"
     TOKEN_SEMICOLON, // ";"
     TOKEN_SCOPE_RES, // "::"
+    TOKEN_QUOTATION, // ' " '
+    TOKEN_HASH, // "#"
+    TOKEN_BACKSLASH, // "\"
 
     TOKEN_ASSIGN, // "="
     TOKEN_PLUS, // "+"
@@ -129,7 +132,8 @@ typedef enum Tokens{
     TOKEN_FAT_ARROW, // "=>" used in match arms ex: 5 => return
     TOKEN_LEFT_ARROW, // use to send or receive on a channel "<-"
     
-    TOKEN_MAIN // to enforce "main" function.
+    TOKEN_MAIN, // to enforce "main" function.
+    TOKEN_COMMENT
 }TokenType;
 
 //mapping characters to a bitmask array
@@ -144,6 +148,7 @@ typedef enum Character{
 typedef struct Keyword{
     const char *key;
     TokenType token;
+    uint32_t len;
 }KeywordEntry;
 
 //struct for file queue
@@ -159,8 +164,8 @@ typedef struct{
   TokenType token;
   const char *lexeme;
   uint32_t length;
-  uint32_t *line;
-  uint32_t *column;
+  uint32_t line;
+  uint32_t column;
 }TokenStruct;
 
 // struct that will hold the tokens in RAM.
@@ -169,5 +174,13 @@ typedef struct{
     size_t capacity;
     size_t count;
 }TokenStream;
+
+typedef struct {
+    const char *cursor;
+    uint32_t line;
+    uint32_t col;
+    uint32_t error_count;
+} LexerContext;
+
 
 #endif

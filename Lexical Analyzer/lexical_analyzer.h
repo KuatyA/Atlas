@@ -12,14 +12,12 @@ extern TokenStruct token_struct;
 
 //initialize the functions except the helpers here.
 void parse_file(const char *filetype);
-int lex_error_handler(TokenType kw);
+int lex_error_handler(LexerContext *ctx, TokenStruct tok);
 TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col);
-void identifier_handler(const char *string_buf);
-int generate_identifier_token(const char *string_buf);
 
 //initialize hashing functions here.
-static uint32_t hash_string(const char *string);
-static void insert_keyword(const char *key, TokenType token);
+static uint32_t hash_string(const char *string, uint32_t len);
+static void insert_keyword(const char *key, TokenType token, uint32_t len);
 void initialize_hash_table(void);
 void initialize_char_table(void);
 
