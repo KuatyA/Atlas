@@ -1,0 +1,73 @@
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+        if(queue.next_file_index < queue.total_files){
+            filename = queue.files[queue.next_file_index];
+            queue.next_file_index++;
+        }
+        pthread_mutex_unlock(&queue.lock);
+
+        if(filename == NULL) break;
+
+        parse_file(filename);
+        
+    }
+    return NULL;
+}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "lexical_analyzer.h"
+#include <stdatomic.h>
+
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+TokenType lookup_token(const char *string);
+
+/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
+
+
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+
+    //open the files
+    FILE *atl_file = fopen(filetype, "rb");
+    //check empty
+    if(atl_file == NULL){
+        fprintf(stderr, "ERROR: Could not open file!");
+        return;
+    }
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;

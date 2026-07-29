@@ -10,13 +10,13 @@
 bool is_valid_identifier_start(int ch);
 bool is_valid_identifier_character(int ch);
 int special_format_handler(const char *string_buf);
-TokenType lookup_token(const char *string);
+TokenType lookup_token(const char *string, uint32_t len);
+TokenStream create_token_stream(size_t initial_capacity);
+void append_token(TokenStream *stream, TokenStruct token);
 
 /*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
 make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
 in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
-
-
 void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
 
     //open the files
@@ -26,9 +26,9 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
         fprintf(stderr, "ERROR: Could not open file!");
         return;
     }
-    //initialize string buf and index.
-    char string_buf[256];
-    int buf_idx = 0;
+
+    //initialize token stream for the current file being parsed.
+    TokenStream stream = create_token_stream(1024);
 
     //get file size
     fseek(atl_file, 0, SEEK_END);
@@ -48,83 +48,29 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
     fclose(atl_file);
 
     const char *src = src_buf;
+    uint32_t line = 1, col = 1;
 
     while((*src != '\0')){
-        unsigned char ch = *src;
-       uint8_t type = char_table[ch];
 
-       if(type & CHAR_WS){
-            if(buf_idx >0){
-                string_buf[buf_idx] = '\0';
-                generate_token(string_buf);
-                buf_idx = 0;
+       if(char_table[(unsigned char)*src] & CHAR_WS){
+            if(src == '\n'){
+                line++;
+                col = 1;
+            }else{
+                col++;
             }
         src++;
         continue;
        }
-       if(type & CHAR_OP){
-            if(buf_idx > 0){
-                string_buf[buf_idx] = '\0';
-                generate_token(string_buf);
-                buf_idx = 0;
-            }
-            if (ch == '<' && src[1] == '<' && src[2] == '=') {
-                src += 3; generate_token("<<="); continue;
-            }
-            if (ch == '>' && src[1] == '>' && src[2] == '=') {
-                src += 3; generate_token(">>="); continue;
-            }
-
-            // 2-character operators
-            if (ch == ':' && src[1] == ':') { src += 2; generate_token("::"); continue; }
-            if (ch == '-' && src[1] == '>') { src += 2; generate_token("->"); continue; }
-            if (ch == '=' && src[1] == '=') { src += 2; generate_token("=="); continue; }
-            if (ch == '=' && src[1] == '>') { src += 2; generate_token("=>"); continue; }
-            if (ch == '<' && src[1] == '-') { src += 2; generate_token("<-"); continue; }
-            if (ch == '+' && src[1] == '=') { src += 2; generate_token("+="); continue; }
-            if (ch == '-' && src[1] == '=') { src += 2; generate_token("-="); continue; }
-            if (ch == '*' && src[1] == '=') { src += 2; generate_token("*="); continue; }
-            if (ch == '/' && src[1] == '=') { src += 2; generate_token("/="); continue; }
-            if (ch == '%' && src[1] == '=') { src += 2; generate_token("%="); continue; }
-            if (ch == '<' && src[1] == '=') { src += 2; generate_token("<="); continue; }
-            if (ch == '>' && src[1] == '=') { src += 2; generate_token(">="); continue; }
-            if (ch == '!' && src[1] == '=') { src += 2; generate_token("!="); continue; }
-            if (ch == '&' && src[1] == '&') { src += 2; generate_token("&&"); continue; }
-            if (ch == '|' && src[1] == '|') { src += 2; generate_token("||"); continue; }
-            if (ch == '!' && src[1] == '&') { src += 2; generate_token("!&"); continue; }
-            if (ch == '<' && src[1] == '<') { src += 2; generate_token("<<"); continue; }
-            if (ch == '>' && src[1] == '>') { src += 2; generate_token(">>"); continue; }
-
-            string_buf[0] = (char)ch;
-            string_buf[1] = '\0';
-            generate_token(string_buf);
-            src++;
-            continue;
-       }
-
-       if(type & CHAR_DELIM){
-            if(buf_idx > 0){
-                string_buf[buf_idx] = '\0';
-                generate_token(string_buf);
-                buf_idx = 0;
-            }
-            string_buf[0] = (char)ch;
-            string_buf[1] = '\0';
-            generate_token(string_buf);
-            src++;
-            continue;
-       }
-
-       string_buf[buf_idx++] = (char)ch;
-       src++;
+       TokenStruct tok = generate_token(&src, &line, &col);
+        append_token(&stream, tok);
     }
-    //get the last string of the code.
-    if(buf_idx > 0){
-        string_buf[buf_idx] = '\0';
-        generate_token(string_buf);
-    }
+    //generate eof token.
+    TokenStruct eof_tok = { .token = TOKEN_EOF, .lexeme = src, .length = 0, .line = line, .column = col };
+    append_token(&stream, eof_tok); 
 
-    generate_token("EOF");
+    //free memory(for now).
+    free(stream.tokens);
     free(src_buf);
 }
 
@@ -132,53 +78,421 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
 when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
 will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
 and if the counter is bigger than 0, it will exit with 1.*/
-
-int lex_error_handler(){
+int lex_error_handler(TokenType kw){
 
 }
 
 /*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
-just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
+just be a little confusing at worst. IDEK if string_buf is the way to go tbh.(update, string_buf was NOT the way to go)*/
+TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
+        TokenStruct tok;
+        const char *start = *cursor;
+        char c = *start;
 
-static atomic_size_t token_count = 0;
+        tok.lexeme = start;
+        tok.line = *line;
+        tok.column = *col;
+        // for the single charcter tokens
+        
+            switch(c){
+                case '{':
+                    tok.token = TOKEN_LBRACE;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '}':
+                    tok.token = TOKEN_RBRACE;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '[':
+                    tok.token = TOKEN_LBRACKET;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case ']':
+                    tok.token = TOKEN_RBRACKET;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '(':
+                    tok.token = TOKEN_LPAREN;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case ')':
+                    tok.token = TOKEN_RPAREN;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '.':
+                    tok.token = TOKEN_DOT;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case ',':
+                    tok.token = TOKEN_COMMA;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case ':':
+                    if(start[1] == ':'){
+                        tok.token = TOKEN_SCOPE_RES;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                        }
+                        tok.token = TOKEN_COLON;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case ';':
+                    tok.token = TOKEN_SEMICOLON;
+                    tok.length = 1;
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '=':
+                    if(start[1] == '='){
+                        tok.token = TOKEN_EQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }else if(start[1] == '>'){
+                        tok.token = TOKEN_FAT_ARROW;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_ASSIGN;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '+':
+                    if(start[1] == '='){
+                        tok.token = TOKEN_PLUS_EQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_PLUS;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '-':
+                    if(start[1] == '='){
+                        tok.token = TOKEN_MINUS_EQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }else if(start[1] == '>'){
+                        tok.token = TOKEN_ARROW;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_MINUS;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '*':
+                    if(start[1] == '='){
+                        tok.token = TOKEN_STAR_EQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_STAR;
+                        tok.length = 1;        
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '/':
+                    if(start[1] == '='){
+                        tok.token = TOKEN_SLASH_EQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_SLASH;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '%':
+                    if(start[1] == '='){
+                        tok.token = TOKEN_MOD_EQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_MOD;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '<':
+                    if(start[1] == '<' && start[2] == '='){
+                        tok.token = TOKEN_LSHIFT_ASSIGN;
+                        tok.length = 3;
+                        *cursor += 3;
+                        *col += 3;
+                        return tok;
+                    }else if(start[1] == '<'){
+                        tok.token = TOKEN_LSHIFT;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }else if(start[1] == '='){
+                        tok.token = TOKEN_LE;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }else if(start[1] == '-'){
+                        tok.token = TOKEN_LEFT_ARROW;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_LT;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '>':
+                    if(start[1] == '>' && start[2] == '='){
+                        tok.token = TOKEN_RSHIFT_ASSIGN;
+                        tok.length = 3;
+                        *cursor += 3;
+                        *col += 3;
+                        return tok;
+                    }else if(start[1] == '>'){
+                        tok.token = TOKEN_RSHIFT;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }else if(start[1] == '='){
+                        tok.token = TOKEN_GE;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_GT;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '^':
+                    tok.token = TOKEN_XOR;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '!':
+                    if(start[1] == '&'){
+                        tok.token = TOKEN_NAND;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }else if(start[1] == '='){
+                        tok.token = TOKEN_NEQ;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_NOT;
+                        tok.length = 1;
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '~':
+                    tok.token = TOKEN_BIT_NOT;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '?':
+                    tok.token = TOKEN_QUESTION;
+                    tok.length = 1;
+                    
+                    (*cursor)++;
+                    (*col)++;
+                    return tok;
+                break;
+                case '&':
+                    if(start[1] == '&'){
+                        tok.token = TOKEN_AND;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_AMPERSAND;
+                        tok.length = 1;    
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '|':
+                    if(start[1] == '|'){
+                        tok.token = TOKEN_OR;
+                        tok.length = 2;
+                        *cursor += 2;
+                        *col += 2;
+                        return tok;
+                    }
+                        tok.token = TOKEN_BIT_OR;
+                        tok.length = 1;    
+                        (*cursor)++;
+                        (*col)++;
+                        return tok;
+                break;
+                case '\n':
+                (*line)++;
+                *col = 1;
+                (*cursor)++;
+                break;
+                default:
+                    if(char_table[(unsigned char)c] & CHAR_ALPHA){
+                        const char *p = start;
+                        while(char_table[(unsigned char)*p] & (CHAR_ALPHA | CHAR_DELIM)){
+                            p++;
+                        }
+                        uint32_t len = (uint32_t)(p - start);
+                        TokenType kw = lookup_token(start, len);
+                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
+                        tok.length = len;
 
-void generate_token(const char *string_buf){
-    
+                        *cursor += len;
+                        *col += len;
+                        return tok;
+                    }
+                    if(char_table[(unsigned char)c] & CHAR_DELIM){
+                        const char *p = start;
+                        while(char_table[(unsigned char)*p] & CHAR_DELIM){
+                            p++;
+                        }
+                        uint32_t len = (uint32_t)(p - start);
+                        TokenType kw = lookup_token(start, len);
+                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_INT_LITERAL;
+                        tok.length = len;
+
+                        *cursor += len;
+                        *col += len;
+                        return tok;
+                    }
+
+                    tok.token = TOKEN_UNKNOWN;
+                    tok.length = 1;
+                    (*cursor)++;
+                    (*col)++;
+                    
+                break;
+
+            }
 }
 
 /*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
 identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
 table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
 this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
-
-
 void identifier_handler(const char *string_buf){
 
 }
 
 //the second generate_token function called:
-
-
 int generate_identifier_token(const char *string_buf){
 
 }
 
 //helper functions
-
 bool is_valid_identifier_start(int ch){
 
 }
 bool is_valid_identifier_character(int ch){
 
 }
-TokenType lookup_token(const char *string){
-    uint32_t index = hash_string(string) % HASH_TABLE_SIZE;
+TokenStream create_token_stream(size_t initial_capacity){
+    TokenStream stream;
+    stream.capacity = initial_capacity;
+    stream.count = 0;
+    stream.tokens = malloc(sizeof(TokenStruct) * initial_capacity);
+    return stream;
+}
+void append_token(TokenStream *stream, TokenStruct token) {
+    if (stream->count >= stream->capacity) {
+        stream->capacity *= 2;
+        stream->tokens = realloc(stream->tokens, sizeof(TokenStruct) * stream->capacity);
+    }
+    stream->tokens[stream->count++] = token;
+}
+TokenType lookup_token(const char *string, uint32_t len){
+    uint32_t idx = hash_string(string) % HASH_TABLE_SIZE;
 
-    while (keyword_table[index].key != NULL) {
-        if (strcmp(keyword_table[index].key, string) == 0) {
-            return keyword_table[index].token; 
+    while (keyword_table[idx].key != NULL) {
+        if (strcmp(keyword_table[idx].key, string) == 0) {
+            return keyword_table[idx].token; 
         }
-        index = (index + 1) % HASH_TABLE_SIZE;
+        idx = (idx + 1) % HASH_TABLE_SIZE;
     }
 
     return TOKEN_UNKNOWN;
@@ -188,8 +502,6 @@ TokenType lookup_token(const char *string){
 "1.5323e-2" this is a float literal but the format of it is basically:
 "TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN__LITERAL" and i dont want to dirty the base generator function
 by handling special cases there.*/
-
-
 int special_format_handler(const char *string_buf){
 
 }
@@ -204,15 +516,15 @@ static uint32_t hash_string(const char *string){
     return hash;
 }
 static void insert_keyword(const char *key, TokenType token) {
-    uint32_t index = hash_string(key) % HASH_TABLE_SIZE;
+    uint32_t idx = hash_string(key) % HASH_TABLE_SIZE;
 
     //resolve collisions.
-    while (keyword_table[index].key != NULL) {
-        index = (index + 1) % HASH_TABLE_SIZE;
+    while (keyword_table[idx].key != NULL) {
+        idx = (idx + 1) % HASH_TABLE_SIZE;
     }
 
-    keyword_table[index].key = key;
-    keyword_table[index].token = token;
+    keyword_table[idx].key = key;
+    keyword_table[idx].token = token;
 }
 void initialize_hash_table(void){
 
@@ -287,6 +599,9 @@ void initialize_hash_table(void){
     insert_keyword("lock", TOKEN_KW_LOCK);
     insert_keyword("shared", TOKEN_KW_SHARED);
 
+    //special insert to enforce a "main"
+    insert_keyword("main", TOKEN_MAIN);
+
 }
 void initialize_char_table(void){
     memset(char_table, 0, sizeof(char_table));
@@ -299,7 +614,7 @@ void initialize_char_table(void){
   for(int i = '0'; i <= '9'; i++){ char_table[i] |= CHAR_DIGIT; }
   char_table['_'] |= CHAR_ALPHA;
 
-  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['('] = char_table[')'] = CHAR_DELIM;
   char_table['{'] = char_table['}'] = CHAR_DELIM;
   char_table['['] = char_table[')'] = CHAR_DELIM;
   char_table[','] = char_table[';'] = CHAR_DELIM;
@@ -314,13 +629,13 @@ void initialize_char_table(void){
 
 }
 
-
 /*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
 put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
 the compilers life like the LLVM part maybe idk*/
 void *worker_thread(void *arg){
 
     int thread_id = *(int *)arg;
+    int token_struct_id = *(int *)arg;
 
     while(1){
         char *filename = NULL;

@@ -1,0 +1,2550 @@
+#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "lexical_analyzer.h"
+#include <stdatomic.h>
+
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+TokenType lookup_token(const char *string);
+
+/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
+
+
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+
+    //open the files
+    FILE *atl_file = fopen(filetype, "rb");
+    //check empty
+    if(atl_file == NULL){
+        fprintf(stderr, "ERROR: Could not open file!");
+        return;
+    }
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+    #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "lexical_analyzer.h"
+#include <stdatomic.h>
+
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+        if(queue.next_file_index < queue.total_files){
+            filename = queue.files[queue.next_file_index];
+            queue.next_file_index++;
+        }
+        pthread_mutex_unlock(&queue.lock);
+
+        if(filename == NULL) break;
+
+        parse_file(filename);
+        
+    }
+    return NULL;
+}
+
+TokenType lookup_token(const char *string);
+
+/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
+
+
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+
+    //open the files
+    FILE *atl_file = fopen(filetype, "rb");
+    //check empty
+    if(atl_file == NULL){
+        fprintf(stderr, "ERROR: Could not open file!");
+        return;
+    }
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+        if(queue.next_file_index < queue.total_files){
+            filename = queue.files[queue.next_file_index];
+            queue.next_file_index++;
+        }
+        pthread_mutex_unlock(&queue.lock);
+
+        if(filename == NULL) break;
+
+        parse_file(filename);
+        
+    }
+    return NULL;
+}
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+        if(queue.next_file_index < queue.total_files){
+            filename = queue.files[queue.next_file_index];
+            queue.next_file_index++;
+        }
+        pthread_mutex_unlock(&queue.lock);
+
+        if(filename == NULL) break;
+
+        parse_file(filename);
+        
+    }
+    return NULL;
+}
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    //get file size
+    fseek(atl_file, 0, SEEK_END);
+    long file_size = ftell(atl_file);
+    fseek(atl_file, 0 , SEEK_SET);
+
+    char *src_buf  = malloc(file_size + 1);
+    if (!file_size) { fclose(atl_file); return; }
+
+    size_t bytes_read = fread(src_buf, 1, file_size, atl_file);
+     if (ferror(atl_file)) {
+        free(src_buf);
+        fclose(atl_file);
+        return;
+    }
+    src_buf[bytes_read] = '\0';
+    fclose(atl_file);
+
+    const char *src = src_buf;
+
+    while((*src != '\0')){
+        unsigned char ch = *src;
+       uint8_t type = char_table[ch];
+
+       if(type & CHAR_WS){
+            if(buf_idx >0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+        src++;
+        continue;
+       }
+       if(type & CHAR_OP){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            if (ch == '<' && src[1] == '<' && src[2] == '=') {
+                src += 3; generate_token("<<="); continue;
+            }
+            if (ch == '>' && src[1] == '>' && src[2] == '=') {
+                src += 3; generate_token(">>="); continue;
+            }
+
+            // 2-character operators
+            if (ch == ':' && src[1] == ':') { src += 2; generate_token("::"); continue; }
+            if (ch == '-' && src[1] == '>') { src += 2; generate_token("->"); continue; }
+            if (ch == '=' && src[1] == '=') { src += 2; generate_token("=="); continue; }
+            if (ch == '=' && src[1] == '>') { src += 2; generate_token("=>"); continue; }
+            if (ch == '<' && src[1] == '-') { src += 2; generate_token("<-"); continue; }
+            if (ch == '+' && src[1] == '=') { src += 2; generate_token("+="); continue; }
+            if (ch == '-' && src[1] == '=') { src += 2; generate_token("-="); continue; }
+            if (ch == '*' && src[1] == '=') { src += 2; generate_token("*="); continue; }
+            if (ch == '/' && src[1] == '=') { src += 2; generate_token("/="); continue; }
+            if (ch == '%' && src[1] == '=') { src += 2; generate_token("%="); continue; }
+            if (ch == '<' && src[1] == '=') { src += 2; generate_token("<="); continue; }
+            if (ch == '>' && src[1] == '=') { src += 2; generate_token(">="); continue; }
+            if (ch == '!' && src[1] == '=') { src += 2; generate_token("!="); continue; }
+            if (ch == '&' && src[1] == '&') { src += 2; generate_token("&&"); continue; }
+            if (ch == '|' && src[1] == '|') { src += 2; generate_token("||"); continue; }
+            if (ch == '!' && src[1] == '&') { src += 2; generate_token("!&"); continue; }
+            if (ch == '<' && src[1] == '<') { src += 2; generate_token("<<"); continue; }
+            if (ch == '>' && src[1] == '>') { src += 2; generate_token(">>"); continue; }
+
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       if(type & CHAR_DELIM){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       string_buf[buf_idx++] = (char)ch;
+       src++;
+    }
+    //get the last string of the code.
+    if(buf_idx > 0){
+        string_buf[buf_idx] = '\0';
+        generate_token(string_buf);
+    }
+
+    generate_token("EOF");
+    free(src_buf);
+}
+
+/*lets continue with the error handler, the name speaks for itself. It will handle errors(shocking!). The main idea is that
+when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
+will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
+and if the counter is bigger than 0, it will exit with 1.*/
+
+int lex_error_handler(){
+
+}
+
+/*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
+just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
+
+static atomic_size_t token_count = 0;
+
+void generate_token(const char *string_buf){
+    
+}
+
+/*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
+identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
+table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
+this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
+
+
+void identifier_handler(const char *string_buf){
+
+}
+
+//the second generate_token function called:
+
+
+int generate_identifier_token(const char *string_buf){
+
+}
+
+//helper functions
+
+bool is_valid_identifier_start(int ch){
+
+}
+bool is_valid_identifier_character(int ch){
+
+}
+TokenType lookup_token(const char *string){
+    uint32_t index = hash_string(string) % HASH_TABLE_SIZE;
+
+    while (keyword_table[index].key != NULL) {
+        if (strcmp(keyword_table[index].key, string) == 0) {
+            return keyword_table[index].token; 
+        }
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    return TOKEN_UNKNOWN;
+}
+
+/*ok this one is inbetween but i think its closer to a helper function. So it will handle special formats like:
+"1.5323e-2" this is a float literal but the format of it is basically:
+"TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN__LITERAL" and i dont want to dirty the base generator function
+by handling special cases there.*/
+
+
+int special_format_handler(const char *string_buf){
+
+}
+
+//hashing functions to convert strings to integers for assigning tokens from the enum table.
+static uint32_t hash_string(const char *string){
+    uint32_t hash = 2166136261u;
+    while (*string) {
+        hash ^= (uint8_t)*string++;
+        hash *= 16777619u;
+    }
+    return hash;
+}
+static void insert_keyword(const char *key, TokenType token) {
+    uint32_t index = hash_string(key) % HASH_TABLE_SIZE;
+
+    //resolve collisions.
+    while (keyword_table[index].key != NULL) {
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    keyword_table[index].key = key;
+    keyword_table[index].token = token;
+}
+void initialize_hash_table(void){
+
+    memset(keyword_table, 0, sizeof(keyword_table));
+
+    //types
+    insert_keyword("int", TOKEN_KW_INT);
+    insert_keyword("short", TOKEN_KW_SHORT);
+    insert_keyword("long", TOKEN_KW_LONG);
+    insert_keyword("byte", TOKEN_KW_BYTE);
+    insert_keyword("float", TOKEN_KW_FLOAT);
+    insert_keyword("double", TOKEN_KW_DOUBLE);
+    insert_keyword("char", TOKEN_KW_CHAR);
+    insert_keyword("string", TOKEN_KW_STRING);
+    insert_keyword("bool", TOKEN_KW_BOOL);
+    insert_keyword("struct", TOKEN_KW_STRUCT);
+    insert_keyword("enum", TOKEN_KW_ENUM);
+    insert_keyword("union", TOKEN_KW_UNION);
+
+    //statements and functions
+    insert_keyword("if", TOKEN_KW_IF);
+    insert_keyword("else", TOKEN_KW_ELSE);
+    insert_keyword("while", TOKEN_KW_WHILE);
+    insert_keyword("do", TOKEN_KW_DO);
+    insert_keyword("for", TOKEN_KW_FOR);
+    insert_keyword("switch", TOKEN_KW_SWITCH);
+    insert_keyword("return", TOKEN_KW_RETURN);
+    insert_keyword("out", TOKEN_KW_OUTPUT);
+    insert_keyword("in", TOKEN_KW_INPUT);
+    insert_keyword("read_file", TOKEN_KW_READ_FILE);
+    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE);
+    insert_keyword("break", TOKEN_KW_BREAK);
+    insert_keyword("continue", TOKEN_KW_CONTINUE);
+    insert_keyword("match", TOKEN_KW_MATCH);
+    insert_keyword("func", TOKEN_KW_FUNCTION);
+
+    //memory thingys
+    insert_keyword("NULL", TOKEN_KW_NULL);
+    insert_keyword("arena", TOKEN_KW_ARENA);
+    insert_keyword("defer", TOKEN_KW_DEFER);
+    insert_keyword("reset", TOKEN_KW_RESET);
+    insert_keyword("temp", TOKEN_KW_TEMP);
+    insert_keyword("const", TOKEN_KW_CONST);
+    insert_keyword("mutable", TOKEN_KW_MUT);
+    insert_keyword("static", TOKEN_KW_STATIC);
+    insert_keyword("volatile", TOKEN_KW_VOLATILE);
+    insert_keyword("cast", TOKEN_KW_CAST);
+    insert_keyword("typealias", TOKEN_KW_TYPEALIAS);
+
+    //modules, visibility, import
+    insert_keyword("import", TOKEN_KW_IMPORT);
+    insert_keyword("module", TOKEN_KW_MODULE);
+    insert_keyword("public", TOKEN_KW_PUBLIC);
+    insert_keyword("private", TOKEN_KW_PRIVATE);
+
+    //error handling
+    insert_keyword("try", TOKEN_KW_TRY);
+    insert_keyword("catch", TOKEN_KW_CATCH);
+    insert_keyword("raise", TOKEN_KW_RAISE);
+
+    //function and multithreading thingys
+    insert_keyword("async", TOKEN_KW_ASYNC);
+    insert_keyword("await", TOKEN_KW_AWAIT);
+    insert_keyword("spawn", TOKEN_KW_SPAWN);
+    insert_keyword("thread", TOKEN_KW_THREAD);
+    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T);
+    insert_keyword("join", TOKEN_KW_JOIN);
+    insert_keyword("channel", TOKEN_KW_CHAN);
+    insert_keyword("select", TOKEN_KW_SELECT);
+    insert_keyword("atomic", TOKEN_KW_ATOMIC);
+    insert_keyword("mutex", TOKEN_KW_MUTEX);
+    insert_keyword("lock", TOKEN_KW_LOCK);
+    insert_keyword("shared", TOKEN_KW_SHARED);
+
+}
+void initialize_char_table(void){
+    memset(char_table, 0, sizeof(char_table));
+
+    char_table[' '] = char_table['\t'] = char_table['\n']
+  = char_table['\r'] = CHAR_WS;
+
+  for(int i = 'a'; i <= 'z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = 'A'; i <= 'Z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = '0'; i <= '9'; i++){ char_table[i] |= CHAR_DIGIT; }
+  char_table['_'] |= CHAR_ALPHA;
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+
+
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    //get file size
+    fseek(atl_file, 0, SEEK_END);
+    long file_size = ftell(atl_file);
+    fseek(atl_file, 0 , SEEK_SET);
+
+    char *src_buf  = malloc(file_size + 1);
+    if (!file_size) { fclose(atl_file); return; }
+
+    size_t bytes_read = fread(src_buf, 1, file_size, atl_file);
+     if (ferror(atl_file)) {
+        free(src_buf);
+        fclose(atl_file);
+        return;
+    }
+    src_buf[bytes_read] = '\0';
+    fclose(atl_file);
+
+    const char *src = src_buf;
+
+    while((*src != '\0')){
+        unsigned char ch = *src;
+       uint8_t type = char_table[ch];
+
+       if(type & CHAR_WS){
+            if(buf_idx >0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+        src++;
+        continue;
+       }
+       if(type & CHAR_OP){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            if (ch == '<' && src[1] == '<' && src[2] == '=') {
+                src += 3; generate_token("<<="); continue;
+            }
+            if (ch == '>' && src[1] == '>' && src[2] == '=') {
+                src += 3; generate_token(">>="); continue;
+            }
+
+            // 2-character operators
+            if (ch == ':' && src[1] == ':') { src += 2; generate_token("::"); continue; }
+            if (ch == '-' && src[1] == '>') { src += 2; generate_token("->"); continue; }
+            if (ch == '=' && src[1] == '=') { src += 2; generate_token("=="); continue; }
+            if (ch == '=' && src[1] == '>') { src += 2; generate_token("=>"); continue; }
+            if (ch == '<' && src[1] == '-') { src += 2; generate_token("<-"); continue; }
+            if (ch == '+' && src[1] == '=') { src += 2; generate_token("+="); continue; }
+            if (ch == '-' && src[1] == '=') { src += 2; generate_token("-="); continue; }
+            if (ch == '*' && src[1] == '=') { src += 2; generate_token("*="); continue; }
+            if (ch == '/' && src[1] == '=') { src += 2; generate_token("/="); continue; }
+            if (ch == '%' && src[1] == '=') { src += 2; generate_token("%="); continue; }
+            if (ch == '<' && src[1] == '=') { src += 2; generate_token("<="); continue; }
+            if (ch == '>' && src[1] == '=') { src += 2; generate_token(">="); continue; }
+            if (ch == '!' && src[1] == '=') { src += 2; generate_token("!="); continue; }
+            if (ch == '&' && src[1] == '&') { src += 2; generate_token("&&"); continue; }
+            if (ch == '|' && src[1] == '|') { src += 2; generate_token("||"); continue; }
+            if (ch == '!' && src[1] == '&') { src += 2; generate_token("!&"); continue; }
+            if (ch == '<' && src[1] == '<') { src += 2; generate_token("<<"); continue; }
+            if (ch == '>' && src[1] == '>') { src += 2; generate_token(">>"); continue; }
+
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       if(type & CHAR_DELIM){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       string_buf[buf_idx++] = (char)ch;
+       src++;
+    }
+    //get the last string of the code.
+    if(buf_idx > 0){
+        string_buf[buf_idx] = '\0';
+        generate_token(string_buf);
+    }
+
+    generate_token("EOF");
+    free(src_buf);
+}
+
+/*lets continue with the error handler, the name speaks for itself. It will handle errors(shocking!). The main idea is that
+when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
+will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
+and if the counter is bigger than 0, it will exit with 1.*/
+
+int lex_error_handler(){
+
+}
+
+/*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
+just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
+
+static atomic_size_t token_count = 0;
+
+void generate_token(const char *string_buf){
+    
+}
+
+/*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
+identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
+table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
+this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
+
+
+void identifier_handler(const char *string_buf){
+
+}
+
+//the second generate_token function called:
+
+
+int generate_identifier_token(const char *string_buf){
+
+}
+
+//helper functions
+
+bool is_valid_identifier_start(int ch){
+
+}
+bool is_valid_identifier_character(int ch){
+
+}
+TokenType lookup_token(const char *string){
+    uint32_t index = hash_string(string) % HASH_TABLE_SIZE;
+
+    while (keyword_table[index].key != NULL) {
+        if (strcmp(keyword_table[index].key, string) == 0) {
+            return keyword_table[index].token; 
+        }
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    return TOKEN_UNKNOWN;
+}
+
+/*ok this one is inbetween but i think its closer to a helper function. So it will handle special formats like:
+"1.5323e-2" this is a float literal but the format of it is basically:
+"TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN__LITERAL" and i dont want to dirty the base generator function
+by handling special cases there.*/
+
+
+int special_format_handler(const char *string_buf){
+
+}
+
+//hashing functions to convert strings to integers for assigning tokens from the enum table.
+static uint32_t hash_string(const char *string){
+    uint32_t hash = 2166136261u;
+    while (*string) {
+        hash ^= (uint8_t)*string++;
+        hash *= 16777619u;
+    }
+    return hash;
+}
+static void insert_keyword(const char *key, TokenType token) {
+    uint32_t index = hash_string(key) % HASH_TABLE_SIZE;
+
+    //resolve collisions.
+    while (keyword_table[index].key != NULL) {
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    keyword_table[index].key = key;
+    keyword_table[index].token = token;
+}
+void initialize_hash_table(void){
+
+    memset(keyword_table, 0, sizeof(keyword_table));
+
+    //types
+    insert_keyword("int", TOKEN_KW_INT);
+    insert_keyword("short", TOKEN_KW_SHORT);
+    insert_keyword("long", TOKEN_KW_LONG);
+    insert_keyword("byte", TOKEN_KW_BYTE);
+    insert_keyword("float", TOKEN_KW_FLOAT);
+    insert_keyword("double", TOKEN_KW_DOUBLE);
+    insert_keyword("char", TOKEN_KW_CHAR);
+    insert_keyword("string", TOKEN_KW_STRING);
+    insert_keyword("bool", TOKEN_KW_BOOL);
+    insert_keyword("struct", TOKEN_KW_STRUCT);
+    insert_keyword("enum", TOKEN_KW_ENUM);
+    insert_keyword("union", TOKEN_KW_UNION);
+
+    //statements and functions
+    insert_keyword("if", TOKEN_KW_IF);
+    insert_keyword("else", TOKEN_KW_ELSE);
+    insert_keyword("while", TOKEN_KW_WHILE);
+    insert_keyword("do", TOKEN_KW_DO);
+    insert_keyword("for", TOKEN_KW_FOR);
+    insert_keyword("switch", TOKEN_KW_SWITCH);
+    insert_keyword("return", TOKEN_KW_RETURN);
+    insert_keyword("out", TOKEN_KW_OUTPUT);
+    insert_keyword("in", TOKEN_KW_INPUT);
+    insert_keyword("read_file", TOKEN_KW_READ_FILE);
+    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE);
+    insert_keyword("break", TOKEN_KW_BREAK);
+    insert_keyword("continue", TOKEN_KW_CONTINUE);
+    insert_keyword("match", TOKEN_KW_MATCH);
+    insert_keyword("func", TOKEN_KW_FUNCTION);
+
+    //memory thingys
+    insert_keyword("NULL", TOKEN_KW_NULL);
+    insert_keyword("arena", TOKEN_KW_ARENA);
+    insert_keyword("defer", TOKEN_KW_DEFER);
+    insert_keyword("reset", TOKEN_KW_RESET);
+    insert_keyword("temp", TOKEN_KW_TEMP);
+    insert_keyword("const", TOKEN_KW_CONST);
+    insert_keyword("mutable", TOKEN_KW_MUT);
+    insert_keyword("static", TOKEN_KW_STATIC);
+    insert_keyword("volatile", TOKEN_KW_VOLATILE);
+    insert_keyword("cast", TOKEN_KW_CAST);
+    insert_keyword("typealias", TOKEN_KW_TYPEALIAS);
+
+    //modules, visibility, import
+    insert_keyword("import", TOKEN_KW_IMPORT);
+    insert_keyword("module", TOKEN_KW_MODULE);
+    insert_keyword("public", TOKEN_KW_PUBLIC);
+    insert_keyword("private", TOKEN_KW_PRIVATE);
+
+    //error handling
+    insert_keyword("try", TOKEN_KW_TRY);
+    insert_keyword("catch", TOKEN_KW_CATCH);
+    insert_keyword("raise", TOKEN_KW_RAISE);
+
+    //function and multithreading thingys
+    insert_keyword("async", TOKEN_KW_ASYNC);
+    insert_keyword("await", TOKEN_KW_AWAIT);
+    insert_keyword("spawn", TOKEN_KW_SPAWN);
+    insert_keyword("thread", TOKEN_KW_THREAD);
+    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T);
+    insert_keyword("join", TOKEN_KW_JOIN);
+    insert_keyword("channel", TOKEN_KW_CHAN);
+    insert_keyword("select", TOKEN_KW_SELECT);
+    insert_keyword("atomic", TOKEN_KW_ATOMIC);
+    insert_keyword("mutex", TOKEN_KW_MUTEX);
+    insert_keyword("lock", TOKEN_KW_LOCK);
+    insert_keyword("shared", TOKEN_KW_SHARED);
+
+}
+void initialize_char_table(void){
+    memset(char_table, 0, sizeof(char_table));
+
+    char_table[' '] = char_table['\t'] = char_table['\n']
+  = char_table['\r'] = CHAR_WS;
+
+  for(int i = 'a'; i <= 'z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = 'A'; i <= 'Z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = '0'; i <= '9'; i++){ char_table[i] |= CHAR_DIGIT; }
+  char_table['_'] |= CHAR_ALPHA;
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+        if(queue.next_file_index < queue.total_files){
+            filename = queue.files[queue.next_file_index];
+            queue.next_file_index++;
+        }
+        pthread_mutex_unlock(&queue.lock);
+
+        if(filename == NULL) break;
+
+        parse_file(filename);
+        
+    }
+    return NULL;
+}
+
+    return 0;
+}#include /inline_lib.atl/
+
+pub func int main(){
+    private int variable = 112;
+
+    private int a = 3;
+    private int b;
+
+    b = a + variable;
+
+    return 0;
+
+
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    //get file size
+    fseek(atl_file, 0, SEEK_END);
+    long file_size = ftell(atl_file);
+    fseek(atl_file, 0 , SEEK_SET);
+
+    char *src_buf  = malloc(file_size + 1);
+    if (!file_size) { fclose(atl_file); return; }
+
+    size_t bytes_read = fread(src_buf, 1, file_size, atl_file);
+     if (ferror(atl_file)) {
+        free(src_buf);
+        fclose(atl_file);
+        return;
+    }
+    src_buf[bytes_read] = '\0';
+    fclose(atl_file);
+
+    const char *src = src_buf;
+
+    while((*src != '\0')){
+        unsigned char ch = *src;
+       uint8_t type = char_table[ch];
+
+       if(type & CHAR_WS){
+            if(buf_idx >0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+        src++;
+        continue;
+       }
+       if(type & CHAR_OP){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            if (ch == '<' && src[1] == '<' && src[2] == '=') {
+                src += 3; generate_token("<<="); continue;
+            }
+            if (ch == '>' && src[1] == '>' && src[2] == '=') {
+                src += 3; generate_token(">>="); continue;
+            }
+
+            // 2-character operators
+            if (ch == ':' && src[1] == ':') { src += 2; generate_token("::"); continue; }
+            if (ch == '-' && src[1] == '>') { src += 2; generate_token("->"); continue; }
+            if (ch == '=' && src[1] == '=') { src += 2; generate_token("=="); continue; }
+            if (ch == '=' && src[1] == '>') { src += 2; generate_token("=>"); continue; }
+            if (ch == '<' && src[1] == '-') { src += 2; generate_token("<-"); continue; }
+            if (ch == '+' && src[1] == '=') { src += 2; generate_token("+="); continue; }
+            if (ch == '-' && src[1] == '=') { src += 2; generate_token("-="); continue; }
+            if (ch == '*' && src[1] == '=') { src += 2; generate_token("*="); continue; }
+            if (ch == '/' && src[1] == '=') { src += 2; generate_token("/="); continue; }
+            if (ch == '%' && src[1] == '=') { src += 2; generate_token("%="); continue; }
+            if (ch == '<' && src[1] == '=') { src += 2; generate_token("<="); continue; }
+            if (ch == '>' && src[1] == '=') { src += 2; generate_token(">="); continue; }
+            if (ch == '!' && src[1] == '=') { src += 2; generate_token("!="); continue; }
+            if (ch == '&' && src[1] == '&') { src += 2; generate_token("&&"); continue; }
+            if (ch == '|' && src[1] == '|') { src += 2; generate_token("||"); continue; }
+            if (ch == '!' && src[1] == '&') { src += 2; generate_token("!&"); continue; }
+            if (ch == '<' && src[1] == '<') { src += 2; generate_token("<<"); continue; }
+            if (ch == '>' && src[1] == '>') { src += 2; generate_token(">>"); continue; }
+
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       if(type & CHAR_DELIM){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       string_buf[buf_idx++] = (char)ch;
+       src++;
+    }
+    //get the last string of the code.
+    if(buf_idx > 0){
+        string_buf[buf_idx] = '\0';
+        generate_token(string_buf);
+    }
+
+    generate_token("EOF");
+    free(src_buf);
+}
+
+/*lets continue with the error handler, the name speaks for itself. It will handle errors(shocking!). The main idea is that
+when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
+will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
+and if the counter is bigger than 0, it will exit with 1.*/
+
+int lex_error_handler(){
+
+}
+
+/*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
+just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
+
+static atomic_size_t token_count = 0;
+
+void generate_token(const char *string_buf){
+    
+}
+
+/*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
+identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
+table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
+this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
+
+
+void identifier_handler(const char *string_buf){
+
+}
+
+//the second generate_token function called:
+
+
+int generate_identifier_token(const char *string_buf){
+
+
+
+    //initialize the tables
+    initialize_char_table();
+    initialize_hash_table();
+
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
+
+    // Elapsed time calculation
+    double seconds = (end.tv_sec - start.tv_sec) + 
+                     (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    // %.9f prints 9 decimal places (exact nanoseconds)
+    fprintf(stderr, "\nLex time: %.9f seconds (%.3f µs / %.0f ns)\n", 
+            seconds, seconds * 1e6, seconds * 1e9);
+
+    return 0;
+}
+
+
+    //initialize the tables
+    initialize_char_table();
+    initialize_hash_table();
+
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+
+        #define LEXICAL_H
+#define HASH_TABLE_SIZE 256
+#define NUM_THREADS 4
+
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+
+typedef enum Tokens{
+    TOKEN_EOF, //end of file
+    TOKEN_UNKNOWN, //unknown string / character
+    TOKEN_IDENTIFIER, //identifiers ex: function names, variable names
+
+    TOKEN_KW_INT, //int keyword
+    TOKEN_KW_SHORT, //short keyword
+    TOKEN_KW_LONG, //long keyword
+    TOKEN_KW_BYTE, //byte keyword
+    TOKEN_KW_FLOAT, //float keyword
+    TOKEN_KW_DOUBLE, //double keyword
+    TOKEN_KW_CHAR, //char keyword
+    TOKEN_KW_STRING,
+    TOKEN_KW_BOOL, //bool keyword
+    TOKEN_KW_STRUCT, //struct keyword
+    TOKEN_KW_ENUM, //enum keyword
+    TOKEN_KW_UNION, //union keyword
+
+    TOKEN_INT_LITERAL, //int literal ex: 1, 45, 8779     
+    TOKEN_FLOAT_LITERAL, //float literal ex: 43.63, 12e-5
+    TOKEN_CHAR_LITERAL, //char literal ex: a, b, c  
+    TOKEN_STRING_LITERAL, //string literal ex: "wassup", "my G"
+    TOKEN_BOOL_LITERAL, //bool literal ex: true, false
+
+    TOKEN_KW_IF, //if(potential man) statement block
+    TOKEN_KW_ELSE, //else statement block
+    TOKEN_KW_WHILE, //while statement block
+    TOKEN_KW_DO, //do statement block
+    TOKEN_KW_FOR, //for statement block
+    TOKEN_KW_SWITCH, //switch statement block
+    TOKEN_KW_RETURN, //return statement block
+    TOKEN_KW_OUTPUT, //print to terminal
+    TOKEN_KW_INPUT, //get input from terminal
+    TOKEN_KW_READ_FILE, //read from file
+    TOKEN_KW_WRITE_TO_FILE, //write to file
+    TOKEN_KW_BREAK, //break a block of code from executing further
+    TOKEN_KW_CONTINUE, //skip that specific iteration
+    TOKEN_KW_MATCH, //to match the structure of data
+    TOKEN_KW_FUNCTION, //function keyword
+
+    TOKEN_KW_NULL, //null pointer
+    TOKEN_KW_ARENA, //alternative to heap memory, an area of data with a bump pointer
+    TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
+    TOKEN_KW_RESET, //destroy arena
+    TOKEN_KW_TEMP, //a temporary scratch arena
+    TOKEN_KW_CONST, //make constant variable types
+    TOKEN_KW_MUT, //make mutable variable types
+    TOKEN_KW_STATIC, //make static var,able types
+    TOKEN_KW_VOLATILE, //prevent compiler modifications in harware mem registers
+    TOKEN_KW_CAST, //convert types to eachother ex: char to int
+    TOKEN_KW_TYPEALIAS, //custom type names
+
+    TOKEN_KW_IMPORT, //import libraries
+    TOKEN_KW_MODULE, //declare current files namespace
+    TOKEN_KW_PRIVATE,
+    TOKEN_KW_PUBLIC,
+
+    TOKEN_KW_TRY, //try/propogate an error
+    TOKEN_KW_CATCH, //handle the caught error
+    TOKEN_KW_RAISE, //throw / emit error
+
+    TOKEN_KW_ASYNC, // async declaeration
+    TOKEN_KW_AWAIT, //wait async result
+    TOKEN_KW_SPAWN, //spin up worker thread
+    TOKEN_KW_THREAD, //assign which thread the program/block will run on
+    TOKEN_KW_ENABLE_T, //decide how many threads the program will use
+    TOKEN_KW_JOIN, //wait thread termination
+    TOKEN_KW_CHAN, //declare channel type
+    TOKEN_KW_SELECT, //multiplex channel operations
+    TOKEN_KW_ATOMIC, //edgelord ahh token / atomic memory operations SON...
+    TOKEN_KW_MUTEX, //exclusion lock
+    TOKEN_KW_LOCK, //safely aquire mutex or atomic locks and release them at critical parts of the code
+    TOKEN_KW_SHARED, //cross arena shared data specifier
+
+    TOKEN_LBRACE, // "{"
+    TOKEN_RBRACE, // "}"
+    TOKEN_LBRACKET, // "["
+    TOKEN_RBRACKET, // "]"
+    TOKEN_LPAREN, // "("
+    TOKEN_RPAREN, // ")"
+    TOKEN_DOT, // "."
+    TOKEN_COMMA, // ","
+    TOKEN_COLON, // ":"
+    TOKEN_SEMICOLON, // ";"
+    TOKEN_SCOPE_RES, // "::"
+
+    TOKEN_ASSIGN, // "="
+    TOKEN_PLUS, // "+"
+    TOKEN_MINUS, // "-"
+    TOKEN_STAR, // "*"
+    TOKEN_SLASH, // "/"
+    TOKEN_MOD, // "%"
+    TOKEN_PLUS_EQ, // "+="         
+    TOKEN_MINUS_EQ, // "-="
+    TOKEN_STAR_EQ, // "*="
+    TOKEN_SLASH_EQ, // "/="
+    TOKEN_MOD_EQ, // "%="
+    
+    TOKEN_LT, // "<"
+    TOKEN_GT, // ">"
+    TOKEN_LE, // "<="
+    TOKEN_GE, // ">="
+    TOKEN_EQ, // "=="
+    TOKEN_NEQ, // "!="
+    
+    TOKEN_AND, // "&&"
+    TOKEN_OR, // "||"
+    TOKEN_NAND, // "!&"
+    TOKEN_XOR, // "^"
+    TOKEN_NOT, // "!"
+    TOKEN_BIT_NOT, // "~"     
+    TOKEN_LSHIFT, // "<<"
+    TOKEN_RSHIFT, // ">>"
+    TOKEN_LSHIFT_EQ, // "<<="   
+    TOKEN_RSHIFT_EQ, //">>="
+    TOKEN_QUESTION, // "?"
+    TOKEN_AMPERSAND, // "&"
+    
+
+    TOKEN_ARROW, // "->"
+    TOKEN_FAT_ARROW, // "=>" used in match arms ex: 5 => return
+    TOKEN_LEFT_ARROW, //use to send or receive on a channel "<-"
+    
+}TokenType;
+
+typedef struct Keyword{
+    const char *key;
+    TokenType token;
+}KeywordEntry;
+
+//mapping characters to a bitmask array
+typedef enum Character{
+    CHAR_WS = (1<<0), //whitespace
+    CHAR_ALPHA = (1<<1), //alphanumeric
+    CHAR_DIGIT = (1<<2), //digits
+    CHAR_DELIM = (1<<3), //delimiters
+    CHAR_OP = (1<<4) //operations
+}CharacterClass;
+
+typedef struct {
+    char **files;
+    int total_files;
+    int next_file_index;
+    pthread_mutex_t lock;
+}FileQueue;
+
+extern FileQueue queue;
+
+//initialize the functions except the helpers here.
+void parse_file(const char *filetype);
+int lex_error_handler();
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
+
+    // Elapsed time calculation
+    double seconds = (end.tv_sec - start.tv_sec) + 
+                     (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    // %.9f prints 9 decimal places (exact nanoseconds)
+    fprintf(stderr, "\nLex time: %.9f seconds (%.3f µs / %.0f ns)\n", 
+            seconds, seconds * 1e6, seconds * 1e9);
+
+    return 0;
+}
+
+}
+
+//helper functions
+
+bool is_valid_identifier_start(int ch){
+
+}
+bool is_valid_identifier_character(int ch){
+
+}
+TokenType lookup_token(const char *string){
+    uint32_t index = hash_string(string) % HASH_TABLE_SIZE;
+
+    while (keyword_table[index].key != NULL) {
+        if (strcmp(keyword_table[index].key, string) == 0) {
+            return keyword_table[index].token; 
+        }
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    return TOKEN_UNKNOWN;
+}
+
+/*ok this one is inbetween but i think its closer to a helper function. So it will handle special formats like:
+"1.5323e-2" this is a float literal but the format of it is basically:
+"TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN__LITERAL" and i dont want to dirty the base generator function
+by handling special cases there.*/
+
+
+int special_format_handler(const char *string_buf){
+
+}
+
+//hashing functions to convert strings to integers for assigning tokens from the enum table.
+static uint32_t hash_string(const char *string){
+    uint32_t hash = 2166136261u;
+    while (*string) {
+        hash ^= (uint8_t)*string++;
+        hash *= 16777619u;
+    }
+    return hash;
+}
+static void insert_keyword(const char *key, TokenType token) {
+    uint32_t index = hash_string(key) % HASH_TABLE_SIZE;
+
+    //resolve collisions.
+    while (keyword_table[index].key != NULL) {
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    keyword_table[index].key = key;
+    keyword_table[index].token = token;
+}
+void initialize_hash_table(void){
+
+    memset(keyword_table, 0, sizeof(keyword_table));
+
+    //types
+    insert_keyword("int", TOKEN_KW_INT);
+    insert_keyword("short", TOKEN_KW_SHORT);
+    insert_keyword("long", TOKEN_KW_LONG);
+    insert_keyword("byte", TOKEN_KW_BYTE);
+    insert_keyword("float", TOKEN_KW_FLOAT);
+    insert_keyword("double", TOKEN_KW_DOUBLE);
+    insert_keyword("char", TOKEN_KW_CHAR);
+    insert_keyword("string", TOKEN_KW_STRING);
+    insert_keyword("bool", TOKEN_KW_BOOL);
+    insert_keyword("struct", TOKEN_KW_STRUCT);
+    insert_keyword("enum", TOKEN_KW_ENUM);
+    insert_keyword("union", TOKEN_KW_UNION);
+
+    //statements and functions
+    insert_keyword("if", TOKEN_KW_IF);
+    insert_keyword("else", TOKEN_KW_ELSE);
+    insert_keyword("while", TOKEN_KW_WHILE);
+    insert_keyword("do", TOKEN_KW_DO);
+    insert_keyword("for", TOKEN_KW_FOR);
+    insert_keyword("switch", TOKEN_KW_SWITCH);
+    insert_keyword("return", TOKEN_KW_RETURN);
+    insert_keyword("out", TOKEN_KW_OUTPUT);
+    insert_keyword("in", TOKEN_KW_INPUT);
+    insert_keyword("read_file", TOKEN_KW_READ_FILE);
+    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE);
+    insert_keyword("break", TOKEN_KW_BREAK);
+    insert_keyword("continue", TOKEN_KW_CONTINUE);
+    insert_keyword("match", TOKEN_KW_MATCH);
+    insert_keyword("func", TOKEN_KW_FUNCTION);
+
+    //memory thingys
+    insert_keyword("NULL", TOKEN_KW_NULL);
+    insert_keyword("arena", TOKEN_KW_ARENA);
+    insert_keyword("defer", TOKEN_KW_DEFER);
+    insert_keyword("reset", TOKEN_KW_RESET);
+    insert_keyword("temp", TOKEN_KW_TEMP);
+    insert_keyword("const", TOKEN_KW_CONST);
+    insert_keyword("mutable", TOKEN_KW_MUT);
+    insert_keyword("static", TOKEN_KW_STATIC);
+    insert_keyword("volatile", TOKEN_KW_VOLATILE);
+    insert_keyword("cast", TOKEN_KW_CAST);
+    insert_keyword("typealias", TOKEN_KW_TYPEALIAS);
+
+    //modules, visibility, import
+    insert_keyword("import", TOKEN_KW_IMPORT);
+    insert_keyword("module", TOKEN_KW_MODULE);
+    insert_keyword("public", TOKEN_KW_PUBLIC);
+
+#define LEXICAL_H
+#define HASH_TABLE_SIZE 256
+#define NUM_THREADS 4
+
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+
+typedef enum Tokens{
+    TOKEN_EOF, //end of file
+    TOKEN_UNKNOWN, //unknown string / character
+    TOKEN_IDENTIFIER, //identifiers ex: function names, variable names
+
+    TOKEN_KW_INT, //int keyword
+    TOKEN_KW_SHORT, //short keyword
+    TOKEN_KW_LONG, //long keyword
+    TOKEN_KW_BYTE, //byte keyword
+    TOKEN_KW_FLOAT, //float keyword
+    TOKEN_KW_DOUBLE, //double keyword
+    TOKEN_KW_CHAR, //char keyword
+    TOKEN_KW_STRING,
+    TOKEN_KW_BOOL, //bool keyword
+    TOKEN_KW_STRUCT, //struct keyword
+    TOKEN_KW_ENUM, //enum keyword
+    TOKEN_KW_UNION, //union keyword
+
+    TOKEN_INT_LITERAL, //int literal ex: 1, 45, 8779     
+    TOKEN_FLOAT_LITERAL, //float literal ex: 43.63, 12e-5
+    TOKEN_CHAR_LITERAL, //char literal ex: a, b, c  
+    TOKEN_STRING_LITERAL, //string literal ex: "wassup", "my G"
+    TOKEN_BOOL_LITERAL, //bool literal ex: true, false
+
+    TOKEN_KW_IF, //if(potential man) statement block
+    TOKEN_KW_ELSE, //else statement block
+    TOKEN_KW_WHILE, //while statement block
+    TOKEN_KW_DO, //do statement block
+    TOKEN_KW_FOR, //for statement block
+    TOKEN_KW_SWITCH, //switch statement block
+    TOKEN_KW_RETURN, //return statement block
+    TOKEN_KW_OUTPUT, //print to terminal
+    TOKEN_KW_INPUT, //get input from terminal
+    TOKEN_KW_READ_FILE, //read from file
+    TOKEN_KW_WRITE_TO_FILE, //write to file
+    TOKEN_KW_BREAK, //break a block of code from executing further
+    TOKEN_KW_CONTINUE, //skip that specific iteration
+    TOKEN_KW_MATCH, //to match the structure of data
+    TOKEN_KW_FUNCTION, //function keyword
+
+    TOKEN_KW_NULL, //null pointer
+    TOKEN_KW_ARENA, //alternative to heap memory, an area of data with a bump pointer
+    TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
+    TOKEN_KW_RESET, //destroy arena
+    TOKEN_KW_TEMP, //a temporary scratch arena
+    TOKEN_KW_CONST, //make constant variable types
+    TOKEN_KW_MUT, //make mutable variable types
+    TOKEN_KW_STATIC, //make static var,able types
+    TOKEN_KW_VOLATILE, //prevent compiler modifications in harware mem registers
+    TOKEN_KW_CAST, //convert types to eachother ex: char to int
+    TOKEN_KW_TYPEALIAS, //custom type names
+
+    TOKEN_KW_IMPORT, //import libraries
+    TOKEN_KW_MODULE, //declare current files namespace
+    TOKEN_KW_PRIVATE,
+    TOKEN_KW_PUBLIC,
+
+    TOKEN_KW_TRY, //try/propogate an error
+    TOKEN_KW_CATCH, //handle the caught error
+    TOKEN_KW_RAISE, //throw / emit error
+
+    TOKEN_KW_ASYNC, // async declaeration
+    TOKEN_KW_AWAIT, //wait async result
+    TOKEN_KW_SPAWN, //spin up worker thread
+    TOKEN_KW_THREAD, //assign which thread the program/block will run on
+    TOKEN_KW_ENABLE_T, //decide how many threads the program will use
+    TOKEN_KW_JOIN, //wait thread termination
+    TOKEN_KW_CHAN, //declare channel type
+    TOKEN_KW_SELECT, //multiplex channel operations
+    TOKEN_KW_ATOMIC, //edgelord ahh token / atomic memory operations SON...
+    TOKEN_KW_MUTEX, //exclusion lock
+    TOKEN_KW_LOCK, //safely aquire mutex or atomic locks and release them at critical parts of the code
+    TOKEN_KW_SHARED, //cross arena shared data specifier
+
+    TOKEN_LBRACE, // "{"
+    TOKEN_RBRACE, // "}"
+    TOKEN_LBRACKET, // "["
+    TOKEN_RBRACKET, // "]"
+    TOKEN_LPAREN, // "("
+    TOKEN_RPAREN, // ")"
+    TOKEN_DOT, // "."
+    TOKEN_COMMA, // ","
+    TOKEN_COLON, // ":"
+    TOKEN_SEMICOLON, // ";"
+    TOKEN_SCOPE_RES, // "::"
+
+    TOKEN_ASSIGN, // "="
+    TOKEN_PLUS, // "+"
+    TOKEN_MINUS, // "-"
+    TOKEN_STAR, // "*"
+    TOKEN_SLASH, // "/"
+    TOKEN_MOD, // "%"
+    TOKEN_PLUS_EQ, // "+="         
+    TOKEN_MINUS_EQ, // "-="
+    TOKEN_STAR_EQ, // "*="
+    TOKEN_SLASH_EQ, // "/="
+    TOKEN_MOD_EQ, // "%="
+    
+    TOKEN_LT, // "<"
+    TOKEN_GT, // ">"
+    TOKEN_LE, // "<="
+    TOKEN_GE, // ">="
+    TOKEN_EQ, // "=="
+    TOKEN_NEQ, // "!="
+    
+    TOKEN_AND, // "&&"
+    TOKEN_OR, // "||"
+    TOKEN_NAND, // "!&"
+    TOKEN_XOR, // "^"
+    TOKEN_NOT, // "!"
+    TOKEN_BIT_NOT, // "~"     
+    TOKEN_LSHIFT, // "<<"
+    TOKEN_RSHIFT, // ">>"
+    TOKEN_LSHIFT_EQ, // "<<="   
+    TOKEN_RSHIFT_EQ, //">>="
+    TOKEN_QUESTION, // "?"
+    TOKEN_AMPERSAND, // "&"
+    
+
+    TOKEN_ARROW, // "->"
+    TOKEN_FAT_ARROW, // "=>" used in match arms ex: 5 => return
+    TOKEN_LEFT_ARROW, //use to send or receive on a channel "<-"
+    
+}TokenType;
+
+typedef struct Keyword{
+    const char *key;
+    TokenType token;
+}KeywordEntry;
+
+//mapping characters to a bitmask array
+typedef enum Character{
+    CHAR_WS = (1<<0), //whitespace
+    CHAR_ALPHA = (1<<1), //alphanumeric
+    CHAR_DIGIT = (1<<2), //digits
+    CHAR_DELIM = (1<<3), //delimiters
+    CHAR_OP = (1<<4) //operations
+}CharacterClass;
+
+typedef struct {
+    char **files;
+    int total_files;
+    int next_file_index;
+    pthread_mutex_t lock;
+}FileQueue;
+
+extern FileQueue queue;
+
+//initialize the functions except the helpers here.
+void parse_file(const char *filetype);
+int lex_error_handler();
+
+    insert_keyword("private", TOKEN_KW_PRIVATE);
+
+    //error handling
+    insert_keyword("try", TOKEN_KW_TRY);
+    insert_keyword("catch", TOKEN_KW_CATCH);
+    insert_keyword("raise", TOKEN_KW_RAISE);
+
+    //function and multithreading thingys
+    insert_keyword("async", TOKEN_KW_ASYNC);
+    insert_keyword("await", TOKEN_KW_AWAIT);
+    insert_keyword("spawn", TOKEN_KW_SPAWN);
+    insert_keyword("thread", TOKEN_KW_THREAD);
+    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T);
+    insert_keyword("join", TOKEN_KW_JOIN);
+    insert_keyword("channel", TOKEN_KW_CHAN);
+    insert_keyword("select", TOKEN_KW_SELECT);
+    insert_keyword("atomic", TOKEN_KW_ATOMIC);
+    insert_keyword("mutex", TOKEN_KW_MUTEX);
+    insert_keyword("lock", TOKEN_KW_LOCK);
+    insert_keyword("shared", TOKEN_KW_SHARED);
+
+}
+void initialize_char_table(void){
+    memset(char_table, 0, sizeof(char_table));
+
+    char_table[' '] = char_table['\t'] = char_table['\n']
+  = char_table['\r'] = CHAR_WS;
+
+  for(int i = 'a'; i <= 'z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = 'A'; i <= 'Z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = '0'; i <= '9'; i++){ char_table[i] |= CHAR_DIGIT; }
+  char_table['_'] |= CHAR_ALPHA;
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+
+
+    //initialize the tables
+    initialize_char_table();
+    initialize_hash_table();
+
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
+
+    #define LEXICAL_H
+#define HASH_TABLE_SIZE 256
+#define NUM_THREADS 4
+
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+
+typedef enum Tokens{
+    TOKEN_EOF, //end of file
+    TOKEN_UNKNOWN, //unknown string / character
+    TOKEN_IDENTIFIER, //identifiers ex: function names, variable names
+
+    TOKEN_KW_INT, //int keyword
+    TOKEN_KW_SHORT, //short keyword
+    TOKEN_KW_LONG, //long keyword
+    TOKEN_KW_BYTE, //byte keyword
+    TOKEN_KW_FLOAT, //float keyword
+    TOKEN_KW_DOUBLE, //double keyword
+    TOKEN_KW_CHAR, //char keyword
+    TOKEN_KW_STRING,
+    TOKEN_KW_BOOL, //bool keyword
+    TOKEN_KW_STRUCT, //struct keyword
+    TOKEN_KW_ENUM, //enum keyword
+    TOKEN_KW_UNION, //union keyword
+
+    TOKEN_INT_LITERAL, //int literal ex: 1, 45, 8779     
+    TOKEN_FLOAT_LITERAL, //float literal ex: 43.63, 12e-5
+    TOKEN_CHAR_LITERAL, //char literal ex: a, b, c  
+    TOKEN_STRING_LITERAL, //string literal ex: "wassup", "my G"
+    TOKEN_BOOL_LITERAL, //bool literal ex: true, false
+
+    TOKEN_KW_IF, //if(potential man) statement block
+    TOKEN_KW_ELSE, //else statement block
+    TOKEN_KW_WHILE, //while statement block
+    TOKEN_KW_DO, //do statement block
+    TOKEN_KW_FOR, //for statement block
+    TOKEN_KW_SWITCH, //switch statement block
+    TOKEN_KW_RETURN, //return statement block
+    TOKEN_KW_OUTPUT, //print to terminal
+    TOKEN_KW_INPUT, //get input from terminal
+    TOKEN_KW_READ_FILE, //read from file
+    TOKEN_KW_WRITE_TO_FILE, //write to file
+    TOKEN_KW_BREAK, //break a block of code from executing further
+    TOKEN_KW_CONTINUE, //skip that specific iteration
+    TOKEN_KW_MATCH, //to match the structure of data
+    TOKEN_KW_FUNCTION, //function keyword
+
+    TOKEN_KW_NULL, //null pointer
+    TOKEN_KW_ARENA, //alternative to heap memory, an area of data with a bump pointer
+    TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
+    TOKEN_KW_RESET, //destroy arena
+    TOKEN_KW_TEMP, //a temporary scratch arena
+    TOKEN_KW_CONST, //make constant variable types
+    TOKEN_KW_MUT, //make mutable variable types
+    TOKEN_KW_STATIC, //make static var,able types
+    TOKEN_KW_VOLATILE, //prevent compiler modifications in harware mem registers
+    TOKEN_KW_CAST, //convert types to eachother ex: char to int
+    TOKEN_KW_TYPEALIAS, //custom type names
+
+    TOKEN_KW_IMPORT, //import libraries
+    TOKEN_KW_MODULE, //declare current files namespace
+    TOKEN_KW_PRIVATE,
+    TOKEN_KW_PUBLIC,
+
+    TOKEN_KW_TRY, //try/propogate an error
+    TOKEN_KW_CATCH, //handle the caught error
+    TOKEN_KW_RAISE, //throw / emit error
+
+    TOKEN_KW_ASYNC, // async declaeration
+    TOKEN_KW_AWAIT, //wait async result
+    TOKEN_KW_SPAWN, //spin up worker thread
+    TOKEN_KW_THREAD, //assign which thread the program/block will run on
+    TOKEN_KW_ENABLE_T, //decide how many threads the program will use
+    TOKEN_KW_JOIN, //wait thread termination
+    TOKEN_KW_CHAN, //declare channel type
+    TOKEN_KW_SELECT, //multiplex channel operations
+    TOKEN_KW_ATOMIC, //edgelord ahh token / atomic memory operations SON...
+    TOKEN_KW_MUTEX, //exclusion lock
+    TOKEN_KW_LOCK, //safely aquire mutex or atomic locks and release them at critical parts of the code
+    TOKEN_KW_SHARED, //cross arena shared data specifier
+
+    TOKEN_LBRACE, // "{"
+    TOKEN_RBRACE, // "}"
+    TOKEN_LBRACKET, // "["
+    TOKEN_RBRACKET, // "]"
+    TOKEN_LPAREN, // "("
+    TOKEN_RPAREN, // ")"
+    TOKEN_DOT, // "."
+    TOKEN_COMMA, // ","
+    TOKEN_COLON, // ":"
+    TOKEN_SEMICOLON, // ";"
+    TOKEN_SCOPE_RES, // "::"
+
+    TOKEN_ASSIGN, // "="
+    TOKEN_PLUS, // "+"
+    TOKEN_MINUS, // "-"
+    TOKEN_STAR, // "*"
+    TOKEN_SLASH, // "/"
+    TOKEN_MOD, // "%"
+    TOKEN_PLUS_EQ, // "+="         
+    TOKEN_MINUS_EQ, // "-="
+    TOKEN_STAR_EQ, // "*="
+    TOKEN_SLASH_EQ, // "/="
+    TOKEN_MOD_EQ, // "%="
+    
+    TOKEN_LT, // "<"
+    TOKEN_GT, // ">"
+    TOKEN_LE, // "<="
+    TOKEN_GE, // ">="
+    TOKEN_EQ, // "=="
+    TOKEN_NEQ, // "!="
+    
+    TOKEN_AND, // "&&"
+    TOKEN_OR, // "||"
+    TOKEN_NAND, // "!&"
+    TOKEN_XOR, // "^"
+    TOKEN_NOT, // "!"
+    TOKEN_BIT_NOT, // "~"     
+    TOKEN_LSHIFT, // "<<"
+    TOKEN_RSHIFT, // ">>"
+    TOKEN_LSHIFT_EQ, // "<<="   
+    TOKEN_RSHIFT_EQ, //">>="
+    TOKEN_QUESTION, // "?"
+    TOKEN_AMPERSAND, // "&"
+    
+
+    TOKEN_ARROW, // "->"
+    TOKEN_FAT_ARROW, // "=>" used in match arms ex: 5 => return
+    TOKEN_LEFT_ARROW, //use to send or receive on a channel "<-"
+    
+}TokenType;
+
+typedef struct Keyword{
+    const char *key;
+    TokenType token;
+}KeywordEntry;
+
+//mapping characters to a bitmask array
+typedef enum Character{
+    CHAR_WS = (1<<0), //whitespace
+    CHAR_ALPHA = (1<<1), //alphanumeric
+    CHAR_DIGIT = (1<<2), //digits
+    CHAR_DELIM = (1<<3), //delimiters
+    CHAR_OP = (1<<4) //operations
+}CharacterClass;
+
+typedef struct {
+    char **files;
+    int total_files;
+    int next_file_index;
+    pthread_mutex_t lock;
+}FileQueue;
+
+extern FileQueue queue;
+
+//initialize the functions except the helpers here.
+void parse_file(const char *filetype);
+int lex_error_handler();
+
+#define LEXICAL_H
+#define HASH_TABLE_SIZE 256
+#define NUM_THREADS 4
+
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+
+typedef enum Tokens{
+    TOKEN_EOF, //end of file
+    TOKEN_UNKNOWN, //unknown string / character
+    TOKEN_IDENTIFIER, //identifiers ex: function names, variable names
+
+    TOKEN_KW_INT, //int keyword
+    TOKEN_KW_SHORT, //short keyword
+    TOKEN_KW_LONG, //long keyword
+    TOKEN_KW_BYTE, //byte keyword
+    TOKEN_KW_FLOAT, //float keyword
+    TOKEN_KW_DOUBLE, //double keyword
+    TOKEN_KW_CHAR, //char keyword
+    TOKEN_KW_STRING,
+    TOKEN_KW_BOOL, //bool keyword
+    TOKEN_KW_STRUCT, //struct keyword
+    TOKEN_KW_ENUM, //enum keyword
+    TOKEN_KW_UNION, //union keyword
+
+    TOKEN_INT_LITERAL, //int literal ex: 1, 45, 8779     
+    TOKEN_FLOAT_LITERAL, //float literal ex: 43.63, 12e-5
+    TOKEN_CHAR_LITERAL, //char literal ex: a, b, c  
+    TOKEN_STRING_LITERAL, //string literal ex: "wassup", "my G"
+    TOKEN_BOOL_LITERAL, //bool literal ex: true, false
+
+    TOKEN_KW_IF, //if(potential man) statement block
+    TOKEN_KW_ELSE, //else statement block
+    TOKEN_KW_WHILE, //while statement block
+    TOKEN_KW_DO, //do statement block
+    TOKEN_KW_FOR, //for statement block
+    TOKEN_KW_SWITCH, //switch statement block
+    TOKEN_KW_RETURN, //return statement block
+    TOKEN_KW_OUTPUT, //print to terminal
+    TOKEN_KW_INPUT, //get input from terminal
+    TOKEN_KW_READ_FILE, //read from file
+    TOKEN_KW_WRITE_TO_FILE, //write to file
+    TOKEN_KW_BREAK, //break a block of code from executing further
+    TOKEN_KW_CONTINUE, //skip that specific iteration
+    TOKEN_KW_MATCH, //to match the structure of data
+    TOKEN_KW_FUNCTION, //function keyword
+
+    TOKEN_KW_NULL, //null pointer
+    TOKEN_KW_ARENA, //alternative to heap memory, an area of data with a bump pointer
+    TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
+    TOKEN_KW_RESET, //destroy arena
+    TOKEN_KW_TEMP, //a temporary scratch arena
+    TOKEN_KW_CONST, //make constant variable types
+    TOKEN_KW_MUT, //make mutable variable types
+    TOKEN_KW_STATIC, //make static var,able types
+    TOKEN_KW_VOLATILE, //prevent compiler modifications in harware mem registers
+    TOKEN_KW_CAST, //convert types to eachother ex: char to int
+    TOKEN_KW_TYPEALIAS, //custom type names
+
+    TOKEN_KW_IMPORT, //import libraries
+    TOKEN_KW_MODULE, //declare current files namespace
+    TOKEN_KW_PRIVATE,
+    TOKEN_KW_PUBLIC,
+
+    TOKEN_KW_TRY, //try/propogate an error
+    TOKEN_KW_CATCH, //handle the caught error
+    TOKEN_KW_RAISE, //throw / emit error
+
+    TOKEN_KW_ASYNC, // async declaeration
+    TOKEN_KW_AWAIT, //wait async result
+    TOKEN_KW_SPAWN, //spin up worker thread
+    TOKEN_KW_THREAD, //assign which thread the program/block will run on
+    TOKEN_KW_ENABLE_T, //decide how many threads the program will use
+    TOKEN_KW_JOIN, //wait thread termination
+    TOKEN_KW_CHAN, //declare channel type
+    TOKEN_KW_SELECT, //multiplex channel operations
+    TOKEN_KW_ATOMIC, //edgelord ahh token / atomic memory operations SON...
+    TOKEN_KW_MUTEX, //exclusion lock
+    TOKEN_KW_LOCK, //safely aquire mutex or atomic locks and release them at critical parts of the code
+    TOKEN_KW_SHARED, //cross arena shared data specifier
+
+    TOKEN_LBRACE, // "{"
+    TOKEN_RBRACE, // "}"
+    TOKEN_LBRACKET, // "["
+    TOKEN_RBRACKET, // "]"
+    TOKEN_LPAREN, // "("
+    TOKEN_RPAREN, // ")"
+    TOKEN_DOT, // "."
+    TOKEN_COMMA, // ","
+    TOKEN_COLON, // ":"
+    TOKEN_SEMICOLON, // ";"
+    TOKEN_SCOPE_RES, // "::"
+
+    TOKEN_ASSIGN, // "="
+    TOKEN_PLUS, // "+"
+    TOKEN_MINUS, // "-"
+    TOKEN_STAR, // "*"
+    TOKEN_SLASH, // "/"
+    TOKEN_MOD, // "%"
+    TOKEN_PLUS_EQ, // "+="         
+    TOKEN_MINUS_EQ, // "-="
+    TOKEN_STAR_EQ, // "*="
+    TOKEN_SLASH_EQ, // "/="
+    TOKEN_MOD_EQ, // "%="
+    
+    TOKEN_LT, // "<"
+    TOKEN_GT, // ">"
+    TOKEN_LE, // "<="
+    TOKEN_GE, // ">="
+    TOKEN_EQ, // "=="
+    TOKEN_NEQ, // "!="
+    
+    TOKEN_AND, // "&&"
+    TOKEN_OR, // "||"
+    TOKEN_NAND, // "!&"
+    TOKEN_XOR, // "^"
+    TOKEN_NOT, // "!"
+    TOKEN_BIT_NOT, // "~"     
+    TOKEN_LSHIFT, // "<<"
+    TOKEN_RSHIFT, // ">>"
+    TOKEN_LSHIFT_EQ, // "<<="   
+    TOKEN_RSHIFT_EQ, //">>="
+    TOKEN_QUESTION, // "?"
+    TOKEN_AMPERSAND, // "&"
+    
+
+    TOKEN_ARROW, // "->"
+    TOKEN_FAT_ARROW, // "=>" used in match arms ex: 5 => return
+    TOKEN_LEFT_ARROW, //use to send or receive on a channel "<-"
+    
+}TokenType;
+
+typedef struct Keyword{
+    const char *key;
+    TokenType token;
+}KeywordEntry;
+
+//mapping characters to a bitmask array
+typedef enum Character{
+    CHAR_WS = (1<<0), //whitespace
+    CHAR_ALPHA = (1<<1), //alphanumeric
+    CHAR_DIGIT = (1<<2), //digits
+    CHAR_DELIM = (1<<3), //delimiters
+    CHAR_OP = (1<<4) //operations
+
+    #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "lexical_analyzer.h"
+#include <stdatomic.h>
+
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+TokenType lookup_token(const char *string);
+
+/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
+
+
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+
+    //open the files
+    FILE *atl_file = fopen(filetype, "rb");
+    //check empty
+    if(atl_file == NULL){
+        fprintf(stderr, "ERROR: Could not open file!");
+        return;
+    }
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "lexical_analyzer.h"
+#include <stdatomic.h>
+
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+TokenType lookup_token(const char *string);
+
+/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
+
+
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+
+    //open the files
+    FILE *atl_file = fopen(filetype, "rb");
+    //check empty
+    if(atl_file == NULL){
+        fprintf(stderr, "ERROR: Could not open file!");
+        return;
+    }
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "lexical_analyzer.h"
+#include <stdatomic.h>
+
+//initialize the helper functions that will basically never leave this file.
+bool is_valid_identifier_start(int ch);
+bool is_valid_identifier_character(int ch);
+int special_format_handler(const char *string_buf);
+TokenType lookup_token(const char *string);
+
+/*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
+make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
+in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
+
+
+void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+
+    //open the files
+    FILE *atl_file = fopen(filetype, "rb");
+    //check empty
+    if(atl_file == NULL){
+        fprintf(stderr, "ERROR: Could not open file!");
+        return;
+    }
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+    
+}CharacterClass;
+
+typedef struct {
+    char **files;
+    int total_files;
+    int next_file_index;
+    pthread_mutex_t lock;
+}FileQueue;
+
+extern FileQueue queue;
+
+//initialize the functions except the helpers here.
+void parse_file(const char *filetype);
+int lex_error_handler();
+
+    // Elapsed time calculation
+    double seconds = (end.tv_sec - start.tv_sec) + 
+                     (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    // %.9f prints 9 decimal places (exact nanoseconds)
+    fprintf(stderr, "\nLex time: %.9f seconds (%.3f µs / %.0f ns)\n", 
+            seconds, seconds * 1e6, seconds * 1e9);
+
+    return 0;
+}
+
+
+    //initialize the tables
+    initialize_char_table();
+    initialize_hash_table();
+
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
+
+    // Elapsed time calculation
+    double seconds = (end.tv_sec - start.tv_sec) + 
+                     (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    // %.9f prints 9 decimal places (exact nanoseconds)
+    fprintf(stderr, "\nLex time: %.9f seconds (%.3f µs / %.0f ns)\n", 
+            seconds, seconds * 1e6, seconds * 1e9);
+
+    return 0;
+}
+
+
+    //initialize the tables
+    initialize_char_table();
+    initialize_hash_table();
+
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
+
+    // Elapsed time calculation
+    double seconds = (end.tv_sec - start.tv_sec) + 
+                     (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    // %.9f prints 9 decimal places (exact nanoseconds)
+    fprintf(stderr, "\nLex time: %.9f seconds (%.3f µs / %.0f ns)\n", 
+            seconds, seconds * 1e6, seconds * 1e9);
+
+    return 0;
+}
+
+
+    //initialize the tables
+    initialize_char_table();
+    initialize_hash_table();
+
+    //start making queue
+    queue.files = &argv[1];
+    queue.total_files = argc - 1;
+    queue.next_file_index = 0;
+    pthread_mutex_init(&queue.lock, NULL);
+
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    
+    for(int i = 0; i < NUM_THREADS; i++){
+        thread_ids[i] = i;
+        if(pthread_create(&threads[i], NULL, worker_thread, &thread_ids[i]) != 0){
+            perror("ERROR: Couldn't create thread.");
+            return 1;
+        }
+    }
+    for(int i = 0; i < NUM_THREADS; i++){
+        pthread_join(threads[i], NULL);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    pthread_mutex_destroy(&queue.lock);
+
+    // Elapsed time calculation
+    double seconds = (end.tv_sec - start.tv_sec) + 
+                     (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    // %.9f prints 9 decimal places (exact nanoseconds)
+    fprintf(stderr, "\nLex time: %.9f seconds (%.3f µs / %.0f ns)\n", 
+            seconds, seconds * 1e6, seconds * 1e9);
+
+    return 0;
+}
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+
+    //initialize string buf and index.
+    char string_buf[256];
+    int buf_idx = 0;
+
+    //get file size
+    fseek(atl_file, 0, SEEK_END);
+    long file_size = ftell(atl_file);
+    fseek(atl_file, 0 , SEEK_SET);
+
+    char *src_buf  = malloc(file_size + 1);
+    if (!file_size) { fclose(atl_file); return; }
+
+    size_t bytes_read = fread(src_buf, 1, file_size, atl_file);
+     if (ferror(atl_file)) {
+        free(src_buf);
+        fclose(atl_file);
+        return;
+    }
+    src_buf[bytes_read] = '\0';
+    fclose(atl_file);
+
+    const char *src = src_buf;
+
+    while((*src != '\0')){
+        unsigned char ch = *src;
+       uint8_t type = char_table[ch];
+
+       if(type & CHAR_WS){
+            if(buf_idx >0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+        src++;
+        continue;
+       }
+       if(type & CHAR_OP){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            if (ch == '<' && src[1] == '<' && src[2] == '=') {
+                src += 3; generate_token("<<="); continue;
+            }
+            if (ch == '>' && src[1] == '>' && src[2] == '=') {
+                src += 3; generate_token(">>="); continue;
+            }
+
+            // 2-character operators
+            if (ch == ':' && src[1] == ':') { src += 2; generate_token("::"); continue; }
+            if (ch == '-' && src[1] == '>') { src += 2; generate_token("->"); continue; }
+            if (ch == '=' && src[1] == '=') { src += 2; generate_token("=="); continue; }
+            if (ch == '=' && src[1] == '>') { src += 2; generate_token("=>"); continue; }
+            if (ch == '<' && src[1] == '-') { src += 2; generate_token("<-"); continue; }
+            if (ch == '+' && src[1] == '=') { src += 2; generate_token("+="); continue; }
+            if (ch == '-' && src[1] == '=') { src += 2; generate_token("-="); continue; }
+            if (ch == '*' && src[1] == '=') { src += 2; generate_token("*="); continue; }
+            if (ch == '/' && src[1] == '=') { src += 2; generate_token("/="); continue; }
+            if (ch == '%' && src[1] == '=') { src += 2; generate_token("%="); continue; }
+            if (ch == '<' && src[1] == '=') { src += 2; generate_token("<="); continue; }
+            if (ch == '>' && src[1] == '=') { src += 2; generate_token(">="); continue; }
+            if (ch == '!' && src[1] == '=') { src += 2; generate_token("!="); continue; }
+            if (ch == '&' && src[1] == '&') { src += 2; generate_token("&&"); continue; }
+            if (ch == '|' && src[1] == '|') { src += 2; generate_token("||"); continue; }
+            if (ch == '!' && src[1] == '&') { src += 2; generate_token("!&"); continue; }
+            if (ch == '<' && src[1] == '<') { src += 2; generate_token("<<"); continue; }
+            if (ch == '>' && src[1] == '>') { src += 2; generate_token(">>"); continue; }
+
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       if(type & CHAR_DELIM){
+            if(buf_idx > 0){
+                string_buf[buf_idx] = '\0';
+                generate_token(string_buf);
+                buf_idx = 0;
+            }
+            string_buf[0] = (char)ch;
+            string_buf[1] = '\0';
+            generate_token(string_buf);
+            src++;
+            continue;
+       }
+
+       string_buf[buf_idx++] = (char)ch;
+       src++;
+    }
+    //get the last string of the code.
+    if(buf_idx > 0){
+        string_buf[buf_idx] = '\0';
+        generate_token(string_buf);
+    }
+
+    generate_token("EOF");
+    free(src_buf);
+}
+
+/*lets continue with the error handler, the name speaks for itself. It will handle errors(shocking!). The main idea is that
+when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
+will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
+and if the counter is bigger than 0, it will exit with 1.*/
+
+int lex_error_handler(){
+
+}
+
+/*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
+just be a little confusing at worst. IDEK if string_buf is the way to go tbh.*/
+
+static atomic_size_t token_count = 0;
+
+void generate_token(const char *string_buf){
+    
+}
+
+/*Ok so a special function here. I couldn't figure out another way so i decided to split the token function to 2 and 1
+identifier_handler function and call this as the default choice if the generate_token couldn't match the token with the 
+table. It basically works like this: generate_token wont have the TOKEN_IDENTIFIER as a valid case so it will default to 
+this function which will decide if the string it got is an identifier or unknown. God this is a long ahh comment.*/
+
+
+void identifier_handler(const char *string_buf){
+
+}
+
+//the second generate_token function called:
+
+
+int generate_identifier_token(const char *string_buf){
+
+}
+
+//helper functions
+
+bool is_valid_identifier_start(int ch){
+
+}
+bool is_valid_identifier_character(int ch){
+
+}
+TokenType lookup_token(const char *string){
+    uint32_t index = hash_string(string) % HASH_TABLE_SIZE;
+
+    while (keyword_table[index].key != NULL) {
+        if (strcmp(keyword_table[index].key, string) == 0) {
+            return keyword_table[index].token; 
+        }
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    return TOKEN_UNKNOWN;
+}
+
+/*ok this one is inbetween but i think its closer to a helper function. So it will handle special formats like:
+"1.5323e-2" this is a float literal but the format of it is basically:
+"TOKEN_FLOAT_LITERAL + e + TOKEN_PLUS/MINUS + TOKEN__LITERAL" and i dont want to dirty the base generator function
+by handling special cases there.*/
+
+
+int special_format_handler(const char *string_buf){
+
+}
+
+//hashing functions to convert strings to integers for assigning tokens from the enum table.
+static uint32_t hash_string(const char *string){
+    uint32_t hash = 2166136261u;
+    while (*string) {
+        hash ^= (uint8_t)*string++;
+        hash *= 16777619u;
+    }
+    return hash;
+}
+static void insert_keyword(const char *key, TokenType token) {
+    uint32_t index = hash_string(key) % HASH_TABLE_SIZE;
+
+    //resolve collisions.
+    while (keyword_table[index].key != NULL) {
+        index = (index + 1) % HASH_TABLE_SIZE;
+    }
+
+    keyword_table[index].key = key;
+    keyword_table[index].token = token;
+}
+void initialize_hash_table(void){
+
+    memset(keyword_table, 0, sizeof(keyword_table));
+
+    //types
+    insert_keyword("int", TOKEN_KW_INT);
+    insert_keyword("short", TOKEN_KW_SHORT);
+    insert_keyword("long", TOKEN_KW_LONG);
+    insert_keyword("byte", TOKEN_KW_BYTE);
+    insert_keyword("float", TOKEN_KW_FLOAT);
+    insert_keyword("double", TOKEN_KW_DOUBLE);
+    insert_keyword("char", TOKEN_KW_CHAR);
+    insert_keyword("string", TOKEN_KW_STRING);
+    insert_keyword("bool", TOKEN_KW_BOOL);
+    insert_keyword("struct", TOKEN_KW_STRUCT);
+    insert_keyword("enum", TOKEN_KW_ENUM);
+    insert_keyword("union", TOKEN_KW_UNION);
+
+    //statements and functions
+    insert_keyword("if", TOKEN_KW_IF);
+    insert_keyword("else", TOKEN_KW_ELSE);
+    insert_keyword("while", TOKEN_KW_WHILE);
+    insert_keyword("do", TOKEN_KW_DO);
+    insert_keyword("for", TOKEN_KW_FOR);
+    insert_keyword("switch", TOKEN_KW_SWITCH);
+    insert_keyword("return", TOKEN_KW_RETURN);
+    insert_keyword("out", TOKEN_KW_OUTPUT);
+    insert_keyword("in", TOKEN_KW_INPUT);
+    insert_keyword("read_file", TOKEN_KW_READ_FILE);
+    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE);
+    insert_keyword("break", TOKEN_KW_BREAK);
+    insert_keyword("continue", TOKEN_KW_CONTINUE);
+    insert_keyword("match", TOKEN_KW_MATCH);
+    insert_keyword("func", TOKEN_KW_FUNCTION);
+
+    //memory thingys
+    insert_keyword("NULL", TOKEN_KW_NULL);
+    insert_keyword("arena", TOKEN_KW_ARENA);
+    insert_keyword("defer", TOKEN_KW_DEFER);
+    insert_keyword("reset", TOKEN_KW_RESET);
+    insert_keyword("temp", TOKEN_KW_TEMP);
+    insert_keyword("const", TOKEN_KW_CONST);
+    insert_keyword("mutable", TOKEN_KW_MUT);
+    insert_keyword("static", TOKEN_KW_STATIC);
+    insert_keyword("volatile", TOKEN_KW_VOLATILE);
+    insert_keyword("cast", TOKEN_KW_CAST);
+    insert_keyword("typealias", TOKEN_KW_TYPEALIAS);
+
+    //modules, visibility, import
+    insert_keyword("import", TOKEN_KW_IMPORT);
+    insert_keyword("module", TOKEN_KW_MODULE);
+    insert_keyword("public", TOKEN_KW_PUBLIC);
+    insert_keyword("private", TOKEN_KW_PRIVATE);
+
+    //error handling
+    insert_keyword("try", TOKEN_KW_TRY);
+    insert_keyword("catch", TOKEN_KW_CATCH);
+    insert_keyword("raise", TOKEN_KW_RAISE);
+
+    //function and multithreading thingys
+    insert_keyword("async", TOKEN_KW_ASYNC);
+    insert_keyword("await", TOKEN_KW_AWAIT);
+    insert_keyword("spawn", TOKEN_KW_SPAWN);
+    insert_keyword("thread", TOKEN_KW_THREAD);
+    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T);
+    insert_keyword("join", TOKEN_KW_JOIN);
+    insert_keyword("channel", TOKEN_KW_CHAN);
+    insert_keyword("select", TOKEN_KW_SELECT);
+    insert_keyword("atomic", TOKEN_KW_ATOMIC);
+    insert_keyword("mutex", TOKEN_KW_MUTEX);
+    insert_keyword("lock", TOKEN_KW_LOCK);
+    insert_keyword("shared", TOKEN_KW_SHARED);
+
+}
+void initialize_char_table(void){
+    memset(char_table, 0, sizeof(char_table));
+
+    char_table[' '] = char_table['\t'] = char_table['\n']
+  = char_table['\r'] = CHAR_WS;
+
+  for(int i = 'a'; i <= 'z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = 'A'; i <= 'Z'; i++){ char_table[i] |= CHAR_ALPHA; }
+  for(int i = '0'; i <= '9'; i++){ char_table[i] |= CHAR_DIGIT; }
+  char_table['_'] |= CHAR_ALPHA;
+
+  char_table['('] = char_table[']'] = CHAR_DELIM;
+  char_table['{'] = char_table['}'] = CHAR_DELIM;
+  char_table['['] = char_table[')'] = CHAR_DELIM;
+  char_table[','] = char_table[';'] = CHAR_DELIM;
+
+  char_table['+'] = char_table['-'] = CHAR_OP;
+  char_table['*'] = char_table['/'] = CHAR_OP;
+  char_table[':'] = char_table['='] = CHAR_OP;
+  char_table['<'] = char_table['>'] = CHAR_OP;
+  char_table['!'] = char_table['&'] = CHAR_OP;
+  char_table['%'] = char_table['|'] = CHAR_OP;
+
+
+}
+
+
+/*the multithreading function to parse multiple files at the same time, i dont know how im gonna do the tokens maybe
+put them in seperate token files and th parser can read them just like the lexical analyzer and combine them at the end of
+the compilers life like the LLVM part maybe idk*/
+void *worker_thread(void *arg){
+
+    int thread_id = *(int *)arg;
+
+    while(1){
+        char *filename = NULL;
+        
+        pthread_mutex_lock(&queue.lock);
+}
