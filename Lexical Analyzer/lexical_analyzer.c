@@ -565,6 +565,7 @@ void initialize_hash_table(void){
     insert_keyword("arena", TOKEN_KW_ARENA);
     insert_keyword("defer", TOKEN_KW_DEFER);
     insert_keyword("reset", TOKEN_KW_RESET);
+    insert_keyword("challoc", TOKEN_KW_CHALLOC);
     insert_keyword("temp", TOKEN_KW_TEMP);
     insert_keyword("const", TOKEN_KW_CONST);
     insert_keyword("mutable", TOKEN_KW_MUT);
