@@ -1,8 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "Lexical Analyzer/lexical_analyzer.h"
 #include <stdio.h>
-#include <string.h>
-#include <string.h>
 #include <time.h>
 
  FileQueue queue;
