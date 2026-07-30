@@ -2,7 +2,7 @@ import randomlib.atl
 
 int main(argc[]){
     if(argc[0] > 3){
-        print("ERROR: More arguments that uhh... idk");
+        out("ERROR: More arguments that uhh... idk");
     }
     return 0;
 }

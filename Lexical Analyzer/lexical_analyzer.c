@@ -17,7 +17,7 @@ static thread_local uint32_t lex_error_count = 0;
 /*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
 make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
 in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
-void parse_file(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+void lexer(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
     lex_error_count = 0;
     LexerContext ctx = {0};
     //open the files
@@ -46,7 +46,6 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
         fclose(atl_file);
         return;
     }
-    src_buf[bytes_read] = '\0';
     fclose(atl_file);
 
     const char *src = src_buf;
@@ -83,7 +82,7 @@ void parse_file(const char *filetype /*would 'filetype' be accurate? idk might c
         free(src_buf);
         return; 
     }
-
+    get_token_stream(&stream);
     //free memory(for now).
     free(stream.tokens);
     free(src_buf);
@@ -211,7 +210,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     (*col)++;
                     return tok;
                 break;
-                case '"':
+                case '"':{
                    const char *quote_start = *cursor; // Save exact start position
                     (*cursor)++;
                     (*col)++;
@@ -234,6 +233,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         tok.length = (uint32_t)(*cursor - quote_start);
                     }
                     return tok;
+                }
                 break;
                 case '#':
                     tok.token = TOKEN_HASH;
@@ -580,12 +580,14 @@ void append_token(TokenStream *stream, TokenStruct token) {
 }
 TokenType lookup_token(const char *string, uint32_t len){
     uint32_t idx = hash_string(string, len) % HASH_TABLE_SIZE;
+    uint32_t start_idx = idx;
 
     while (keyword_table[idx].key != NULL) {
         if (keyword_table[idx].len == len && memcmp(keyword_table[idx].key, string, len) == 0) {
             return keyword_table[idx].token;
         }
         idx = (idx + 1) % HASH_TABLE_SIZE;
+        if(idx == start_idx) break;
     }
 
     return TOKEN_UNKNOWN;
@@ -723,6 +725,10 @@ void initialize_hash_table(void){
     //special insert to enforce a "main"
     insert_keyword("main", TOKEN_MAIN, 4);
 
+    //boolean literals
+    insert_keyword("true", TOKEN_BOOL_LITERAL, 4);
+    insert_keyword("false", TOKEN_BOOL_LITERAL, 5);
+
 }
 void initialize_char_table(void){
     memset(char_table, 0, sizeof(char_table));
@@ -770,7 +776,7 @@ void *worker_thread(void *arg){
 
         if(filename == NULL) break;
 
-        parse_file(filename);
+        lexer(filename);
         
     }
     return NULL;

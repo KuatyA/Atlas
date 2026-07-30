@@ -1,11 +1,3 @@
 import bool func token1 {
-    int var1 = 999;
-    float var2 = 2.445e-8;
-    int 2illegal½token <<= string;
-    string dohickey = "hhhhh";
-
-    for(int = 0; get rekt){
-        idek = 111;
-    }
-    return 0;
+    char a = 'a';
 }

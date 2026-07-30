@@ -6,12 +6,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include "structs.h"
+#include "../Parser/parser.h"
 
 extern FileQueue queue;
 extern TokenStruct token_struct;
 
 //initialize the functions except the helpers here.
-void parse_file(const char *filetype);
+void lexer(const char *filetype);
 int lex_error_handler(LexerContext *ctx, TokenStruct tok);
 TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col);
 
