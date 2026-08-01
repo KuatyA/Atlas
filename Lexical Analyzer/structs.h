@@ -33,7 +33,8 @@ typedef enum Tokens{
     TOKEN_KW_WHILE, //while statement block
     TOKEN_KW_DO, //do statement block
     TOKEN_KW_FOR, //for statement block
-    TOKEN_KW_SWITCH, //switch statement block
+    TOKEN_KW_SWITCH,
+    TOKEN_KW_CASE, //switch statement block
     TOKEN_KW_RETURN, //return statement block
     TOKEN_KW_OUTPUT, //print to terminal
     TOKEN_KW_INPUT, //get input from terminal
