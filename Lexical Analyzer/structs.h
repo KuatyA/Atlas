@@ -50,6 +50,7 @@ typedef enum Tokens{
     TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
     TOKEN_KW_RESET, //destroy arena
     TOKEN_KW_CHALLOC, //change memory allocation system to manual
+    TOKEN_KW_MARENA, //allocate more memory to the arena if manual allocation system is enabled
     TOKEN_KW_TEMP, //a temporary scratch arena
     TOKEN_KW_CONST, //make constant variable types
     TOKEN_KW_MUT, //make mutable variable types
