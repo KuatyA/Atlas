@@ -665,6 +665,7 @@ void initialize_hash_table(void){
     insert_keyword("struct", TOKEN_KW_STRUCT, 6);
     insert_keyword("enum", TOKEN_KW_ENUM, 4);
     insert_keyword("union", TOKEN_KW_UNION, 5);
+    insert_keyword("void", TOKEN_KW_VOID, 4);
 
     //statements and functions
     insert_keyword("if", TOKEN_KW_IF, 2);
@@ -674,10 +675,6 @@ void initialize_hash_table(void){
     insert_keyword("for", TOKEN_KW_FOR, 3);
     insert_keyword("switch", TOKEN_KW_SWITCH, 6);
     insert_keyword("return", TOKEN_KW_RETURN, 6);
-    insert_keyword("out", TOKEN_KW_OUTPUT, 3);
-    insert_keyword("in", TOKEN_KW_INPUT, 2);
-    insert_keyword("read_file", TOKEN_KW_READ_FILE, 9);
-    insert_keyword("write_file", TOKEN_KW_WRITE_TO_FILE, 10);
     insert_keyword("break", TOKEN_KW_BREAK, 5);
     insert_keyword("continue", TOKEN_KW_CONTINUE, 8);
     insert_keyword("match", TOKEN_KW_MATCH, 5);
@@ -685,10 +682,7 @@ void initialize_hash_table(void){
 
     //memory thingys
     insert_keyword("NULL", TOKEN_KW_NULL, 4);
-    insert_keyword("arena", TOKEN_KW_ARENA, 5);
     insert_keyword("defer", TOKEN_KW_DEFER, 5);
-    insert_keyword("reset", TOKEN_KW_RESET, 5);
-    insert_keyword("challoc", TOKEN_KW_CHALLOC, 7);
     insert_keyword("temp", TOKEN_KW_TEMP, 4);
     insert_keyword("const", TOKEN_KW_CONST, 5);
     insert_keyword("mutable", TOKEN_KW_MUT, 7);
@@ -712,18 +706,12 @@ void initialize_hash_table(void){
     insert_keyword("async", TOKEN_KW_ASYNC, 5);
     insert_keyword("await", TOKEN_KW_AWAIT, 5);
     insert_keyword("spawn", TOKEN_KW_SPAWN, 5);
-    insert_keyword("thread", TOKEN_KW_THREAD, 6);
-    insert_keyword("enable_thread", TOKEN_KW_ENABLE_T, 13);
-    insert_keyword("join", TOKEN_KW_JOIN, 4);
     insert_keyword("channel", TOKEN_KW_CHAN, 7);
     insert_keyword("select", TOKEN_KW_SELECT, 6);
     insert_keyword("atomic", TOKEN_KW_ATOMIC, 6);
     insert_keyword("mutex", TOKEN_KW_MUTEX, 5);
     insert_keyword("lock", TOKEN_KW_LOCK, 4);
     insert_keyword("shared", TOKEN_KW_SHARED, 6);
-
-    //special insert to enforce a "main"
-    insert_keyword("main", TOKEN_MAIN, 4);
 
     //boolean literals
     insert_keyword("true", TOKEN_BOOL_LITERAL, 4);

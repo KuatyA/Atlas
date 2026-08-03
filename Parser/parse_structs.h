@@ -25,10 +25,9 @@ typedef enum{
     NT_FUNC_DECLARATION,
     
     NT_MODIFIER,
+    NT_MODIFIER_LIST,
     NT_TYPE,
     NT_FACTOR,
-
-    NT_IDENTIFIER,
     
     NT_FUNC_SUFFIX,
     NT_FUNC_BODY,
@@ -54,16 +53,9 @@ typedef enum{
     NT_CASE_STATEMENT,
     NT_CASE_LIST,
     NT_RETURN_STATEMENT,
-    NT_OUTPUT_STATEMENT,
-    NT_INPUT_STATEMENT,
-    NT_READ_FILE_STATEMENT,
-    NT_WRITE_TO_FILE_STATEMENT,
     NT_MATCH_STATEMENT,
 
-    NT_ARENA_STATEMENT,
     NT_DEFER_STATEMENT,
-    NT_RESET_STATEMENT,
-    NT_CHALLOC_STATEMENT,
     
     NT_IMPORT_STATEMENT,
     NT_MODULE_STATEMENT,
@@ -73,9 +65,6 @@ typedef enum{
     NT_CATCH_STATEMENT,
     NT_RAISE_STATEMENT,
 
-    NT_THREAD_STATEMENT,
-    NT_ENABLE_T_STATEMENT,
-    NT_JOIN_STATEMENT,
     NT_SPAWN_STATEMENT,
     NT_SELECT_STATEMENT,
     NT_LOCK_STATEMENT,
@@ -137,7 +126,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_EXPRESSION, 3, "expr -> expr TOKEN_RSHIFT expr"},
     {NT_EXPRESSION, 3, "expr -> expr TOKEN_LSHIFT_ASSIGN expr"},
     {NT_EXPRESSION, 3, "expr -> expr TOKEN_RSHIFT_ASSIGN expr"},
-    {NT_EXPRESSION, 3, "expr -> expr TOKEN_QUESTION expr"},
+    {NT_EXPRESSION, 5, "expr -> expr TOKEN_QUESTION expr TOKEN_COLON expr"},
     {NT_EXPRESSION, 3, "expr -> expr TOKEN_AMPERSAND expr"},
 
     {NT_EXPRESSION, 3, "expr -> expr TOKEN_ARROW expr"},
@@ -149,14 +138,18 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_EXPRESSION, 3, "expr -> TOKEN_IDENTIFIER TOKEN_ASSIGN expr"},
     {NT_EXPRESSION, 4, "expr -> TOKEN_IDENTIFIER array_struct TOKEN_ASSIGN expr"},
     {NT_EXPRESSION, 2, "expr -> TOKEN_IDENTIFIER array_struct"},
+    {NT_EXPRESSION, 1, "expr -> factor"},
+    {NT_EXPRESSION, 3, "expr -> TOKEN_LPAREN expr TOKEN_RPAREN"},
+    {NT_EXPRESSION, 2, "expr -> TOKEN_STAR expr"},
+    {NT_EXPRESSION, 1, "expr -> TOKEN_KW_NULL"},
 
     {NT_EXPRESSION, 2, "expr -> TOKEN_KW_AWAIT expr"},
-    {NT_EXPRESSION, 4, "expr -> TOKEN_IDENTIFIER TOKEN_LPAREN arg_list TOKEN_RPAREN"},
+    {NT_EXPRESSION, 4, "expr -> expr TOKEN_LPAREN arg_list TOKEN_RPAREN"},
 
     {NT_ARG_LIST, 1, "arg_list -> arg_list_nonempty"},
-    {NT_ARG_LIST, 1, "arg_list -> TOKEN_KW_NULL"},
+    {NT_ARG_LIST, 0, "arg_list -> "}, /*empty*/
     {NT_ARG_LIST_NONEMPTY, 1, "arg_list_nonempty -> expr"},
-    {NT_ARG_LIST_NONEMPTY, 2, "arg_list_nonempty -> arg_list_nonempty TOKEN_COMMA expr"},
+    {NT_ARG_LIST_NONEMPTY, 3, "arg_list_nonempty -> arg_list_nonempty TOKEN_COMMA expr"},
 
     {NT_STATEMENT, 1, "stmt -> var_decl"},
     {NT_STATEMENT, 1, "stmt -> expr_stmt"},
@@ -167,17 +160,10 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_STATEMENT, 1, "stmt -> switch_stmt"},
     {NT_STATEMENT, 1, "stmt -> return_stmt"},
     {NT_STATEMENT, 1, "stmt -> break_stmt"},
-    {NT_STATEMENT, 1, "stmt -> output_stmt"},
-    {NT_STATEMENT, 1, "stmt -> input_stmt"},
-    {NT_STATEMENT, 1, "stmt -> read_file_stmt"},
-    {NT_STATEMENT, 1, "stmt -> write_to_file_stmt"},
     {NT_STATEMENT, 1, "stmt -> continue_stmt"},
     {NT_STATEMENT, 1, "stmt -> match_stmt"},
 
-    {NT_STATEMENT, 1, "stmt -> arena_stmt"},
     {NT_STATEMENT, 1, "stmt -> defer_stmt"},
-    {NT_STATEMENT, 1, "stmt -> reset_stmt"},
-    {NT_STATEMENT, 1, "stmt -> challoc_stmt"},
 
     {NT_STATEMENT, 1, "stmt -> import_stmt"},
     {NT_STATEMENT, 1, "stmt -> module_stmt"},
@@ -186,9 +172,6 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_STATEMENT, 1, "stmt -> catch_stmt"},
     {NT_STATEMENT, 1, "stmt -> raise_stmt"},
 
-    {NT_STATEMENT, 1, "stmt -> thread_stmt"},
-    {NT_STATEMENT, 1, "stmt -> enable_t_stmt"},
-    {NT_STATEMENT, 1, "stmt -> join_stmt"},
     {NT_STATEMENT, 1, "stmt -> spawn_stmt"},
     {NT_STATEMENT, 1, "stmt -> select_stmt"},
     {NT_STATEMENT, 1, "stmt -> lock_stmt"},
@@ -201,11 +184,11 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_DECLARATION, 1, "decl -> func_decl"},
 
     {NT_DECLARATION_LIST, 2, "decl_list -> decl_list decl"},
-    {NT_DECLARATION_LIST, 1, "decl_list -> TOKEN_KW_NULL"},
+    {NT_DECLARATION_LIST, 0, "decl_list -> "}, /*empty*/
 
-    {NT_VAR_DECLARATION, 5, "var_decl -> type TOKEN_IDENTIFIER TOKEN_ASSIGN factor TOKEN_SEMICOLON"},
+    {NT_VAR_DECLARATION, 5, "var_decl -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_SEMICOLON"},
     {NT_VAR_DECLARATION, 3, "var_decl -> type TOKEN_IDENTIFIER TOKEN_SEMICOLON"},
-    {NT_VAR_DECLARATION, 5, "var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_ASSIGN array_init"},
+    {NT_VAR_DECLARATION, 6, "var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_ASSIGN array_init TOKEN_SEMICOLON"},
     {NT_VAR_DECLARATION, 4, "var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_SEMICOLON"},
 
     {NT_FUNC_DECLARATION, 7, "func_decl -> TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
@@ -219,6 +202,10 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_TYPEALIAS"},
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_ATOMIC"},
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_SHARED"},
+    {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PRIVATE"},
+    {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PUBLIC"},
+    {NT_MODIFIER_LIST, 2, "modifier_list -> modifier_list modifier"},
+    {NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
 
     {NT_TYPE, 1, "type -> TOKEN_KW_INT"},
     {NT_TYPE, 1, "type -> TOKEN_KW_SHORT"},
@@ -232,22 +219,24 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_TYPE, 1, "type -> TOKEN_KW_STRUCT"},
     {NT_TYPE, 1, "type -> TOKEN_KW_ENUM"},
     {NT_TYPE, 1, "type -> TOKEN_KW_UNION"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_INT"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_SHORT"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_LONG"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_BYTE"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_FLOAT"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_DOUBLE"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_CHAR"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_STRING"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_BOOL"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_STRUCT"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_ENUM"},
-    {NT_TYPE, 2, "type -> modifier TOKEN_KW_UNION"},
+    {NT_TYPE, 1, "type -> TOKEN_KW_VOID"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_INT"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_SHORT"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_LONG"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_BYTE"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_FLOAT"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_DOUBLE"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_CHAR"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_STRING"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_BOOL"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_STRUCT"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_ENUM"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_UNION"},
+    {NT_TYPE, 2, "type -> modifier_list TOKEN_KW_VOID"},
     {NT_TYPE, 2, "type -> TOKEN_KW_CHAN type"},
     {NT_TYPE, 1, "type -> TOKEN_KW_MUTEX"},
-    {NT_EXPRESSION, 2, "type -> TOKEN_STAR type"},
-    {NT_EXPRESSION, 2, "type -> TOKEN_AMPERSAND type"},
+    {NT_TYPE, 2, "type -> TOKEN_STAR type"},
+    {NT_TYPE, 2, "type -> TOKEN_AMPERSAND type"},
 
     {NT_FACTOR, 1, "factor -> TOKEN_INT_LITERAL"},
     {NT_FACTOR, 1, "factor -> TOKEN_FLOAT_LITERAL"},
@@ -262,7 +251,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     
     {NT_PARAM, 2, "param -> type TOKEN_IDENTIFIER"},
     {NT_PARAM_LIST, 1, "param_list -> param_list_nonempty"},
-    {NT_PARAM_LIST, 1, "param_list -> TOKEN_KW_NULL"},
+    {NT_PARAM_LIST, 0, "param_list -> "}, /*empty*/
     {NT_PARAM_LIST_NONEMPTY, 1, "param_list_nonempty -> param"},
     {NT_PARAM_LIST_NONEMPTY, 3, "param_list_nonempty -> param_list_nonempty TOKEN_COMMA param"},
 
@@ -277,7 +266,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_ELSE, 2, "else -> TOKEN_KW_ELSE block"},
     {NT_ELSE, 1, "else -> lower_than_else"},
     {NT_LOWER_THAN_ELSE, 2, "lower_than_else -> TOKEN_KW_ELSE if_stmt"},
-    {NT_LOWER_THAN_ELSE, 1, "lower_than_else -> TOKEN_KW_NULL"},
+    {NT_LOWER_THAN_ELSE, 0, "lower_than_else -> "}, /*empty*/
     {NT_WHILE_STATEMENT, 5, "while_stmt -> TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN stmt"},
     {NT_WHILE_STATEMENT, 7, "while_stmt -> TOKEN_KW_DO block TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
     {NT_FOR_STATEMENT, 5, "for_stmt -> TOKEN_KW_FOR TOKEN_LPAREN expr TOKEN_RPAREN stmt"},
@@ -288,29 +277,20 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_CASE_LIST, 2, "case_list -> case_list case_stmt"},
     {NT_CASE_LIST, 1, "case_list -> case_stmt"},
     {NT_RETURN_STATEMENT, 3, "return_stmt -> TOKEN_KW_RETURN expr TOKEN_SEMICOLON"},
-    {NT_OUTPUT_STATEMENT, 5, "output_stmt -> TOKEN_KW_OUTPUT TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_INPUT_STATEMENT, 5, "input_stmt -> TOKEN_KW_INPUT TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_READ_FILE_STATEMENT, 5, "read_file_stmt -> TOKEN_KW_READ_FILE TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_WRITE_TO_FILE_STATEMENT, 5, "write_to_file_stmt -> TOKEN_KW_WRITE_TO_FILE TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_MATCH_STATEMENT, 1, "match_stmt -> match_stmt"}, //to be determined
+    {NT_RETURN_STATEMENT, 2, "return_stmt -> TOKEN_KW_RETURN TOKEN_SEMICOLON"},
+    {NT_MATCH_STATEMENT, 8, "match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE case_list TOKEN_RBRACE"},
 
-    {NT_ARENA_STATEMENT, 5, "arena_stmt -> TOKEN_KW_ARENA TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
     {NT_DEFER_STATEMENT, 5, "defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_RESET_STATEMENT, 5, "reset_stmt -> TOKEN_KW_RESET TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_CHALLOC_STATEMENT, 5, "challoc_stmt -> TOKEN_KW_CHALLOC TOKEN_LPAREN stmt TOKEN_RPAREN TOKEN_SEMICOLON"},
-    
+   
     {NT_IMPORT_STATEMENT, 3, "import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER"},
     {NT_MODULE_STATEMENT, 3, "module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON"},
     {NT_MODULE_LIST, 3, "module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER"},
     {NT_MODULE_LIST, 1, "module_list -> TOKEN_IDENTIFIER"},
 
-    {NT_TRY_STATEMENT, 6, "try_stmt -> TOKEN_KW_TRY TOKEN_COLON stmt catch_stmt"},
-    {NT_CATCH_STATEMENT, 9, "catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt TOKEN_RBRACE TOKEN_SEMICOLON"},
+    {NT_TRY_STATEMENT, 4, "try_stmt -> TOKEN_KW_TRY TOKEN_COLON stmt catch_stmt"},
+    {NT_CATCH_STATEMENT, 9, "catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE TOKEN_SEMICOLON"},
     {NT_RAISE_STATEMENT, 3, "raise_stmt -> TOKEN_KW_RAISE expr TOKEN_SEMICOLON"},
 
-    {NT_THREAD_STATEMENT, 6, "thread_stmt -> TOKEN_KW_THREAD TOKEN_LPAREN expr TOKEN_RPAREN block"},
-    {NT_ENABLE_T_STATEMENT, 5, "enable_t_stmt -> TOKEN_KW_ENABLE_T TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
-    {NT_JOIN_STATEMENT, 5, "join_stmt -> TOKEN_KW_JOIN TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
     {NT_SPAWN_STATEMENT, 3, "spawn_stmt -> TOKEN_KW_SPAWN expr TOKEN_SEMICOLON"},
     {NT_SELECT_STATEMENT, 2, "select_stmt -> TOKEN_KW_SELECT case_block"},
     {NT_LOCK_STATEMENT, 6, "lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block"},
@@ -318,4 +298,3 @@ static GrammarRule GRAMMAR_RULES[] = {
 };
 
 #endif
-

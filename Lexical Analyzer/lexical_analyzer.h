@@ -5,7 +5,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "structs.h"
+#include "lex_structs.h"
 #include "../Parser/parser.h"
 
 extern FileQueue queue;
