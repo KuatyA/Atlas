@@ -36,6 +36,7 @@ typedef enum Tokens{
     TOKEN_KW_FOR, //for statement block
     TOKEN_KW_SWITCH,
     TOKEN_KW_CASE, //switch statement block
+    TOKEN_KW_DEFAULT,
     TOKEN_KW_RETURN, //return statement block
     TOKEN_KW_BREAK, //break a block of code from executing further
     TOKEN_KW_CONTINUE, //skip that specific iteration
@@ -172,6 +173,5 @@ typedef struct {
     uint32_t col;
     uint32_t error_count;
 } LexerContext;
-
 
 #endif

@@ -674,6 +674,8 @@ void initialize_hash_table(void){
     insert_keyword("do", TOKEN_KW_DO, 2);
     insert_keyword("for", TOKEN_KW_FOR, 3);
     insert_keyword("switch", TOKEN_KW_SWITCH, 6);
+    insert_keyword("case", TOKEN_KW_CASE, 4);
+    insert_keyword("default", TOKEN_KW_DEFAULT, 7);
     insert_keyword("return", TOKEN_KW_RETURN, 6);
     insert_keyword("break", TOKEN_KW_BREAK, 5);
     insert_keyword("continue", TOKEN_KW_CONTINUE, 8);
