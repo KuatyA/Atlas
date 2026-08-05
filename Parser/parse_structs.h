@@ -2,7 +2,6 @@
 #define STRUCTS_H
 
 #include <stdint.h>
-#include "../AST/ast.h"
 
 #define SYMBOL_TO_INDEX(sym) ((sym) >= NT_PROGRAM ? (TOKEN_COMMENT + 1 + ((sym) - NT_PROGRAM)) : (sym))
 
@@ -334,5 +333,56 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_LOCK_STATEMENT, 6, "lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block"},
 
 };
+
+typedef enum{
+    AST_PROGRAM,
+    AST_BINARY_EXPR,
+    AST_UNARY_EXPR,
+    AST_ARG_LIST,
+    AST_PARAM,
+
+    AST_VAR_DECL,
+    AST_FUNC_DECL,
+    AST_STRUCT_DECL,
+    AST_ENUM_DECL,
+    AST_UNION_DECL,
+    AST_TYPEALIAS_DECL,
+
+    AST_TYPE,
+    AST_MODIFIER,
+
+    AST_IDENTIFIER,
+    AST_INT_LITERAL,
+    AST_FLOAT_LITERAL,
+    AST_CHAR_LITERAL,
+    AST_STRING_LITERAL,
+    AST_BOOL_LITERAL,
+
+    AST_EXPR_STMT,
+    AST_IF_STMT,
+    AST_WHILE_STMT,
+    AST_DO_STMT,
+    AST_FOR_STMT,
+    AST_SWITCH_STMT,
+    AST_RETURN_STMT,
+    AST_BREAK_STMT,
+    AST_CONTINUE_STMT,
+    AST_MATCH_STMT,
+
+    AST_DEFER_STMT,
+
+    AST_IMPORT_STMT,
+    AST_MODULE_STMT,
+
+    AST_TRY_STMT,
+    AST_CATCH_STMT,
+    AST_RAISE_STMT,
+
+    AST_SPAWN_STMT,
+    AST_SELECT_STMT,
+    AST_LOCK_STMT,
+
+    AST_BLOCK
+}ASTNodeType;
 
 #endif
