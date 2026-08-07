@@ -381,6 +381,7 @@ typedef enum{
     AST_CAST_EXPR,
 
     AST_ARRAY_INIT,
+    AST_ARRAY_STRUCT,
     AST_FOR_INIT,
     AST_ENUM_MEMBER,
     
