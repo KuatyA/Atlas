@@ -341,7 +341,7 @@ typedef enum{
     AST_ARG_LIST,
     AST_PARAM,
 
-    AST_VAR_DECL,
+    AST_VAR_DECL, 
     AST_FUNC_DECL,
     AST_STRUCT_DECL,
     AST_ENUM_DECL,
