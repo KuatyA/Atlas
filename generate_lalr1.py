@@ -57,9 +57,19 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
 
     # Precedence specification to resolve operator ambiguity
     precedence = (
-        ('right', 'TOKEN_ASSIGN'),
+      
+        ('right', 'TOKEN_ASSIGN', 'TOKEN_PLUS_ASSIGN', 'TOKEN_MINUS_ASSIGN', 'TOKEN_STAR_ASSIGN', 'TOKEN_SLASH_ASSIGN'),
+        ('left', 'TOKEN_LOGICAL_OR', 'TOKEN_OR'),
+        ('left', 'TOKEN_LOGICAL_AND', 'TOKEN_AND'),
+        ('left', 'TOKEN_BIT_OR', 'TOKEN_PIPE'),
+        ('left', 'TOKEN_BIT_XOR', 'TOKEN_CARET'),
+        ('left', 'TOKEN_BIT_AND', 'TOKEN_AMPERSAND'),
+        ('left', 'TOKEN_EQUAL', 'TOKEN_NOT_EQUAL'),
+        ('left', 'TOKEN_LESS', 'TOKEN_LESS_EQUAL', 'TOKEN_GREATER', 'TOKEN_GREATER_EQUAL'),
+        ('left', 'TOKEN_SHL', 'TOKEN_SHR'),
         ('left', 'TOKEN_PLUS', 'TOKEN_MINUS'),
         ('left', 'TOKEN_STAR', 'TOKEN_SLASH', 'TOKEN_PERCENT'),
+        ('right', 'UNARY_OP'),
         ('left', 'TOKEN_DOT', 'TOKEN_COLON', 'TOKEN_SCOPE_RES'),
     )
 

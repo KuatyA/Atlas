@@ -7464,120 +7464,84 @@ state 144
     (175) expr -> expr . TOKEN_PLUS expr
     (186) expr -> expr . TOKEN_MINUS expr
 
-  ! shift/reduce conflict for TOKEN_STAR resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_STAR_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_LT resolved as shift
-  ! shift/reduce conflict for TOKEN_GT resolved as shift
-  ! shift/reduce conflict for TOKEN_LE resolved as shift
-  ! shift/reduce conflict for TOKEN_GE resolved as shift
-  ! shift/reduce conflict for TOKEN_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_NEQ resolved as shift
-  ! shift/reduce conflict for TOKEN_AND resolved as shift
-  ! shift/reduce conflict for TOKEN_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_BIT_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_NAND resolved as shift
-  ! shift/reduce conflict for TOKEN_XOR resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_QUESTION resolved as shift
-  ! shift/reduce conflict for TOKEN_AMPERSAND resolved as shift
-  ! shift/reduce conflict for TOKEN_DOT resolved as shift
-  ! shift/reduce conflict for TOKEN_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_FAT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LEFT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LBRACKET resolved as shift
-  ! shift/reduce conflict for TOKEN_COLON resolved as shift
-  ! shift/reduce conflict for TOKEN_LPAREN resolved as shift
-  ! shift/reduce conflict for TOKEN_SCOPE_RES resolved as shift
-  ! shift/reduce conflict for TOKEN_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS resolved as shift
     TOKEN_SEMICOLON reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_MOD       reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_PLUS_EQ   reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_MINUS_EQ  reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_STAR_EQ   reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_SLASH_EQ  reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_MOD_EQ    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LT        reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_GT        reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LE        reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_GE        reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_EQ        reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_NEQ       reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_AND       reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_OR        reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_BIT_OR    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_NAND      reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_XOR       reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LSHIFT    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_RSHIFT    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LSHIFT_ASSIGN reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_RSHIFT_ASSIGN reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_QUESTION  reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_AMPERSAND reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_ARROW     reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_FAT_ARROW reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LEFT_ARROW reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LBRACKET  reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_LPAREN    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
+    TOKEN_ASSIGN    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
     TOKEN_RBRACKET  reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
     TOKEN_RPAREN    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
     TOKEN_COMMA     reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
     TOKEN_RBRACE    reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .)
     TOKEN_STAR      shift and go to state 104
     TOKEN_SLASH     shift and go to state 105
-    TOKEN_MOD       shift and go to state 106
-    TOKEN_PLUS_EQ   shift and go to state 107
-    TOKEN_MINUS_EQ  shift and go to state 108
-    TOKEN_STAR_EQ   shift and go to state 109
-    TOKEN_SLASH_EQ  shift and go to state 110
-    TOKEN_MOD_EQ    shift and go to state 111
-    TOKEN_LT        shift and go to state 112
-    TOKEN_GT        shift and go to state 113
-    TOKEN_LE        shift and go to state 114
-    TOKEN_GE        shift and go to state 115
-    TOKEN_EQ        shift and go to state 116
-    TOKEN_NEQ       shift and go to state 117
-    TOKEN_AND       shift and go to state 118
-    TOKEN_OR        shift and go to state 119
-    TOKEN_BIT_OR    shift and go to state 120
-    TOKEN_NAND      shift and go to state 121
-    TOKEN_XOR       shift and go to state 122
-    TOKEN_LSHIFT    shift and go to state 123
-    TOKEN_RSHIFT    shift and go to state 124
-    TOKEN_LSHIFT_ASSIGN shift and go to state 125
-    TOKEN_RSHIFT_ASSIGN shift and go to state 126
-    TOKEN_QUESTION  shift and go to state 127
-    TOKEN_AMPERSAND shift and go to state 129
     TOKEN_DOT       shift and go to state 130
-    TOKEN_ARROW     shift and go to state 131
-    TOKEN_FAT_ARROW shift and go to state 132
-    TOKEN_LEFT_ARROW shift and go to state 133
-    TOKEN_LBRACKET  shift and go to state 134
     TOKEN_COLON     shift and go to state 128
-    TOKEN_LPAREN    shift and go to state 135
     TOKEN_SCOPE_RES shift and go to state 136
-    TOKEN_ASSIGN    shift and go to state 102
     TOKEN_PLUS      shift and go to state 137
     TOKEN_MINUS     shift and go to state 138
 
   ! TOKEN_STAR      [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
   ! TOKEN_SLASH     [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_MOD       [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_PLUS_EQ   [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_MINUS_EQ  [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_STAR_EQ   [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_SLASH_EQ  [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_MOD_EQ    [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LT        [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_GT        [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LE        [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_GE        [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_EQ        [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_NEQ       [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_AND       [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_OR        [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_BIT_OR    [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_NAND      [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_XOR       [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LSHIFT    [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_RSHIFT    [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LSHIFT_ASSIGN [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_RSHIFT_ASSIGN [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_QUESTION  [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_AMPERSAND [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
   ! TOKEN_DOT       [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_ARROW     [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_FAT_ARROW [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LEFT_ARROW [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LBRACKET  [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
   ! TOKEN_COLON     [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LPAREN    [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
   ! TOKEN_SCOPE_RES [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_ASSIGN    [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
   ! TOKEN_PLUS      [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
   ! TOKEN_MINUS     [ reduce using rule 130 (expr -> TOKEN_AMPERSAND expr .) ]
+  ! TOKEN_MOD       [ shift and go to state 106 ]
+  ! TOKEN_PLUS_EQ   [ shift and go to state 107 ]
+  ! TOKEN_MINUS_EQ  [ shift and go to state 108 ]
+  ! TOKEN_STAR_EQ   [ shift and go to state 109 ]
+  ! TOKEN_SLASH_EQ  [ shift and go to state 110 ]
+  ! TOKEN_MOD_EQ    [ shift and go to state 111 ]
+  ! TOKEN_LT        [ shift and go to state 112 ]
+  ! TOKEN_GT        [ shift and go to state 113 ]
+  ! TOKEN_LE        [ shift and go to state 114 ]
+  ! TOKEN_GE        [ shift and go to state 115 ]
+  ! TOKEN_EQ        [ shift and go to state 116 ]
+  ! TOKEN_NEQ       [ shift and go to state 117 ]
+  ! TOKEN_AND       [ shift and go to state 118 ]
+  ! TOKEN_OR        [ shift and go to state 119 ]
+  ! TOKEN_BIT_OR    [ shift and go to state 120 ]
+  ! TOKEN_NAND      [ shift and go to state 121 ]
+  ! TOKEN_XOR       [ shift and go to state 122 ]
+  ! TOKEN_LSHIFT    [ shift and go to state 123 ]
+  ! TOKEN_RSHIFT    [ shift and go to state 124 ]
+  ! TOKEN_LSHIFT_ASSIGN [ shift and go to state 125 ]
+  ! TOKEN_RSHIFT_ASSIGN [ shift and go to state 126 ]
+  ! TOKEN_QUESTION  [ shift and go to state 127 ]
+  ! TOKEN_AMPERSAND [ shift and go to state 129 ]
+  ! TOKEN_ARROW     [ shift and go to state 131 ]
+  ! TOKEN_FAT_ARROW [ shift and go to state 132 ]
+  ! TOKEN_LEFT_ARROW [ shift and go to state 133 ]
+  ! TOKEN_LBRACKET  [ shift and go to state 134 ]
+  ! TOKEN_LPAREN    [ shift and go to state 135 ]
+  ! TOKEN_ASSIGN    [ shift and go to state 102 ]
 
 
 state 145
@@ -8438,9 +8402,6 @@ state 165
     TOKEN_GE        reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_EQ        reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_NEQ       reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
-    TOKEN_AND       reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
-    TOKEN_OR        reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
-    TOKEN_BIT_OR    reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_NAND      reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_XOR       reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_LSHIFT    reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
@@ -8448,7 +8409,6 @@ state 165
     TOKEN_LSHIFT_ASSIGN reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_RSHIFT_ASSIGN reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_QUESTION  reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
-    TOKEN_AMPERSAND reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_ARROW     reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_FAT_ARROW reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_LEFT_ARROW reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
@@ -8460,6 +8420,10 @@ state 165
     TOKEN_RBRACE    reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .)
     TOKEN_STAR      shift and go to state 104
     TOKEN_SLASH     shift and go to state 105
+    TOKEN_AND       shift and go to state 118
+    TOKEN_OR        shift and go to state 119
+    TOKEN_BIT_OR    shift and go to state 120
+    TOKEN_AMPERSAND shift and go to state 129
     TOKEN_DOT       shift and go to state 130
     TOKEN_COLON     shift and go to state 128
     TOKEN_SCOPE_RES shift and go to state 136
@@ -8469,6 +8433,10 @@ state 165
 
   ! TOKEN_STAR      [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
   ! TOKEN_SLASH     [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
+  ! TOKEN_AND       [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
+  ! TOKEN_OR        [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
+  ! TOKEN_BIT_OR    [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
+  ! TOKEN_AMPERSAND [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
   ! TOKEN_DOT       [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
   ! TOKEN_COLON     [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
   ! TOKEN_SCOPE_RES [ reduce using rule 164 (expr -> expr TOKEN_ASSIGN expr .) ]
@@ -8487,9 +8455,6 @@ state 165
   ! TOKEN_GE        [ shift and go to state 115 ]
   ! TOKEN_EQ        [ shift and go to state 116 ]
   ! TOKEN_NEQ       [ shift and go to state 117 ]
-  ! TOKEN_AND       [ shift and go to state 118 ]
-  ! TOKEN_OR        [ shift and go to state 119 ]
-  ! TOKEN_BIT_OR    [ shift and go to state 120 ]
   ! TOKEN_NAND      [ shift and go to state 121 ]
   ! TOKEN_XOR       [ shift and go to state 122 ]
   ! TOKEN_LSHIFT    [ shift and go to state 123 ]
@@ -8497,7 +8462,6 @@ state 165
   ! TOKEN_LSHIFT_ASSIGN [ shift and go to state 125 ]
   ! TOKEN_RSHIFT_ASSIGN [ shift and go to state 126 ]
   ! TOKEN_QUESTION  [ shift and go to state 127 ]
-  ! TOKEN_AMPERSAND [ shift and go to state 129 ]
   ! TOKEN_ARROW     [ shift and go to state 131 ]
   ! TOKEN_FAT_ARROW [ shift and go to state 132 ]
   ! TOKEN_LEFT_ARROW [ shift and go to state 133 ]
@@ -10657,120 +10621,84 @@ state 180
     (175) expr -> expr . TOKEN_PLUS expr
     (186) expr -> expr . TOKEN_MINUS expr
 
-  ! shift/reduce conflict for TOKEN_STAR resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_STAR_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_LT resolved as shift
-  ! shift/reduce conflict for TOKEN_GT resolved as shift
-  ! shift/reduce conflict for TOKEN_LE resolved as shift
-  ! shift/reduce conflict for TOKEN_GE resolved as shift
-  ! shift/reduce conflict for TOKEN_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_NEQ resolved as shift
-  ! shift/reduce conflict for TOKEN_AND resolved as shift
-  ! shift/reduce conflict for TOKEN_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_BIT_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_NAND resolved as shift
-  ! shift/reduce conflict for TOKEN_XOR resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_QUESTION resolved as shift
-  ! shift/reduce conflict for TOKEN_AMPERSAND resolved as shift
-  ! shift/reduce conflict for TOKEN_DOT resolved as shift
-  ! shift/reduce conflict for TOKEN_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_FAT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LEFT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LBRACKET resolved as shift
-  ! shift/reduce conflict for TOKEN_COLON resolved as shift
-  ! shift/reduce conflict for TOKEN_LPAREN resolved as shift
-  ! shift/reduce conflict for TOKEN_SCOPE_RES resolved as shift
-  ! shift/reduce conflict for TOKEN_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS resolved as shift
     TOKEN_SEMICOLON reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_MOD       reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_PLUS_EQ   reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_MINUS_EQ  reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_STAR_EQ   reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_SLASH_EQ  reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_MOD_EQ    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LT        reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_GT        reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LE        reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_GE        reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_EQ        reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_NEQ       reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_AND       reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_OR        reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_NAND      reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_XOR       reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LSHIFT    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_RSHIFT    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LSHIFT_ASSIGN reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_RSHIFT_ASSIGN reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_QUESTION  reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_ARROW     reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_FAT_ARROW reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LEFT_ARROW reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LBRACKET  reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_LPAREN    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
+    TOKEN_ASSIGN    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
     TOKEN_RBRACKET  reduce using rule 116 (expr -> expr TOKEN_AND expr .)
     TOKEN_RPAREN    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
     TOKEN_COMMA     reduce using rule 116 (expr -> expr TOKEN_AND expr .)
     TOKEN_RBRACE    reduce using rule 116 (expr -> expr TOKEN_AND expr .)
     TOKEN_STAR      shift and go to state 104
     TOKEN_SLASH     shift and go to state 105
-    TOKEN_MOD       shift and go to state 106
-    TOKEN_PLUS_EQ   shift and go to state 107
-    TOKEN_MINUS_EQ  shift and go to state 108
-    TOKEN_STAR_EQ   shift and go to state 109
-    TOKEN_SLASH_EQ  shift and go to state 110
-    TOKEN_MOD_EQ    shift and go to state 111
-    TOKEN_LT        shift and go to state 112
-    TOKEN_GT        shift and go to state 113
-    TOKEN_LE        shift and go to state 114
-    TOKEN_GE        shift and go to state 115
-    TOKEN_EQ        shift and go to state 116
-    TOKEN_NEQ       shift and go to state 117
-    TOKEN_AND       shift and go to state 118
-    TOKEN_OR        shift and go to state 119
     TOKEN_BIT_OR    shift and go to state 120
-    TOKEN_NAND      shift and go to state 121
-    TOKEN_XOR       shift and go to state 122
-    TOKEN_LSHIFT    shift and go to state 123
-    TOKEN_RSHIFT    shift and go to state 124
-    TOKEN_LSHIFT_ASSIGN shift and go to state 125
-    TOKEN_RSHIFT_ASSIGN shift and go to state 126
-    TOKEN_QUESTION  shift and go to state 127
     TOKEN_AMPERSAND shift and go to state 129
     TOKEN_DOT       shift and go to state 130
-    TOKEN_ARROW     shift and go to state 131
-    TOKEN_FAT_ARROW shift and go to state 132
-    TOKEN_LEFT_ARROW shift and go to state 133
-    TOKEN_LBRACKET  shift and go to state 134
     TOKEN_COLON     shift and go to state 128
-    TOKEN_LPAREN    shift and go to state 135
     TOKEN_SCOPE_RES shift and go to state 136
-    TOKEN_ASSIGN    shift and go to state 102
     TOKEN_PLUS      shift and go to state 137
     TOKEN_MINUS     shift and go to state 138
 
   ! TOKEN_STAR      [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_SLASH     [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_MOD       [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_PLUS_EQ   [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_MINUS_EQ  [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_STAR_EQ   [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_SLASH_EQ  [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_MOD_EQ    [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LT        [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_GT        [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LE        [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_GE        [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_EQ        [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_NEQ       [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_AND       [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_OR        [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_BIT_OR    [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_NAND      [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_XOR       [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LSHIFT    [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_RSHIFT    [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LSHIFT_ASSIGN [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_RSHIFT_ASSIGN [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_QUESTION  [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_AMPERSAND [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_DOT       [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_ARROW     [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_FAT_ARROW [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LEFT_ARROW [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LBRACKET  [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_COLON     [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_LPAREN    [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_SCOPE_RES [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
-  ! TOKEN_ASSIGN    [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_PLUS      [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
   ! TOKEN_MINUS     [ reduce using rule 116 (expr -> expr TOKEN_AND expr .) ]
+  ! TOKEN_MOD       [ shift and go to state 106 ]
+  ! TOKEN_PLUS_EQ   [ shift and go to state 107 ]
+  ! TOKEN_MINUS_EQ  [ shift and go to state 108 ]
+  ! TOKEN_STAR_EQ   [ shift and go to state 109 ]
+  ! TOKEN_SLASH_EQ  [ shift and go to state 110 ]
+  ! TOKEN_MOD_EQ    [ shift and go to state 111 ]
+  ! TOKEN_LT        [ shift and go to state 112 ]
+  ! TOKEN_GT        [ shift and go to state 113 ]
+  ! TOKEN_LE        [ shift and go to state 114 ]
+  ! TOKEN_GE        [ shift and go to state 115 ]
+  ! TOKEN_EQ        [ shift and go to state 116 ]
+  ! TOKEN_NEQ       [ shift and go to state 117 ]
+  ! TOKEN_AND       [ shift and go to state 118 ]
+  ! TOKEN_OR        [ shift and go to state 119 ]
+  ! TOKEN_NAND      [ shift and go to state 121 ]
+  ! TOKEN_XOR       [ shift and go to state 122 ]
+  ! TOKEN_LSHIFT    [ shift and go to state 123 ]
+  ! TOKEN_RSHIFT    [ shift and go to state 124 ]
+  ! TOKEN_LSHIFT_ASSIGN [ shift and go to state 125 ]
+  ! TOKEN_RSHIFT_ASSIGN [ shift and go to state 126 ]
+  ! TOKEN_QUESTION  [ shift and go to state 127 ]
+  ! TOKEN_ARROW     [ shift and go to state 131 ]
+  ! TOKEN_FAT_ARROW [ shift and go to state 132 ]
+  ! TOKEN_LEFT_ARROW [ shift and go to state 133 ]
+  ! TOKEN_LBRACKET  [ shift and go to state 134 ]
+  ! TOKEN_LPAREN    [ shift and go to state 135 ]
+  ! TOKEN_ASSIGN    [ shift and go to state 102 ]
 
 
 state 181
@@ -10813,120 +10741,84 @@ state 181
     (175) expr -> expr . TOKEN_PLUS expr
     (186) expr -> expr . TOKEN_MINUS expr
 
-  ! shift/reduce conflict for TOKEN_STAR resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_STAR_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_LT resolved as shift
-  ! shift/reduce conflict for TOKEN_GT resolved as shift
-  ! shift/reduce conflict for TOKEN_LE resolved as shift
-  ! shift/reduce conflict for TOKEN_GE resolved as shift
-  ! shift/reduce conflict for TOKEN_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_NEQ resolved as shift
-  ! shift/reduce conflict for TOKEN_AND resolved as shift
-  ! shift/reduce conflict for TOKEN_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_BIT_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_NAND resolved as shift
-  ! shift/reduce conflict for TOKEN_XOR resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_QUESTION resolved as shift
-  ! shift/reduce conflict for TOKEN_AMPERSAND resolved as shift
-  ! shift/reduce conflict for TOKEN_DOT resolved as shift
-  ! shift/reduce conflict for TOKEN_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_FAT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LEFT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LBRACKET resolved as shift
-  ! shift/reduce conflict for TOKEN_COLON resolved as shift
-  ! shift/reduce conflict for TOKEN_LPAREN resolved as shift
-  ! shift/reduce conflict for TOKEN_SCOPE_RES resolved as shift
-  ! shift/reduce conflict for TOKEN_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS resolved as shift
     TOKEN_SEMICOLON reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_MOD       reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_PLUS_EQ   reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_MINUS_EQ  reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_STAR_EQ   reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_SLASH_EQ  reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_MOD_EQ    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LT        reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_GT        reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LE        reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_GE        reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_EQ        reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_NEQ       reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_OR        reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_NAND      reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_XOR       reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LSHIFT    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_RSHIFT    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LSHIFT_ASSIGN reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_RSHIFT_ASSIGN reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_QUESTION  reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_ARROW     reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_FAT_ARROW reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LEFT_ARROW reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LBRACKET  reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_LPAREN    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
+    TOKEN_ASSIGN    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
     TOKEN_RBRACKET  reduce using rule 117 (expr -> expr TOKEN_OR expr .)
     TOKEN_RPAREN    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
     TOKEN_COMMA     reduce using rule 117 (expr -> expr TOKEN_OR expr .)
     TOKEN_RBRACE    reduce using rule 117 (expr -> expr TOKEN_OR expr .)
     TOKEN_STAR      shift and go to state 104
     TOKEN_SLASH     shift and go to state 105
-    TOKEN_MOD       shift and go to state 106
-    TOKEN_PLUS_EQ   shift and go to state 107
-    TOKEN_MINUS_EQ  shift and go to state 108
-    TOKEN_STAR_EQ   shift and go to state 109
-    TOKEN_SLASH_EQ  shift and go to state 110
-    TOKEN_MOD_EQ    shift and go to state 111
-    TOKEN_LT        shift and go to state 112
-    TOKEN_GT        shift and go to state 113
-    TOKEN_LE        shift and go to state 114
-    TOKEN_GE        shift and go to state 115
-    TOKEN_EQ        shift and go to state 116
-    TOKEN_NEQ       shift and go to state 117
     TOKEN_AND       shift and go to state 118
-    TOKEN_OR        shift and go to state 119
     TOKEN_BIT_OR    shift and go to state 120
-    TOKEN_NAND      shift and go to state 121
-    TOKEN_XOR       shift and go to state 122
-    TOKEN_LSHIFT    shift and go to state 123
-    TOKEN_RSHIFT    shift and go to state 124
-    TOKEN_LSHIFT_ASSIGN shift and go to state 125
-    TOKEN_RSHIFT_ASSIGN shift and go to state 126
-    TOKEN_QUESTION  shift and go to state 127
     TOKEN_AMPERSAND shift and go to state 129
     TOKEN_DOT       shift and go to state 130
-    TOKEN_ARROW     shift and go to state 131
-    TOKEN_FAT_ARROW shift and go to state 132
-    TOKEN_LEFT_ARROW shift and go to state 133
-    TOKEN_LBRACKET  shift and go to state 134
     TOKEN_COLON     shift and go to state 128
-    TOKEN_LPAREN    shift and go to state 135
     TOKEN_SCOPE_RES shift and go to state 136
-    TOKEN_ASSIGN    shift and go to state 102
     TOKEN_PLUS      shift and go to state 137
     TOKEN_MINUS     shift and go to state 138
 
   ! TOKEN_STAR      [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_SLASH     [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_MOD       [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_PLUS_EQ   [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_MINUS_EQ  [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_STAR_EQ   [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_SLASH_EQ  [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_MOD_EQ    [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LT        [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_GT        [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LE        [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_GE        [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_EQ        [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_NEQ       [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_AND       [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_OR        [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_BIT_OR    [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_NAND      [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_XOR       [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LSHIFT    [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_RSHIFT    [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LSHIFT_ASSIGN [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_RSHIFT_ASSIGN [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_QUESTION  [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_AMPERSAND [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_DOT       [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_ARROW     [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_FAT_ARROW [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LEFT_ARROW [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LBRACKET  [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_COLON     [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_LPAREN    [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_SCOPE_RES [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
-  ! TOKEN_ASSIGN    [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_PLUS      [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
   ! TOKEN_MINUS     [ reduce using rule 117 (expr -> expr TOKEN_OR expr .) ]
+  ! TOKEN_MOD       [ shift and go to state 106 ]
+  ! TOKEN_PLUS_EQ   [ shift and go to state 107 ]
+  ! TOKEN_MINUS_EQ  [ shift and go to state 108 ]
+  ! TOKEN_STAR_EQ   [ shift and go to state 109 ]
+  ! TOKEN_SLASH_EQ  [ shift and go to state 110 ]
+  ! TOKEN_MOD_EQ    [ shift and go to state 111 ]
+  ! TOKEN_LT        [ shift and go to state 112 ]
+  ! TOKEN_GT        [ shift and go to state 113 ]
+  ! TOKEN_LE        [ shift and go to state 114 ]
+  ! TOKEN_GE        [ shift and go to state 115 ]
+  ! TOKEN_EQ        [ shift and go to state 116 ]
+  ! TOKEN_NEQ       [ shift and go to state 117 ]
+  ! TOKEN_OR        [ shift and go to state 119 ]
+  ! TOKEN_NAND      [ shift and go to state 121 ]
+  ! TOKEN_XOR       [ shift and go to state 122 ]
+  ! TOKEN_LSHIFT    [ shift and go to state 123 ]
+  ! TOKEN_RSHIFT    [ shift and go to state 124 ]
+  ! TOKEN_LSHIFT_ASSIGN [ shift and go to state 125 ]
+  ! TOKEN_RSHIFT_ASSIGN [ shift and go to state 126 ]
+  ! TOKEN_QUESTION  [ shift and go to state 127 ]
+  ! TOKEN_ARROW     [ shift and go to state 131 ]
+  ! TOKEN_FAT_ARROW [ shift and go to state 132 ]
+  ! TOKEN_LEFT_ARROW [ shift and go to state 133 ]
+  ! TOKEN_LBRACKET  [ shift and go to state 134 ]
+  ! TOKEN_LPAREN    [ shift and go to state 135 ]
+  ! TOKEN_ASSIGN    [ shift and go to state 102 ]
 
 
 state 182
@@ -10969,120 +10861,84 @@ state 182
     (175) expr -> expr . TOKEN_PLUS expr
     (186) expr -> expr . TOKEN_MINUS expr
 
-  ! shift/reduce conflict for TOKEN_STAR resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_STAR_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_LT resolved as shift
-  ! shift/reduce conflict for TOKEN_GT resolved as shift
-  ! shift/reduce conflict for TOKEN_LE resolved as shift
-  ! shift/reduce conflict for TOKEN_GE resolved as shift
-  ! shift/reduce conflict for TOKEN_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_NEQ resolved as shift
-  ! shift/reduce conflict for TOKEN_AND resolved as shift
-  ! shift/reduce conflict for TOKEN_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_BIT_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_NAND resolved as shift
-  ! shift/reduce conflict for TOKEN_XOR resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_QUESTION resolved as shift
-  ! shift/reduce conflict for TOKEN_AMPERSAND resolved as shift
-  ! shift/reduce conflict for TOKEN_DOT resolved as shift
-  ! shift/reduce conflict for TOKEN_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_FAT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LEFT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LBRACKET resolved as shift
-  ! shift/reduce conflict for TOKEN_COLON resolved as shift
-  ! shift/reduce conflict for TOKEN_LPAREN resolved as shift
-  ! shift/reduce conflict for TOKEN_SCOPE_RES resolved as shift
-  ! shift/reduce conflict for TOKEN_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS resolved as shift
     TOKEN_SEMICOLON reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_MOD       reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_PLUS_EQ   reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_MINUS_EQ  reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_STAR_EQ   reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_SLASH_EQ  reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_MOD_EQ    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LT        reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_GT        reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LE        reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_GE        reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_EQ        reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_NEQ       reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_AND       reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_OR        reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_BIT_OR    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_NAND      reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_XOR       reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LSHIFT    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_RSHIFT    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LSHIFT_ASSIGN reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_RSHIFT_ASSIGN reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_QUESTION  reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_ARROW     reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_FAT_ARROW reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LEFT_ARROW reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LBRACKET  reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_LPAREN    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
+    TOKEN_ASSIGN    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
     TOKEN_RBRACKET  reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
     TOKEN_RPAREN    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
     TOKEN_COMMA     reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
     TOKEN_RBRACE    reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .)
     TOKEN_STAR      shift and go to state 104
     TOKEN_SLASH     shift and go to state 105
-    TOKEN_MOD       shift and go to state 106
-    TOKEN_PLUS_EQ   shift and go to state 107
-    TOKEN_MINUS_EQ  shift and go to state 108
-    TOKEN_STAR_EQ   shift and go to state 109
-    TOKEN_SLASH_EQ  shift and go to state 110
-    TOKEN_MOD_EQ    shift and go to state 111
-    TOKEN_LT        shift and go to state 112
-    TOKEN_GT        shift and go to state 113
-    TOKEN_LE        shift and go to state 114
-    TOKEN_GE        shift and go to state 115
-    TOKEN_EQ        shift and go to state 116
-    TOKEN_NEQ       shift and go to state 117
-    TOKEN_AND       shift and go to state 118
-    TOKEN_OR        shift and go to state 119
-    TOKEN_BIT_OR    shift and go to state 120
-    TOKEN_NAND      shift and go to state 121
-    TOKEN_XOR       shift and go to state 122
-    TOKEN_LSHIFT    shift and go to state 123
-    TOKEN_RSHIFT    shift and go to state 124
-    TOKEN_LSHIFT_ASSIGN shift and go to state 125
-    TOKEN_RSHIFT_ASSIGN shift and go to state 126
-    TOKEN_QUESTION  shift and go to state 127
     TOKEN_AMPERSAND shift and go to state 129
     TOKEN_DOT       shift and go to state 130
-    TOKEN_ARROW     shift and go to state 131
-    TOKEN_FAT_ARROW shift and go to state 132
-    TOKEN_LEFT_ARROW shift and go to state 133
-    TOKEN_LBRACKET  shift and go to state 134
     TOKEN_COLON     shift and go to state 128
-    TOKEN_LPAREN    shift and go to state 135
     TOKEN_SCOPE_RES shift and go to state 136
-    TOKEN_ASSIGN    shift and go to state 102
     TOKEN_PLUS      shift and go to state 137
     TOKEN_MINUS     shift and go to state 138
 
   ! TOKEN_STAR      [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_SLASH     [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_MOD       [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_PLUS_EQ   [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_MINUS_EQ  [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_STAR_EQ   [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_SLASH_EQ  [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_MOD_EQ    [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LT        [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_GT        [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LE        [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_GE        [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_EQ        [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_NEQ       [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_AND       [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_OR        [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_BIT_OR    [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_NAND      [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_XOR       [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LSHIFT    [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_RSHIFT    [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LSHIFT_ASSIGN [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_RSHIFT_ASSIGN [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_QUESTION  [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_AMPERSAND [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_DOT       [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_ARROW     [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_FAT_ARROW [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LEFT_ARROW [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LBRACKET  [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_COLON     [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_LPAREN    [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_SCOPE_RES [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
-  ! TOKEN_ASSIGN    [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_PLUS      [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
   ! TOKEN_MINUS     [ reduce using rule 118 (expr -> expr TOKEN_BIT_OR expr .) ]
+  ! TOKEN_MOD       [ shift and go to state 106 ]
+  ! TOKEN_PLUS_EQ   [ shift and go to state 107 ]
+  ! TOKEN_MINUS_EQ  [ shift and go to state 108 ]
+  ! TOKEN_STAR_EQ   [ shift and go to state 109 ]
+  ! TOKEN_SLASH_EQ  [ shift and go to state 110 ]
+  ! TOKEN_MOD_EQ    [ shift and go to state 111 ]
+  ! TOKEN_LT        [ shift and go to state 112 ]
+  ! TOKEN_GT        [ shift and go to state 113 ]
+  ! TOKEN_LE        [ shift and go to state 114 ]
+  ! TOKEN_GE        [ shift and go to state 115 ]
+  ! TOKEN_EQ        [ shift and go to state 116 ]
+  ! TOKEN_NEQ       [ shift and go to state 117 ]
+  ! TOKEN_AND       [ shift and go to state 118 ]
+  ! TOKEN_OR        [ shift and go to state 119 ]
+  ! TOKEN_BIT_OR    [ shift and go to state 120 ]
+  ! TOKEN_NAND      [ shift and go to state 121 ]
+  ! TOKEN_XOR       [ shift and go to state 122 ]
+  ! TOKEN_LSHIFT    [ shift and go to state 123 ]
+  ! TOKEN_RSHIFT    [ shift and go to state 124 ]
+  ! TOKEN_LSHIFT_ASSIGN [ shift and go to state 125 ]
+  ! TOKEN_RSHIFT_ASSIGN [ shift and go to state 126 ]
+  ! TOKEN_QUESTION  [ shift and go to state 127 ]
+  ! TOKEN_ARROW     [ shift and go to state 131 ]
+  ! TOKEN_FAT_ARROW [ shift and go to state 132 ]
+  ! TOKEN_LEFT_ARROW [ shift and go to state 133 ]
+  ! TOKEN_LBRACKET  [ shift and go to state 134 ]
+  ! TOKEN_LPAREN    [ shift and go to state 135 ]
+  ! TOKEN_ASSIGN    [ shift and go to state 102 ]
 
 
 state 183
@@ -12259,120 +12115,84 @@ state 191
     (175) expr -> expr . TOKEN_PLUS expr
     (186) expr -> expr . TOKEN_MINUS expr
 
-  ! shift/reduce conflict for TOKEN_STAR resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_STAR_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_SLASH_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_MOD_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_LT resolved as shift
-  ! shift/reduce conflict for TOKEN_GT resolved as shift
-  ! shift/reduce conflict for TOKEN_LE resolved as shift
-  ! shift/reduce conflict for TOKEN_GE resolved as shift
-  ! shift/reduce conflict for TOKEN_EQ resolved as shift
-  ! shift/reduce conflict for TOKEN_NEQ resolved as shift
-  ! shift/reduce conflict for TOKEN_AND resolved as shift
-  ! shift/reduce conflict for TOKEN_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_BIT_OR resolved as shift
-  ! shift/reduce conflict for TOKEN_NAND resolved as shift
-  ! shift/reduce conflict for TOKEN_XOR resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT resolved as shift
-  ! shift/reduce conflict for TOKEN_LSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_RSHIFT_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_QUESTION resolved as shift
-  ! shift/reduce conflict for TOKEN_AMPERSAND resolved as shift
-  ! shift/reduce conflict for TOKEN_DOT resolved as shift
-  ! shift/reduce conflict for TOKEN_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_FAT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LEFT_ARROW resolved as shift
-  ! shift/reduce conflict for TOKEN_LBRACKET resolved as shift
-  ! shift/reduce conflict for TOKEN_COLON resolved as shift
-  ! shift/reduce conflict for TOKEN_LPAREN resolved as shift
-  ! shift/reduce conflict for TOKEN_SCOPE_RES resolved as shift
-  ! shift/reduce conflict for TOKEN_ASSIGN resolved as shift
-  ! shift/reduce conflict for TOKEN_PLUS resolved as shift
-  ! shift/reduce conflict for TOKEN_MINUS resolved as shift
     TOKEN_SEMICOLON reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_MOD       reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_PLUS_EQ   reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_MINUS_EQ  reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_STAR_EQ   reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_SLASH_EQ  reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_MOD_EQ    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LT        reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_GT        reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LE        reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_GE        reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_EQ        reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_NEQ       reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_AND       reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_OR        reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_BIT_OR    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_NAND      reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_XOR       reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LSHIFT    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_RSHIFT    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LSHIFT_ASSIGN reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_RSHIFT_ASSIGN reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_QUESTION  reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_AMPERSAND reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_ARROW     reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_FAT_ARROW reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LEFT_ARROW reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LBRACKET  reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_LPAREN    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
+    TOKEN_ASSIGN    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
     TOKEN_RBRACKET  reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
     TOKEN_RPAREN    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
     TOKEN_COMMA     reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
     TOKEN_RBRACE    reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .)
     TOKEN_STAR      shift and go to state 104
     TOKEN_SLASH     shift and go to state 105
-    TOKEN_MOD       shift and go to state 106
-    TOKEN_PLUS_EQ   shift and go to state 107
-    TOKEN_MINUS_EQ  shift and go to state 108
-    TOKEN_STAR_EQ   shift and go to state 109
-    TOKEN_SLASH_EQ  shift and go to state 110
-    TOKEN_MOD_EQ    shift and go to state 111
-    TOKEN_LT        shift and go to state 112
-    TOKEN_GT        shift and go to state 113
-    TOKEN_LE        shift and go to state 114
-    TOKEN_GE        shift and go to state 115
-    TOKEN_EQ        shift and go to state 116
-    TOKEN_NEQ       shift and go to state 117
-    TOKEN_AND       shift and go to state 118
-    TOKEN_OR        shift and go to state 119
-    TOKEN_BIT_OR    shift and go to state 120
-    TOKEN_NAND      shift and go to state 121
-    TOKEN_XOR       shift and go to state 122
-    TOKEN_LSHIFT    shift and go to state 123
-    TOKEN_RSHIFT    shift and go to state 124
-    TOKEN_LSHIFT_ASSIGN shift and go to state 125
-    TOKEN_RSHIFT_ASSIGN shift and go to state 126
-    TOKEN_QUESTION  shift and go to state 127
-    TOKEN_AMPERSAND shift and go to state 129
     TOKEN_DOT       shift and go to state 130
-    TOKEN_ARROW     shift and go to state 131
-    TOKEN_FAT_ARROW shift and go to state 132
-    TOKEN_LEFT_ARROW shift and go to state 133
-    TOKEN_LBRACKET  shift and go to state 134
     TOKEN_COLON     shift and go to state 128
-    TOKEN_LPAREN    shift and go to state 135
     TOKEN_SCOPE_RES shift and go to state 136
-    TOKEN_ASSIGN    shift and go to state 102
     TOKEN_PLUS      shift and go to state 137
     TOKEN_MINUS     shift and go to state 138
 
   ! TOKEN_STAR      [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
   ! TOKEN_SLASH     [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_MOD       [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_PLUS_EQ   [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_MINUS_EQ  [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_STAR_EQ   [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_SLASH_EQ  [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_MOD_EQ    [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LT        [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_GT        [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LE        [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_GE        [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_EQ        [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_NEQ       [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_AND       [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_OR        [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_BIT_OR    [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_NAND      [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_XOR       [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LSHIFT    [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_RSHIFT    [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LSHIFT_ASSIGN [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_RSHIFT_ASSIGN [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_QUESTION  [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_AMPERSAND [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
   ! TOKEN_DOT       [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_ARROW     [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_FAT_ARROW [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LEFT_ARROW [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LBRACKET  [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
   ! TOKEN_COLON     [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_LPAREN    [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
   ! TOKEN_SCOPE_RES [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
-  ! TOKEN_ASSIGN    [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
   ! TOKEN_PLUS      [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
   ! TOKEN_MINUS     [ reduce using rule 129 (expr -> expr TOKEN_AMPERSAND expr .) ]
+  ! TOKEN_MOD       [ shift and go to state 106 ]
+  ! TOKEN_PLUS_EQ   [ shift and go to state 107 ]
+  ! TOKEN_MINUS_EQ  [ shift and go to state 108 ]
+  ! TOKEN_STAR_EQ   [ shift and go to state 109 ]
+  ! TOKEN_SLASH_EQ  [ shift and go to state 110 ]
+  ! TOKEN_MOD_EQ    [ shift and go to state 111 ]
+  ! TOKEN_LT        [ shift and go to state 112 ]
+  ! TOKEN_GT        [ shift and go to state 113 ]
+  ! TOKEN_LE        [ shift and go to state 114 ]
+  ! TOKEN_GE        [ shift and go to state 115 ]
+  ! TOKEN_EQ        [ shift and go to state 116 ]
+  ! TOKEN_NEQ       [ shift and go to state 117 ]
+  ! TOKEN_AND       [ shift and go to state 118 ]
+  ! TOKEN_OR        [ shift and go to state 119 ]
+  ! TOKEN_BIT_OR    [ shift and go to state 120 ]
+  ! TOKEN_NAND      [ shift and go to state 121 ]
+  ! TOKEN_XOR       [ shift and go to state 122 ]
+  ! TOKEN_LSHIFT    [ shift and go to state 123 ]
+  ! TOKEN_RSHIFT    [ shift and go to state 124 ]
+  ! TOKEN_LSHIFT_ASSIGN [ shift and go to state 125 ]
+  ! TOKEN_RSHIFT_ASSIGN [ shift and go to state 126 ]
+  ! TOKEN_QUESTION  [ shift and go to state 127 ]
+  ! TOKEN_AMPERSAND [ shift and go to state 129 ]
+  ! TOKEN_ARROW     [ shift and go to state 131 ]
+  ! TOKEN_FAT_ARROW [ shift and go to state 132 ]
+  ! TOKEN_LEFT_ARROW [ shift and go to state 133 ]
+  ! TOKEN_LBRACKET  [ shift and go to state 134 ]
+  ! TOKEN_LPAREN    [ shift and go to state 135 ]
+  ! TOKEN_ASSIGN    [ shift and go to state 102 ]
 
 
 state 192
@@ -24044,42 +23864,6 @@ WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 143 resolved as shif
 WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 143 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_PLUS in state 143 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_MINUS in state 143 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS_EQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS_EQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR_EQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH_EQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD_EQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LT in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GT in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LE in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GE in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_EQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NEQ in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AND in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_OR in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_BIT_OR in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NAND in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_XOR in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT_ASSIGN in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT_ASSIGN in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_QUESTION in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AMPERSAND in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_DOT in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ARROW in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_FAT_ARROW in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LEFT_ARROW in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LBRACKET in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_COLON in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LPAREN in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS in state 144 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS in state 144 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_STAR in state 145 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_SLASH in state 145 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_MOD in state 145 resolved as shift
@@ -24584,114 +24368,6 @@ WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 179 resolved as shif
 WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 179 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_PLUS in state 179 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_MINUS in state 179 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS_EQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS_EQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR_EQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH_EQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD_EQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LT in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GT in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LE in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GE in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_EQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NEQ in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AND in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_OR in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_BIT_OR in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NAND in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_XOR in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT_ASSIGN in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT_ASSIGN in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_QUESTION in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AMPERSAND in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_DOT in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ARROW in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_FAT_ARROW in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LEFT_ARROW in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LBRACKET in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_COLON in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LPAREN in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS in state 180 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS_EQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS_EQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR_EQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH_EQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD_EQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LT in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GT in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LE in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GE in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_EQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NEQ in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AND in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_OR in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_BIT_OR in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NAND in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_XOR in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT_ASSIGN in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT_ASSIGN in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_QUESTION in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AMPERSAND in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_DOT in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ARROW in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_FAT_ARROW in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LEFT_ARROW in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LBRACKET in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_COLON in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LPAREN in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS in state 181 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS_EQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS_EQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR_EQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH_EQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD_EQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LT in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GT in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LE in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GE in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_EQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NEQ in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AND in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_OR in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_BIT_OR in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NAND in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_XOR in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT_ASSIGN in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT_ASSIGN in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_QUESTION in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AMPERSAND in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_DOT in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ARROW in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_FAT_ARROW in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LEFT_ARROW in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LBRACKET in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_COLON in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LPAREN in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS in state 182 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS in state 182 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_STAR in state 183 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_SLASH in state 183 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_MOD in state 183 resolved as shift
@@ -24908,42 +24584,6 @@ WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 188 resolved as shif
 WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 188 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_PLUS in state 188 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_MINUS in state 188 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS_EQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS_EQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_STAR_EQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SLASH_EQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MOD_EQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LT in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GT in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LE in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_GE in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_EQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NEQ in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AND in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_OR in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_BIT_OR in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_NAND in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_XOR in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LSHIFT_ASSIGN in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_RSHIFT_ASSIGN in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_QUESTION in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_AMPERSAND in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_DOT in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ARROW in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_FAT_ARROW in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LEFT_ARROW in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LBRACKET in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_COLON in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_LPAREN in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_SCOPE_RES in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_ASSIGN in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_PLUS in state 191 resolved as shift
-WARNING: shift/reduce conflict for TOKEN_MINUS in state 191 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_STAR in state 193 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_SLASH in state 193 resolved as shift
 WARNING: shift/reduce conflict for TOKEN_MOD in state 193 resolved as shift
