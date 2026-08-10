@@ -116,7 +116,7 @@ typedef struct{
 static GrammarRule GRAMMAR_RULES[] = {
     {0, 0, "INVALID_RULE"},
 
-    {NT_PROGRAM, 1, "program -> decl_list"},
+    {NT_PROGRAM, 2, "program -> decl_list TOKEN_EOF"},
 
     {NT_EXPRESSION_STATEMENT, 2, "expr_stmt -> expr TOKEN_SEMICOLON"},
     {NT_EXPRESSION_LIST, 3, "expr_list -> expr_list TOKEN_COMMA expr"},
@@ -276,13 +276,12 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_MODIFIER_LIST, 2, "modifier_list -> modifier_list modifier"},
     {NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
 
-    {NT_TYPE, 1, "type -> base_type"},
     {NT_TYPE, 1, "type -> channel_type"},
     {NT_TYPE, 1, "type -> pointer_type"},
 
     {NT_POINTER_TYPE, 2, "pointer_type -> pointer_type TOKEN_STAR"},
     {NT_POINTER_TYPE, 2, "pointer_type -> pointer_type TOKEN_AMPERSAND"},
-    {NT_POINTER_TYPE, 1, "pointer_type -> base_type"}, /*empty*/
+    {NT_POINTER_TYPE, 1, "pointer_type -> base_type"}, 
 
     {NT_CHANNEL_TYPE, 2, "channel_type -> TOKEN_KW_CHAN type"},
 
