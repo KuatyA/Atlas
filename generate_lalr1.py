@@ -57,25 +57,25 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
 
     # Precedence specification to resolve operator ambiguity
     precedence = (
-      
-        ('right', 'TOKEN_ASSIGN', 'TOKEN_PLUS_ASSIGN', 'TOKEN_MINUS_ASSIGN', 'TOKEN_STAR_ASSIGN', 'TOKEN_SLASH_ASSIGN'),
-        ('left', 'TOKEN_LOGICAL_OR', 'TOKEN_OR'),
-        ('left', 'TOKEN_LOGICAL_AND', 'TOKEN_AND'),
-        ('left', 'TOKEN_BIT_OR', 'TOKEN_PIPE'),
-        ('left', 'TOKEN_BIT_XOR', 'TOKEN_CARET'),
-        ('left', 'TOKEN_BIT_AND', 'TOKEN_AMPERSAND'),
-        ('left', 'TOKEN_EQUAL', 'TOKEN_NOT_EQUAL'),
-        ('left', 'TOKEN_LESS', 'TOKEN_LESS_EQUAL', 'TOKEN_GREATER', 'TOKEN_GREATER_EQUAL'),
-        ('left', 'TOKEN_SHL', 'TOKEN_SHR'),
+        ('right', 'TOKEN_ASSIGN', 'TOKEN_PLUS_EQ', 'TOKEN_MINUS_EQ', 'TOKEN_STAR_EQ', 'TOKEN_SLASH_EQ', 'TOKEN_MOD_EQ', 'TOKEN_LSHIFT_ASSIGN', 'TOKEN_RSHIFT_ASSIGN'),
+        ('right', 'TOKEN_QUESTION', 'TOKEN_COLON'),
+        ('left', 'TOKEN_OR'),
+        ('left', 'TOKEN_AND'),
+        ('left', 'TOKEN_BIT_OR'),
+        ('left', 'TOKEN_XOR'),
+        ('left', 'TOKEN_AMPERSAND', 'TOKEN_NAND'),
+        ('left', 'TOKEN_EQ', 'TOKEN_NEQ'),
+        ('left', 'TOKEN_LT', 'TOKEN_LE', 'TOKEN_GT', 'TOKEN_GE'),
+        ('left', 'TOKEN_LSHIFT', 'TOKEN_RSHIFT'),
         ('left', 'TOKEN_PLUS', 'TOKEN_MINUS'),
-        ('left', 'TOKEN_STAR', 'TOKEN_SLASH', 'TOKEN_PERCENT'),
-        ('right', 'UNARY_OP'),
-        ('left', 'TOKEN_DOT', 'TOKEN_COLON', 'TOKEN_SCOPE_RES'),
+        ('left', 'TOKEN_STAR', 'TOKEN_SLASH', 'TOKEN_MOD'),
+        ('right', 'TOKEN_NOT', 'TOKEN_BIT_NOT', 'TOKEN_KW_AWAIT', 'TOKEN_PLUS', 'TOKEN_MINUS', 'TOKEN_AMPERSAND', 'TOKEN_STAR'),
+        ('left', 'TOKEN_DOT', 'TOKEN_ARROW', 'TOKEN_FAT_ARROW', 'TOKEN_SCOPE_RES', 'TOKEN_LEFT_ARROW', 'TOKEN_LPAREN', 'TOKEN_RPAREN', 'TOKEN_LBRACKET', 'TOKEN_RBRACKET'),
     )
 
     valid_prec = []
     for assoc, *toks in precedence:
-        existing_toks = [t for t in toks if t in terminals]
+        existing_toks = [t for t in toks if t in terminals] # or t == 'UNARY_OP']
         if existing_toks:
             valid_prec.append((assoc, *existing_toks))
 
@@ -98,6 +98,13 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
     for idx, (lhs, rhs) in enumerate(parsed_rules):
         rhs_str = " ".join(rhs) if rhs else ""
         doc_string = f"{lhs} : {rhs_str}"
+
+        # BULLETPROOF UNARY HACK: Catches direct operator use AND non-terminal operator groupings
+        #if len(rhs) == 2:
+         #   if rhs[0] in ("TOKEN_STAR", "TOKEN_AMPERSAND", "TOKEN_PLUS", "TOKEN_MINUS", "TOKEN_BANG", "TOKEN_TILDE"):
+         #       doc_string += " %prec UNARY_OP"
+         #   elif "unary" in rhs[0].lower():
+          #      doc_string += " %prec UNARY_OP"
 
         def make_handler(doc):
             def p_rule(p): pass

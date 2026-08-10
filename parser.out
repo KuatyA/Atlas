@@ -1,0 +1,404 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    TOKEN_EOF
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> decl_list
+Rule 2     expr_stmt -> expr TOKEN_SEMICOLON
+Rule 3     assignment -> unary TOKEN_SLASH_EQ assignment
+Rule 4     enum_decl -> TOKEN_KW_ENUM TOKEN_IDENTIFIER TOKEN_IDENTIFIER TOKEN_SEMICOLON
+Rule 5     enum_member_list -> enum_member_list TOKEN_COMMA TOKEN_IDENTIFIER
+Rule 6     enum_member_list -> TOKEN_IDENTIFIER
+Rule 7     union_decl -> TOKEN_KW_UNION TOKEN_IDENTIFIER TOKEN_LBRACE union_member_list TOKEN_RBRACE TOKEN_SEMICOLON
+Rule 8     union_decl -> TOKEN_KW_UNION TOKEN_IDENTIFIER TOKEN_IDENTIFIER TOKEN_SEMICOLON
+Rule 9     union_member_list -> union_member_list var_decl
+Rule 10    union_member_list -> var_decl
+Rule 11    decl_list -> decl_list decl
+Rule 12    decl_list -> <empty>
+Rule 13    var_decl -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_SEMICOLON
+Rule 14    assignment -> unary TOKEN_MOD_EQ assignment
+Rule 15    var_decl -> type TOKEN_IDENTIFIER TOKEN_SEMICOLON
+Rule 16    var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_ASSIGN array_init TOKEN_SEMICOLON
+Rule 17    var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_SEMICOLON
+Rule 18    func_decl -> TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix
+Rule 19    func_decl -> TOKEN_KW_ASYNC TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix
+Rule 20    typealias_decl -> TOKEN_KW_TYPEALIAS TOKEN_IDENTIFIER TOKEN_ASSIGN type TOKEN_SEMICOLON
+Rule 21    modifier -> TOKEN_KW_CONST
+Rule 22    modifier -> TOKEN_KW_MUT
+Rule 23    modifier -> TOKEN_KW_STATIC
+Rule 24    modifier -> TOKEN_KW_VOLATILE
+Rule 25    assignment -> unary TOKEN_LSHIFT_ASSIGN assignment
+Rule 26    modifier -> TOKEN_KW_ATOMIC
+Rule 27    modifier -> TOKEN_KW_SHARED
+Rule 28    modifier -> TOKEN_KW_PRIVATE
+Rule 29    modifier -> TOKEN_KW_PUBLIC
+Rule 30    modifier_list -> modifier_list modifier
+Rule 31    modifier_list -> <empty>
+Rule 32    type -> base_type
+Rule 33    type -> channel_type
+Rule 34    type -> pointer_type
+Rule 35    pointer_type -> pointer_type TOKEN_STAR
+Rule 36    assignment -> unary TOKEN_RSHIFT_ASSIGN assignment
+Rule 37    pointer_type -> pointer_type TOKEN_AMPERSAND
+Rule 38    channel_type -> TOKEN_KW_CHAN type
+Rule 39    base_type -> modifier_list TOKEN_KW_INT
+Rule 40    base_type -> modifier_list TOKEN_KW_SHORT
+Rule 41    base_type -> modifier_list TOKEN_KW_LONG
+Rule 42    base_type -> modifier_list TOKEN_KW_BYTE
+Rule 43    base_type -> modifier_list TOKEN_KW_FLOAT
+Rule 44    base_type -> modifier_list TOKEN_KW_DOUBLE
+Rule 45    base_type -> modifier_list TOKEN_KW_CHAR
+Rule 46    base_type -> modifier_list TOKEN_KW_STRING
+Rule 47    ternary -> logical_or
+Rule 48    base_type -> modifier_list TOKEN_KW_BOOL
+Rule 49    base_type -> modifier_list TOKEN_KW_STRUCT
+Rule 50    base_type -> modifier_list TOKEN_KW_ENUM
+Rule 51    base_type -> modifier_list TOKEN_KW_UNION
+Rule 52    base_type -> modifier_list TOKEN_KW_VOID
+Rule 53    base_type -> TOKEN_KW_MUTEX
+Rule 54    base_type -> modifier_list TOKEN_IDENTIFIER
+Rule 55    factor -> TOKEN_INT_LITERAL
+Rule 56    factor -> TOKEN_FLOAT_LITERAL
+Rule 57    factor -> TOKEN_CHAR_LITERAL
+Rule 58    ternary -> logical_or TOKEN_QUESTION expr TOKEN_COLON ternary
+Rule 59    factor -> TOKEN_STRING_LITERAL
+Rule 60    factor -> TOKEN_BOOL_LITERAL
+Rule 61    func_suffix -> TOKEN_SEMICOLON
+Rule 62    func_suffix -> func_body
+Rule 63    func_body -> TOKEN_LBRACE stmt_list TOKEN_RBRACE
+Rule 64    param -> type TOKEN_IDENTIFIER
+Rule 65    param_list -> param_list_nonempty
+Rule 66    param_list -> <empty>
+Rule 67    param_list_nonempty -> param
+Rule 68    param_list_nonempty -> param_list_nonempty TOKEN_COMMA param
+Rule 69    logical_or -> logical_and
+Rule 70    block -> TOKEN_LBRACE stmt_list TOKEN_RBRACE
+Rule 71    block -> TOKEN_LBRACE TOKEN_RBRACE
+Rule 72    case_block -> TOKEN_LBRACE case_list default_stmt TOKEN_RBRACE
+Rule 73    case_block -> TOKEN_LBRACE case_list TOKEN_RBRACE
+Rule 74    match_block -> TOKEN_LBRACE match_list default_match_stmt TOKEN_RBRACE
+Rule 75    match_block -> TOKEN_LBRACE match_list TOKEN_RBRACE
+Rule 76    match_list -> match_list match_arm
+Rule 77    match_list -> match_arm
+Rule 78    match_arm -> expr TOKEN_FAT_ARROW block TOKEN_SEMICOLON
+Rule 79    array_struct -> array_struct TOKEN_LBRACKET expr TOKEN_RBRACKET
+Rule 80    logical_or -> logical_or TOKEN_OR logical_and
+Rule 81    array_struct -> TOKEN_LBRACKET expr TOKEN_RBRACKET
+Rule 82    array_struct -> TOKEN_LBRACKET TOKEN_RBRACKET
+Rule 83    array_init -> TOKEN_LBRACE init_list TOKEN_RBRACE
+Rule 84    init_list -> init_list TOKEN_COMMA initializer
+Rule 85    init_list -> initializer
+Rule 86    initializer -> expr
+Rule 87    initializer -> array_init
+Rule 88    if_stmt -> TOKEN_KW_IF TOKEN_LPAREN expr TOKEN_RPAREN block else
+Rule 89    else -> TOKEN_KW_ELSE block
+Rule 90    else -> lower_than_else
+Rule 91    logical_and -> bit_or
+Rule 92    lower_than_else -> TOKEN_KW_ELSE if_stmt
+Rule 93    lower_than_else -> <empty>
+Rule 94    while_stmt -> TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN stmt
+Rule 95    do_stmt -> TOKEN_KW_DO block TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
+Rule 96    for_stmt -> TOKEN_KW_FOR TOKEN_LPAREN for_init TOKEN_RPAREN stmt
+Rule 97    for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr TOKEN_COMMA expr
+Rule 98    switch_stmt -> TOKEN_KW_SWITCH TOKEN_LPAREN expr TOKEN_RPAREN case_block
+Rule 99    case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
+Rule 100   default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
+Rule 101   continue_stmt -> TOKEN_KW_CONTINUE TOKEN_SEMICOLON
+Rule 102   logical_and -> logical_and TOKEN_AND bit_or
+Rule 103   break_stmt -> TOKEN_KW_BREAK TOKEN_SEMICOLON
+Rule 104   case_list -> case_list case_stmt
+Rule 105   case_list -> case_stmt
+Rule 106   return_stmt -> TOKEN_KW_RETURN expr TOKEN_SEMICOLON
+Rule 107   return_stmt -> TOKEN_KW_RETURN TOKEN_SEMICOLON
+Rule 108   match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
+Rule 109   default_match_stmt -> TOKEN_KW_DEFAULT TOKEN_FAT_ARROW block TOKEN_SEMICOLON
+Rule 110   defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
+Rule 111   import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+Rule 112   module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
+Rule 113   expr_list -> expr_list TOKEN_COMMA expr
+Rule 114   bit_or -> xor
+Rule 115   module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER
+Rule 116   module_list -> TOKEN_IDENTIFIER
+Rule 117   try_stmt -> TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
+Rule 118   catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
+Rule 119   raise_stmt -> TOKEN_KW_RAISE expr TOKEN_SEMICOLON
+Rule 120   spawn_stmt -> TOKEN_KW_SPAWN expr TOKEN_SEMICOLON
+Rule 121   select_stmt -> TOKEN_KW_SELECT case_block
+Rule 122   lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block
+Rule 123   bit_or -> bit_or TOKEN_BIT_OR xor
+Rule 124   xor -> bit_and
+Rule 125   xor -> xor TOKEN_XOR bit_and
+Rule 126   bit_and -> equality
+Rule 127   bit_and -> bit_and TOKEN_AMPERSAND equality
+Rule 128   bit_and -> bit_and TOKEN_NAND equality
+Rule 129   equality -> relational
+Rule 130   equality -> equality TOKEN_EQ relational
+Rule 131   equality -> equality TOKEN_NEQ relational
+Rule 132   expr_list -> expr
+Rule 133   relational -> additive
+Rule 134   relational -> relational TOKEN_LT additive
+Rule 135   relational -> relational TOKEN_GT additive
+Rule 136   relational -> relational TOKEN_LE additive
+Rule 137   relational -> relational TOKEN_GE additive
+Rule 138   additive -> multiplicative
+Rule 139   additive -> additive TOKEN_PLUS multiplicative
+Rule 140   additive -> additive TOKEN_MINUS multiplicative
+Rule 141   multiplicative -> unary
+Rule 142   multiplicative -> multiplicative TOKEN_STAR unary
+Rule 143   expr -> assignment
+Rule 144   multiplicative -> multiplicative TOKEN_SLASH unary
+Rule 145   multiplicative -> multiplicative TOKEN_MOD unary
+Rule 146   unary -> TOKEN_PLUS unary
+Rule 147   unary -> TOKEN_MINUS unary
+Rule 148   unary -> TOKEN_NOT unary
+Rule 149   unary -> TOKEN_BIT_NOT unary
+Rule 150   unary -> TOKEN_AMPERSAND unary
+Rule 151   unary -> TOKEN_STAR unary
+Rule 152   unary -> TOKEN_KW_AWAIT unary
+Rule 153   unary -> postfix
+Rule 154   assignment -> ternary
+Rule 155   postfix -> primary
+Rule 156   postfix -> postfix TOKEN_LPAREN arg_list TOKEN_RPAREN
+Rule 157   postfix -> postfix TOKEN_LBRACKET expr TOKEN_RBRACKET
+Rule 158   postfix -> postfix TOKEN_DOT TOKEN_IDENTIFIER
+Rule 159   postfix -> postfix TOKEN_SCOPE_RES TOKEN_IDENTIFIER
+Rule 160   postfix -> postfix TOKEN_ARROW TOKEN_IDENTIFIER
+Rule 161   postfix -> postfix TOKEN_LEFT_ARROW TOKEN_IDENTIFIER
+Rule 162   expr -> TOKEN_KW_CAST type TOKEN_ARROW expr
+Rule 163   primary -> TOKEN_IDENTIFIER
+Rule 164   primary -> factor
+Rule 165   assignment -> unary TOKEN_ASSIGN assignment
+Rule 166   primary -> TOKEN_LPAREN expr TOKEN_RPAREN
+Rule 167   primary -> TOKEN_KW_NULL
+Rule 168   arg_list -> arg_list_nonempty
+Rule 169   arg_list -> <empty>
+Rule 170   arg_list_nonempty -> expr
+Rule 171   arg_list_nonempty -> arg_list_nonempty TOKEN_COMMA expr
+Rule 172   stmt -> var_decl
+Rule 173   stmt -> expr_stmt
+Rule 174   stmt -> if_stmt
+Rule 175   stmt -> while_stmt
+Rule 176   assignment -> unary TOKEN_PLUS_EQ assignment
+Rule 177   stmt -> do_stmt
+Rule 178   stmt -> for_stmt
+Rule 179   stmt -> switch_stmt
+Rule 180   stmt -> return_stmt
+Rule 181   stmt -> break_stmt
+Rule 182   stmt -> continue_stmt
+Rule 183   stmt -> match_stmt
+Rule 184   stmt -> defer_stmt
+Rule 185   stmt -> import_stmt
+Rule 186   stmt -> module_stmt
+Rule 187   assignment -> unary TOKEN_MINUS_EQ assignment
+Rule 188   stmt -> try_stmt
+Rule 189   stmt -> catch_stmt
+Rule 190   stmt -> raise_stmt
+Rule 191   stmt -> spawn_stmt
+Rule 192   stmt -> select_stmt
+Rule 193   stmt -> lock_stmt
+Rule 194   stmt -> block
+Rule 195   stmt_list -> stmt_list stmt
+Rule 196   stmt_list -> stmt
+Rule 197   decl -> var_decl
+Rule 198   assignment -> unary TOKEN_STAR_EQ assignment
+Rule 199   decl -> func_decl
+Rule 200   decl -> struct_decl
+Rule 201   decl -> typealias_decl
+Rule 202   decl -> enum_decl
+Rule 203   decl -> union_decl
+Rule 204   struct_decl -> TOKEN_KW_STRUCT TOKEN_IDENTIFIER TOKEN_LBRACE struct_member_list TOKEN_RBRACE TOKEN_SEMICOLON
+Rule 205   struct_decl -> TOKEN_KW_STRUCT TOKEN_IDENTIFIER TOKEN_IDENTIFIER TOKEN_SEMICOLON
+Rule 206   struct_member_list -> struct_member_list var_decl
+Rule 207   struct_member_list -> var_decl
+Rule 208   enum_decl -> TOKEN_KW_ENUM TOKEN_IDENTIFIER TOKEN_LBRACE enum_member_list TOKEN_RBRACE TOKEN_SEMICOLON
+
+Terminals, with rules where they appear
+
+TOKEN_AMPERSAND      : 37 127 150
+TOKEN_AND            : 102
+TOKEN_ARROW          : 160 162
+TOKEN_ASSIGN         : 13 16 20 97 165
+TOKEN_BIT_NOT        : 149
+TOKEN_BIT_OR         : 123
+TOKEN_BOOL_LITERAL   : 60
+TOKEN_CHAR_LITERAL   : 57
+TOKEN_COLON          : 58 99 100 108 117 118
+TOKEN_COMMA          : 5 68 84 97 97 113 171
+TOKEN_DOT            : 158
+TOKEN_EOF            : 
+TOKEN_EQ             : 130
+TOKEN_FAT_ARROW      : 78 109
+TOKEN_FLOAT_LITERAL  : 56
+TOKEN_GE             : 137
+TOKEN_GT             : 111 135
+TOKEN_IDENTIFIER     : 4 4 5 6 7 8 8 13 15 16 17 18 19 20 54 64 97 111 115 116 118 158 159 160 161 163 204 205 205 208
+TOKEN_INT_LITERAL    : 55
+TOKEN_KW_ASYNC       : 19
+TOKEN_KW_ATOMIC      : 26
+TOKEN_KW_AWAIT       : 152
+TOKEN_KW_BOOL        : 48
+TOKEN_KW_BREAK       : 99 100 103
+TOKEN_KW_BYTE        : 42
+TOKEN_KW_CASE        : 99
+TOKEN_KW_CAST        : 162
+TOKEN_KW_CATCH       : 118
+TOKEN_KW_CHAN        : 38
+TOKEN_KW_CHAR        : 45
+TOKEN_KW_CONST       : 21
+TOKEN_KW_CONTINUE    : 101
+TOKEN_KW_DEFAULT     : 100 109
+TOKEN_KW_DEFER       : 110
+TOKEN_KW_DO          : 95
+TOKEN_KW_DOUBLE      : 44
+TOKEN_KW_ELSE        : 89 92
+TOKEN_KW_ENUM        : 4 50 208
+TOKEN_KW_FLOAT       : 43
+TOKEN_KW_FOR         : 96
+TOKEN_KW_FUNCTION    : 18 19
+TOKEN_KW_IF          : 88
+TOKEN_KW_IMPORT      : 111
+TOKEN_KW_INT         : 39
+TOKEN_KW_LOCK        : 122
+TOKEN_KW_LONG        : 41
+TOKEN_KW_MATCH       : 108
+TOKEN_KW_MODULE      : 112
+TOKEN_KW_MUT         : 22
+TOKEN_KW_MUTEX       : 53
+TOKEN_KW_NULL        : 167
+TOKEN_KW_PRIVATE     : 28
+TOKEN_KW_PUBLIC      : 29
+TOKEN_KW_RAISE       : 119
+TOKEN_KW_RETURN      : 106 107
+TOKEN_KW_SELECT      : 121
+TOKEN_KW_SHARED      : 27
+TOKEN_KW_SHORT       : 40
+TOKEN_KW_SPAWN       : 120
+TOKEN_KW_STATIC      : 23
+TOKEN_KW_STRING      : 46
+TOKEN_KW_STRUCT      : 49 204 205
+TOKEN_KW_SWITCH      : 98
+TOKEN_KW_TRY         : 117
+TOKEN_KW_TYPEALIAS   : 20
+TOKEN_KW_UNION       : 7 8 51
+TOKEN_KW_VOID        : 52
+TOKEN_KW_VOLATILE    : 24
+TOKEN_KW_WHILE       : 94 95
+TOKEN_LBRACE         : 7 63 70 71 72 73 74 75 83 117 118 204 208
+TOKEN_LBRACKET       : 79 81 82 157
+TOKEN_LE             : 136
+TOKEN_LEFT_ARROW     : 161
+TOKEN_LPAREN         : 18 19 88 94 95 96 98 108 110 118 122 156 166
+TOKEN_LSHIFT_ASSIGN  : 25
+TOKEN_LT             : 134
+TOKEN_MINUS          : 140 147
+TOKEN_MINUS_EQ       : 187
+TOKEN_MOD            : 145
+TOKEN_MOD_EQ         : 14
+TOKEN_NAND           : 128
+TOKEN_NEQ            : 131
+TOKEN_NOT            : 148
+TOKEN_OR             : 80
+TOKEN_PLUS           : 139 146
+TOKEN_PLUS_EQ        : 176
+TOKEN_QUESTION       : 58
+TOKEN_RBRACE         : 7 63 70 71 72 73 74 75 83 117 118 204 208
+TOKEN_RBRACKET       : 79 81 82 157
+TOKEN_RPAREN         : 18 19 88 94 95 96 98 108 110 118 122 156 166
+TOKEN_RSHIFT_ASSIGN  : 36
+TOKEN_SCOPE_RES      : 115 159
+TOKEN_SEMICOLON      : 2 4 7 8 13 15 16 17 20 61 78 95 99 100 101 103 106 107 109 110 112 119 120 204 205 208
+TOKEN_SLASH          : 144
+TOKEN_SLASH_EQ       : 3
+TOKEN_STAR           : 35 142 151
+TOKEN_STAR_EQ        : 198
+TOKEN_STRING_LITERAL : 59
+TOKEN_XOR            : 125
+error                : 
+
+Nonterminals, with rules where they appear
+
+additive             : 133 134 135 136 137 139 140
+arg_list             : 156
+arg_list_nonempty    : 168 171
+array_init           : 16 87
+array_struct         : 16 17 79
+assignment           : 3 14 25 36 143 165 176 187 198
+base_type            : 32
+bit_and              : 124 125 127 128
+bit_or               : 91 102 123
+block                : 78 88 89 95 99 100 109 122 194
+break_stmt           : 181
+case_block           : 98 121
+case_list            : 72 73 104
+case_stmt            : 104 105
+catch_stmt           : 117 189
+channel_type         : 33
+continue_stmt        : 182
+decl                 : 11
+decl_list            : 1 11
+default_match_stmt   : 74
+default_stmt         : 72
+defer_stmt           : 184
+do_stmt              : 177
+else                 : 88
+enum_decl            : 202
+enum_member_list     : 5 208
+equality             : 126 127 128 130 131
+expr                 : 2 13 58 78 79 81 86 88 94 95 97 97 97 98 99 106 108 110 113 119 120 122 132 157 162 166 170 171
+expr_list            : 113
+expr_stmt            : 173
+factor               : 164
+for_init             : 96
+for_stmt             : 178
+func_body            : 62
+func_decl            : 199
+func_suffix          : 18 19
+if_stmt              : 92 174
+import_stmt          : 185
+init_list            : 83 84
+initializer          : 84 85
+lock_stmt            : 193
+logical_and          : 69 80 102
+logical_or           : 47 58 80
+lower_than_else      : 90
+match_arm            : 76 77
+match_block          : 108
+match_list           : 74 75 76
+match_stmt           : 183
+modifier             : 30
+modifier_list        : 30 39 40 41 42 43 44 45 46 48 49 50 51 52 54
+module_list          : 112 115
+module_stmt          : 186
+multiplicative       : 138 139 140 142 144 145
+param                : 67 68
+param_list           : 18 19
+param_list_nonempty  : 65 68
+pointer_type         : 34 35 37
+postfix              : 153 156 157 158 159 160 161
+primary              : 155
+program              : 0
+raise_stmt           : 190
+relational           : 129 130 131 134 135 136 137
+return_stmt          : 180
+select_stmt          : 192
+spawn_stmt           : 191
+stmt                 : 94 96 195 196
+stmt_list            : 63 70 117 118 195
+struct_decl          : 200
+struct_member_list   : 204 206
+switch_stmt          : 179
+ternary              : 58 154
+try_stmt             : 188
+type                 : 13 15 16 17 18 19 20 38 64 97 162
+typealias_decl       : 201
+unary                : 3 14 25 36 141 142 144 145 146 147 148 149 150 151 152 165 176 187 198
+union_decl           : 203
+union_member_list    : 7 9
+var_decl             : 9 10 172 197 206 207
+while_stmt           : 175
+xor                  : 114 123 125
+
