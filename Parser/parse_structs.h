@@ -38,6 +38,7 @@ typedef enum{
     NT_VAR_DECLARATION,
     NT_FUNC_DECLARATION,
     NT_STRUCT_DECLARATION,
+    NT_STRUCT_BODY,
     NT_STRUCT_MEMBER_LIST,
     NT_ENUM_DECLARATION,
     NT_ENUM_MEMBER_LIST,
@@ -119,8 +120,6 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_PROGRAM, 2, "program -> decl_list TOKEN_EOF"},
 
     {NT_EXPRESSION_STATEMENT, 2, "expr_stmt -> expr TOKEN_SEMICOLON"},
-    {NT_EXPRESSION_LIST, 3, "expr_list -> expr_list TOKEN_COMMA expr"},
-    {NT_EXPRESSION_LIST, 1, "expr_list -> expr"},
 
     {NT_EXPRESSION, 1, "expr -> assignment"},
 
@@ -237,8 +236,9 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_DECLARATION, 1, "decl -> enum_decl"},
     {NT_DECLARATION, 1, "decl -> union_decl"},
 
-    {NT_STRUCT_DECLARATION, 6, "struct_decl -> TOKEN_KW_STRUCT TOKEN_IDENTIFIER TOKEN_LBRACE struct_member_list TOKEN_RBRACE TOKEN_SEMICOLON"},
-    {NT_STRUCT_DECLARATION, 4, "struct_decl -> TOKEN_KW_STRUCT TOKEN_IDENTIFIER TOKEN_IDENTIFIER TOKEN_SEMICOLON"},
+    {NT_STRUCT_DECLARATION, 3, "struct_decl -> TOKEN_KW_STRUCT TOKEN_IDENTIFIER struct_body"},
+    {NT_STRUCT_BODY, 4, "struct_body -> TOKEN_LBRACE struct_member_list TOKEN_RBRACE TOKEN_SEMICOLON"},
+    {NT_STRUCT_BODY, 2, "struct_body -> TOKEN_IDENTIFIER TOKEN_SEMICOLON"},
     {NT_STRUCT_MEMBER_LIST, 2, "struct_member_list -> struct_member_list var_decl"},
     {NT_STRUCT_MEMBER_LIST, 1, "struct_member_list -> var_decl"},
 
@@ -274,7 +274,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PRIVATE"},
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PUBLIC"},
     {NT_MODIFIER_LIST, 2, "modifier_list -> modifier_list modifier"},
-    {NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
+    {NT_MODIFIER_LIST, 1, "modifier_list -> modifier"}, /*empty*/
 
     {NT_TYPE, 1, "type -> channel_type"},
     {NT_TYPE, 1, "type -> pointer_type"},
@@ -454,6 +454,7 @@ typedef enum{
     AST_SELECT_STMT,
     AST_LOCK_STMT,
 }ASTNodeType;
+
 
 typedef struct{
     ASTNodeType type;

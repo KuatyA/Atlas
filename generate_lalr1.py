@@ -1,5 +1,6 @@
 import sys
 import re
+import shutil
 import types
 import ply.yacc as yacc
 
@@ -44,8 +45,8 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
                 terminals.add(sym)
             else:
                 non_terminals.add(sym)
-
-    terminals.add("TOKEN_EOF")
+    
+    terminals.add('UNARY_OP')
 
     terminals_list = sorted(list(terminals))
     non_terminals_list = sorted(list(non_terminals))
@@ -69,13 +70,13 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
         ('left', 'TOKEN_LSHIFT', 'TOKEN_RSHIFT'),
         ('left', 'TOKEN_PLUS', 'TOKEN_MINUS'),
         ('left', 'TOKEN_STAR', 'TOKEN_SLASH', 'TOKEN_MOD'),
-        ('right', 'TOKEN_NOT', 'TOKEN_BIT_NOT', 'TOKEN_KW_AWAIT', 'TOKEN_PLUS', 'TOKEN_MINUS', 'TOKEN_AMPERSAND', 'TOKEN_STAR'),
+        ('right', 'TOKEN_NOT', 'TOKEN_BIT_NOT', 'TOKEN_KW_AWAIT', 'UNARY_OP'),
         ('left', 'TOKEN_DOT', 'TOKEN_ARROW', 'TOKEN_FAT_ARROW', 'TOKEN_SCOPE_RES', 'TOKEN_LEFT_ARROW', 'TOKEN_LPAREN', 'TOKEN_RPAREN', 'TOKEN_LBRACKET', 'TOKEN_RBRACKET'),
     )
 
     valid_prec = []
     for assoc, *toks in precedence:
-        existing_toks = [t for t in toks if t in terminals] # or t == 'UNARY_OP']
+        existing_toks = [t for t in toks if t in terminals or t == 'UNARY_OP']
         if existing_toks:
             valid_prec.append((assoc, *existing_toks))
 
@@ -99,12 +100,11 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
         rhs_str = " ".join(rhs) if rhs else ""
         doc_string = f"{lhs} : {rhs_str}"
 
-        # BULLETPROOF UNARY HACK: Catches direct operator use AND non-terminal operator groupings
-        #if len(rhs) == 2:
-         #   if rhs[0] in ("TOKEN_STAR", "TOKEN_AMPERSAND", "TOKEN_PLUS", "TOKEN_MINUS", "TOKEN_BANG", "TOKEN_TILDE"):
-         #       doc_string += " %prec UNARY_OP"
-         #   elif "unary" in rhs[0].lower():
-          #      doc_string += " %prec UNARY_OP"
+        if len(rhs) == 2:
+            if rhs[0] in ("TOKEN_STAR", "TOKEN_AMPERSAND", "TOKEN_PLUS", "TOKEN_MINUS", "TOKEN_NOT", "TOKEN_BIT_NOT"):
+                doc_string += " %prec UNARY_OP"
+            elif "unary" in rhs[0].lower():
+                doc_string += " %prec UNARY_OP"
 
         def make_handler(doc):
             def p_rule(p): pass
@@ -117,7 +117,7 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
     grammar_mod.__dict__.update(mod_dict)
 
     print("[*] Generating LALR(1) state machine via PLY...")
-    parser = yacc.yacc(module=grammar_mod, debug=True, write_tables=False)
+    parser = yacc.yacc(module=grammar_mod, debug=True, write_tables=True, tabmodule=None)
 
     num_states = len(parser.action)
     num_terms = len(terminals_list)
@@ -188,7 +188,7 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
     # Save detailed state output log
     import os
     if os.path.exists("parser.out"):
-        os.rename("parser.out", f"{output_prefix}.log")
+        shutil.copyfile("parser.out", f"{output_prefix}.log")
         print(f"[+] Exported detailed automaton log to '{output_prefix}.log'")
 
 if __name__ == "__main__":
