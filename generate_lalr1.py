@@ -147,7 +147,7 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
                 goto_table[state_idx][nt_idx] = target_state
 
     # Write C Header
-    with open(f"{output_prefix}.h", "w") as f:
+    with open(f"Parser/{output_prefix}.h", "w") as f:
         f.write("#ifndef PARSER_TABLES_H\n")
         f.write("#define PARSER_TABLES_H\n\n")
         f.write("#include <stdint.h>\n\n")
@@ -183,7 +183,7 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
 
         f.write("#endif // PARSER_TABLES_H\n")
 
-    print(f"[+] Successfully exported C header to '{output_prefix}.h'")
+    print(f"[+] Successfully exported C header to 'Parser/{output_prefix}.h'")
 
     # Save detailed state output log
     import os
