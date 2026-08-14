@@ -83,7 +83,7 @@ void lexer(const char *filetype /*would 'filetype' be accurate? idk might change
         return; 
     }
     //free memory(for now).
-    free(stream.tokens);
+    fetch_tokens(&stream);
     free(src_buf);
 }
 

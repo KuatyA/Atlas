@@ -455,7 +455,6 @@ typedef enum{
     AST_LOCK_STMT,
 }ASTNodeType;
 
-
 typedef struct{
     ASTNodeType type;
     int op;
@@ -474,6 +473,16 @@ typedef struct{
     
 }ASTNode;
 
+typedef struct{
+    int state;
+    ASTNode *node;
+}StackItem;
 
+typedef struct{
+    StackItem *items;
+    int top;
+    size_t capacity;
+    size_t count;
+}ParserStack;
 
 #endif
