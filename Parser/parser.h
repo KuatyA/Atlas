@@ -8,5 +8,6 @@
 /*The parser is gonna be an LALR parser with a matrix table*/
 //fetch the token streams
 void fetch_tokens(TokenStream *stream);
+ASTNode *make_terminal_ast(TokenStruct *current_token);
 
 #endif

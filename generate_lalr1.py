@@ -145,6 +145,10 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
             if nonterm in nonterm_map:
                 nt_idx = nonterm_map[nonterm]
                 goto_table[state_idx][nt_idx] = target_state
+    
+    rule_rhs_lengths = [len(rhs) for lhs, rhs in parsed_rules]
+    rule_lhs_nonterms = [nonterm_map[lhs] for lhs, rhs in parsed_rules]
+    num_rules = len(parsed_rules)
 
     # Write C Header
     with open(f"Parser/{output_prefix}.h", "w") as f:
@@ -154,6 +158,7 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
         f.write(f"#define NUM_STATES {num_states}\n")
         f.write(f"#define NUM_TERMINALS {num_terms}\n")
         f.write(f"#define NUM_NON_TERMINALS {num_nonterms}\n\n")
+        f.write(f"#define NUM_RULES {num_rules}\n\n")
         f.write("#define ACTION_ERROR 0\n")
         f.write("#define ACTION_ACCEPT 99999\n\n")
         f.write("#define IS_SHIFT(act) ((act) > 0 && (act) != ACTION_ACCEPT)\n")
@@ -170,6 +175,20 @@ def generate_lalr1_tables(header_path: str, output_prefix: str = "parser_tables"
         for i, nt in enumerate(non_terminals_list):
             f.write(f" * {i:3d}: {nt}\n")
         f.write(" */\n\n")
+
+        f.write("/* Number of symbols to pop off the stack for each rule */\n")
+        f.write("static const int32_t RULE_RHS_LENGTHS[NUM_RULES] = {\n    ")
+        for i, val in enumerate(rule_rhs_lengths):
+            f.write(f"{val}, ")
+            if (i + 1) % 15 == 0: f.write("\n    ")
+        f.write("\n};\n\n")
+
+        f.write("/* The Non-Terminal ID to look up in the GOTO table after a reduction */\n")
+        f.write("static const int32_t RULE_LHS_NONTERMINALS[NUM_RULES] = {\n    ")
+        for i, val in enumerate(rule_lhs_nonterms):
+            f.write(f"{val}, ")
+            if (i + 1) % 15 == 0: f.write("\n    ")
+        f.write("\n};\n\n")
 
         f.write("static const int32_t ACTION_TABLE[NUM_STATES][NUM_TERMINALS] = {\n")
         for row in action_table:
