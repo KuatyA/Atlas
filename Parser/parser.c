@@ -5,7 +5,7 @@
 #define CURRENT_STATE(stack_ptr) ((stack_ptr)->items[(stack_ptr)->top].state)
 
 
-ASTNode *make_ast(int rule_id, ASTNode *popped_nodes){
+ASTNode *make_ast(int rule_id, ASTNode *tokens){
 
 }
 
@@ -35,7 +35,7 @@ void fetch_tokens(TokenStream *stream){
 
             stack.top++;
             stack.items[stack.top].state = next_state;
-            stack.items[stack.top].node = make_terminal_ast(current_token);
+            stack.items[stack.top].node = make_ast(NULL, current_token);
 
         }else if(IS_REDUCE(act)){
             int rule_id = GET_REDUCE_RULE(act);
