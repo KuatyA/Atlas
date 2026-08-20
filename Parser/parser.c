@@ -5,19 +5,22 @@
 #define CURRENT_STATE(stack_ptr) ((stack_ptr)->items[(stack_ptr)->top].state)
 
 
-ASTNode *make_ast(int rule_id, ASTNode *tokens){
+ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
+
+}
+ASTNode *make_terminal_ast(TokenStruct *tokens){
 
 }
 
 ParserStack create_stack(int32_t initial_stack){
     ParserStack stack;
+    stack.top = -1;
     stack.capacity = initial_stack;
-    stack.count = 0;
     stack.items = malloc(sizeof(StackItem) * initial_stack);
     return stack;
 }
 
-void fetch_tokens(TokenStream *stream){
+ASTNode *fetch_tokens(TokenStream *stream){
     ParserStack stack = create_stack(1024);
     stack.top = -1;
 
@@ -35,7 +38,8 @@ void fetch_tokens(TokenStream *stream){
 
             stack.top++;
             stack.items[stack.top].state = next_state;
-            stack.items[stack.top].node = make_ast(NULL, current_token);
+            stack.items[stack.top].node = make_terminal_ast(current_token);
+            current_token++;
 
         }else if(IS_REDUCE(act)){
             int rule_id = GET_REDUCE_RULE(act);
@@ -56,14 +60,19 @@ void fetch_tokens(TokenStream *stream){
             stack.items[stack.top].state = goto_state;
             stack.items[stack.top].node = reduced_node;
         }else if(act == ACTION_ACCEPT){
-           printf("[+] Parsing successful!\n");
-           free(stream);
+            printf("[+] Parsing successful!\n");
+
+            ASTNode *final_ast_node = stack.items[stack.top].node;
+
+            free(stack.items);
+
+            return final_ast_node;
         }else{
            fprintf(stderr, "[!] Syntax error at line %d near token '%s'\n", 
                     current_token->line, current_token->lexeme);
-            free(stream);
-            return -1;
+                    free(stack.items);
+                    return NULL;
         }
     }
-    free(stream);
+    free(stream->tokens);
 }

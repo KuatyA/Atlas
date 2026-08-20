@@ -482,7 +482,6 @@ typedef struct{
     StackItem *items;
     int top;
     size_t capacity;
-    size_t count;
 }ParserStack;
 
 #endif
