@@ -391,6 +391,8 @@ typedef enum{
     AST_MATCH_LIST,
     AST_MODULE_LIST,
 
+    AST_ASSIGNMENT,
+
     AST_PARAM,
     AST_TYPE,
     AST_MODIFIER,
@@ -455,9 +457,19 @@ typedef enum{
     AST_LOCK_STMT,
 }ASTNodeType;
 
+typedef enum{
+    NO_OP,
+    OP_ADD,
+    OP_SUB,
+    OP_MUL,
+    OP_DIV,
+    OP_MOD,
+    OP_LSHIFT_ASSIGN
+}Operations;
+
 typedef struct{
     ASTNodeType type;
-    int op;
+    Operations op;
 
     struct ASTNode *left;
     struct ASTNode *middle;

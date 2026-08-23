@@ -6,7 +6,51 @@
 
 
 ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
-
+    switch (rule_id){
+        case 0: return popped_nodes[0];
+        case 1: { 
+            ASTNode *prog = calloc(1, sizeof(ASTNode));
+                prog->type = AST_PROGRAM;
+                prog->left = popped_nodes[0];
+                free(popped_nodes[1]); //free eof
+                prog->next = NULL;
+                return prog;
+         }
+         case 2: {
+            popped_nodes[0]->next = NULL;
+            free(popped_nodes[1]);
+            return popped_nodes[0];
+         }
+         case 3: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_ASSIGNMENT;
+                node->left = popped_nodes[0];
+                node->right = popped_nodes[2];
+                node->op = OP_LSHIFT_ASSIGN;
+                node->next = NULL;
+                free(popped_nodes[1]);
+                return node;
+         }
+         case 4: {
+            ASTNode *head = popped_nodes[0];
+            ASTNode *new_member = popped_nodes[2];
+            new_member->next = NULL;
+            ASTNode *curr = head;
+            while(curr->next != NULL){ curr = curr->next; }
+            curr->next = new_member;
+            free(popped_nodes[1]);
+            return head;
+         }
+         case 5: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+         }
+         case 6: {
+            
+         }
+        default: { break; }
+    }
+    
 }
 ASTNode *make_terminal_ast(TokenStruct *tokens){
 
