@@ -376,6 +376,49 @@ static GrammarRule GRAMMAR_RULES[] = {
 };
 
 typedef enum{
+    TQ_NONE = 0,
+    TQ_CONST = (1 << 0),
+    TQ_MUT = (1 << 1),
+    TQ_VOLATILE = (1 << 3),
+}TypeQualfiers;
+
+typedef enum{
+    SC_NONE = 0,
+    SC_STATIC = (1 << 0),
+    SC_ATOMIC = (1 << 1)
+}StorageClass;
+
+typedef enum{
+    VS_NONE = 0,
+    VS_PUBLIC = (1 << 0),
+    VS_PRIVATE = (1 << 1),
+    VS_SHARED = (1 << 2)
+}VisibilitySpecifiers;
+
+typedef enum{
+    PT_INT,
+    PT_SHORT,
+    PT_LONG,
+    PT_BYTE,
+    PT_FLOAT,
+    PT_DOUBLE,
+    PT_CHAR,
+    PT_STRING,
+    PT_BOOL,
+    PT_STRUCT,
+    PT_UNION,
+    PT_ENUM
+}PrimitiveType;
+
+typedef struct{
+    PrimitiveType p_type;
+    uint32_t qualifiers;
+    uint32_t storage_class;
+    uint32_t visibility;
+    int pointer_level;
+}TypeInfo;
+
+typedef enum{
     AST_PROGRAM,
 
     AST_ARG_LIST,
@@ -469,6 +512,7 @@ typedef enum{
 
 typedef struct{
     ASTNodeType type;
+    TypeInfo type_info;
     Operations op;
 
     struct ASTNode *left;

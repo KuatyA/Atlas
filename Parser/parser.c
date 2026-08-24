@@ -9,12 +9,12 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
     switch (rule_id){
         case 0: return popped_nodes[0];
         case 1: { 
-            ASTNode *prog = calloc(1, sizeof(ASTNode));
-                prog->type = AST_PROGRAM;
-                prog->left = popped_nodes[0];
-                free(popped_nodes[1]); //free eof
-                prog->next = NULL;
-                return prog;
+            ASTNode *prog = calloc(1, sizeof(ASTNode)); 
+            prog->type = AST_PROGRAM;
+            prog->left = popped_nodes[0];
+            free(popped_nodes[1]); //free eof
+            prog->next = NULL;
+            return prog;
          }
          case 2: {
             popped_nodes[0]->next = NULL;
@@ -23,13 +23,13 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
          }
          case 3: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_ASSIGNMENT;
-                node->left = popped_nodes[0];
-                node->right = popped_nodes[2];
-                node->op = OP_LSHIFT_ASSIGN;
-                node->next = NULL;
-                free(popped_nodes[1]);
-                return node;
+            node->type = AST_ASSIGNMENT;
+            node->left = popped_nodes[0];
+            node->right = popped_nodes[2];
+            node->op = OP_LSHIFT_ASSIGN;
+            node->next = NULL;
+            free(popped_nodes[1]);
+            return node;
          }
          case 4: {
             ASTNode *head = popped_nodes[0];
@@ -46,8 +46,58 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             return popped_nodes[0];
          }
          case 6: {
-            
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_UNION_DECL;
+            node->type_info.p_type = PT_UNION;
+            node->left = popped_nodes[1];
+            node->right = popped_nodes[3];
+            node->next = NULL;
+            free(popped_nodes[0]);
+            free(popped_nodes[2]);
+            free(popped_nodes[4]);
+            free(popped_nodes[5]);
+            return node;
          }
+         case 7: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_UNION_DECL;
+            node->type_info.p_type = PT_UNION;
+            node->left = popped_nodes[1];
+            node->right = popped_nodes[2];
+            node->next = NULL;
+            free(popped_nodes[0]);
+            free(popped_nodes[3]);
+            return node;
+         }
+         case 8: {
+            ASTNode *head = popped_nodes[0];
+            ASTNode *new_member = popped_nodes[1];
+            new_member->next = NULL;
+            ASTNode *curr = head;
+            while(curr->next != NULL){ curr = curr->next; }
+            curr->next = new_member;
+            return head;
+         }
+         case 9: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+            }
+        case 10: {
+            ASTNode *list = popped_nodes[0];
+            ASTNode *new_decl = popped_nodes[1];
+            if(new_decl == NULL){ return list; }
+            new_decl->next = NULL;
+            if(list == NULL){ return new_decl; }
+            ASTNode *curr = list;
+            while(curr->next != NULL){ curr = curr->next; }
+            curr->next = new_decl;
+            return list;
+        }
+        case 11: { return NULL; }
+        case 12: {
+            ASTNode *var_decl = calloc(1, sizeof(ASTNode));
+            var_decl->type = AST_VAR_DECL;
+        }
         default: { break; }
     }
     
