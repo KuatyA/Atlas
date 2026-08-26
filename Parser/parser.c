@@ -97,6 +97,71 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 12: {
             ASTNode *var_decl = calloc(1, sizeof(ASTNode));
             var_decl->type = AST_VAR_DECL;
+                ASTNode *assignment = calloc(1, sizeof(ASTNode));
+                assignment->type = AST_ASSIGNMENT;
+                assignment->left = popped_nodes[1];
+                assignment->right = popped_nodes[3];
+                assignment->op = OP_ASSIGN;
+            var_decl->left = popped_nodes[0];
+            var_decl->right = assignment;
+            free(popped_nodes[2]);
+            free(popped_nodes[4]);
+            return var_decl;
+        }
+        case 13: {
+            ASTNode *var_decl = calloc(1, sizeof(ASTNode));
+            var_decl->type = AST_VAR_DECL;
+            var_decl->left = popped_nodes[0];
+            var_decl->right = popped_nodes[1];
+            free(popped_nodes[2]);
+            return var_decl;
+        }
+        case 14: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_ASSIGNMENT;
+            node->left = popped_nodes[0];
+            node->right = popped_nodes[2];
+            node->op = OP_RSHIFT_ASSIGN;
+            node->next = NULL;
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 15: {
+            ASTNode *var_decl = calloc(1, sizeof(ASTNode));
+            var_decl->type = AST_VAR_DECL;
+                ASTNode *assignment = calloc(1, sizeof(ASTNode));
+                assignment->type = AST_ASSIGNMENT;
+                    ASTNode *array_assign = calloc(1, sizeof(ASTNode));
+                    array_assign->type = AST_ARRAY_ASSIGN;
+                    array_assign->left = popped_nodes[2];
+                    array_assign->right = popped_nodes[4];
+                assignment->left = popped_nodes[1];
+                assignment->right = array_assign;
+                assignment->op = OP_ASSIGN;
+            var_decl->left = popped_nodes[0];
+            var_decl->right = assignment;
+            free(popped_nodes[3]);
+            free(popped_nodes[5]);
+            return var_decl;
+        }
+        case 16: {
+            ASTNode *var_decl = calloc(1, sizeof(ASTNode));
+            var_decl->type = AST_VAR_DECL;
+                ASTNode *assignment = calloc(1, sizeof(ASTNode));
+                assignment->type = AST_ASSIGNMENT;
+                assignment->left = popped_nodes[1];
+                assignment->right = popped_nodes[2];
+                assignment->op = OP_ASSIGN;
+            var_decl->left = popped_nodes[0];
+            var_decl->right = assignment;
+            free(popped_nodes[3]);
+            return var_decl;
+        }
+        case 17: {
+
+        }
+        case 18: {
+            
         }
         default: { break; }
     }

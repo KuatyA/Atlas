@@ -435,6 +435,7 @@ typedef enum{
     AST_MODULE_LIST,
 
     AST_ASSIGNMENT,
+    AST_ARRAY_ASSIGN,
 
     AST_PARAM,
     AST_TYPE,
@@ -507,7 +508,9 @@ typedef enum{
     OP_MUL,
     OP_DIV,
     OP_MOD,
-    OP_LSHIFT_ASSIGN
+    OP_ASSIGN,
+    OP_LSHIFT_ASSIGN,
+    OP_RSHIFT_ASSIGN
 }Operations;
 
 typedef struct{
