@@ -705,6 +705,7 @@ void initialize_hash_table(void){
 
     //function and multithreading thingys
     insert_keyword("async", TOKEN_KW_ASYNC, 5);
+    insert_keyword("inline", TOKEN_KW_INLINE, 6);
     insert_keyword("await", TOKEN_KW_AWAIT, 5);
     insert_keyword("spawn", TOKEN_KW_SPAWN, 5);
     insert_keyword("channel", TOKEN_KW_CHAN, 7);

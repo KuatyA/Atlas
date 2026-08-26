@@ -5,6 +5,7 @@
 
 #define SYMBOL_TO_INDEX(sym) ((sym) >= NT_PROGRAM ? (TOKEN_COMMENT + 1 + ((sym) - NT_PROGRAM)) : (sym))
 
+
 typedef enum{
     NT_PROGRAM  = 1000,
 
@@ -262,6 +263,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_FUNC_DECLARATION, 7, "func_decl -> TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
     {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_ASYNC TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
+    {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_INLINE TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
 
     {NT_TYPEALIAS_DECLARATION, 5, "typealias_decl -> TOKEN_KW_TYPEALIAS TOKEN_IDENTIFIER TOKEN_ASSIGN type TOKEN_SEMICOLON"},
 
@@ -407,14 +409,23 @@ typedef enum{
     PT_BOOL,
     PT_STRUCT,
     PT_UNION,
-    PT_ENUM
+    PT_ENUM,
+    PT_VOID
 }PrimitiveType;
-
+typedef enum{
+    F_NONE = 0,
+    F_ASYNC = (1 << 0),
+    F_INLINE = (1 << 1),
+    F_REFERENCE = (1 << 2),
+    F_CHANNEL = (1 << 3)
+}Flags;
 typedef struct{
     PrimitiveType p_type;
     uint32_t qualifiers;
     uint32_t storage_class;
     uint32_t visibility;
+    uint32_t modifier;
+    uint32_t flag;
     int pointer_level;
 }TypeInfo;
 
@@ -436,6 +447,9 @@ typedef enum{
 
     AST_ASSIGNMENT,
     AST_ARRAY_ASSIGN,
+
+    AST_FUNC_DETAILS,
+    AST_TERNARY_BODY,
 
     AST_PARAM,
     AST_TYPE,

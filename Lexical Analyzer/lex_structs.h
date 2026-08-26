@@ -63,6 +63,7 @@ typedef enum Tokens{
     TOKEN_KW_RAISE, //throw / emit error
 
     TOKEN_KW_ASYNC, // async declaeration
+    TOKEN_KW_INLINE,
     TOKEN_KW_AWAIT, //wait async result
     TOKEN_KW_SPAWN, //spin up worker thread
     TOKEN_KW_CHAN, //declare channel type

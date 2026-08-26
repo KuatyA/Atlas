@@ -6,6 +6,8 @@
 
 
 ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
+
+    //SWITCH STATEMENT OF DOOM AND DESPAIR
     switch (rule_id){
         case 0: return popped_nodes[0];
         case 1: { 
@@ -31,7 +33,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return node;
          }
-         case 4: {
+         case 4: { //enum member list(long)
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[2];
             new_member->next = NULL;
@@ -41,7 +43,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return head;
          }
-         case 5: {
+         case 5: { //enum member list(base)
             popped_nodes[0]->next = NULL;
             return popped_nodes[0];
          }
@@ -69,7 +71,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[3]);
             return node;
          }
-         case 8: {
+         case 8: {//union member list(long)
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[1];
             new_member->next = NULL;
@@ -78,7 +80,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             curr->next = new_member;
             return head;
          }
-         case 9: {
+         case 9: {//union member list(base)
             popped_nodes[0]->next = NULL;
             return popped_nodes[0];
             }
@@ -158,10 +160,354 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             return var_decl;
         }
         case 17: {
-
+            ASTNode *func_decl = calloc(1, sizeof(ASTNode));
+            func_decl->type = AST_FUNC_DECL;
+                ASTNode *details = calloc(1, sizeof(ASTNode));
+                details->type = AST_FUNC_DETAILS;
+                details->left = popped_nodes[2];
+                details->right = popped_nodes[4];
+                details->middle = popped_nodes[6];
+            func_decl->left = popped_nodes[1];
+            func_decl->right = details;
+            free(popped_nodes[0]);
+            free(popped_nodes[3]);
+            free;(popped_nodes[5]);
+            return func_decl;
         }
         case 18: {
-            
+            ASTNode *func_decl = calloc(1, sizeof(ASTNode));
+            func_decl->type = AST_FUNC_DECL;
+                ASTNode *details = calloc(1, sizeof(ASTNode));
+                details->type = AST_FUNC_DETAILS;
+                details->left = popped_nodes[3];
+                details->right = popped_nodes[5];
+                details->middle = popped_nodes[7];
+            func_decl->left = popped_nodes[2];
+            func_decl->right = details;
+            func_decl->type_info.flag |= F_ASYNC;
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[4]);
+            free(popped_nodes[6]);
+            return func_decl;
+        }
+        case 19: {
+            ASTNode *func_decl = calloc(1, sizeof(ASTNode));
+            func_decl->type = AST_FUNC_DECL;
+                ASTNode *details = calloc(1, sizeof(ASTNode));
+                details->type = AST_FUNC_DETAILS;
+                details->left = popped_nodes[3];
+                details->right = popped_nodes[5];
+                details->middle = popped_nodes[7];
+            func_decl->left = popped_nodes[2];
+            func_decl->right = details;
+            func_decl->type_info.flag |= F_INLINE;
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[4]);
+            free(popped_nodes[6]);
+            return func_decl;
+        }
+        case 20: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_TYPEALIAS_DECL;
+            node->left = popped_nodes[1];
+            node->right = popped_nodes[3];
+            node->op = OP_ASSIGN;
+            free(popped_nodes[0]);
+            free(popped_nodes[2]);
+            free(popped_nodes[4]);
+            return node;
+        }
+        case 21: { // 9 + 10
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.qualifiers = TQ_CONST;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 22: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.qualifiers = TQ_MUT;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 23: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.storage_class = SC_STATIC;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 24: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.qualifiers = TQ_VOLATILE;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 25: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        }
+        case 26: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.storage_class = SC_ATOMIC;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 27: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.visibility = VS_SHARED;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 28: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.visibility = VS_PRIVATE;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 29: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODIFIER;
+            node->type_info.visibility = VS_PUBLIC;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 30: {
+            ASTNode *head = popped_nodes[0];
+            ASTNode *new_member = popped_nodes[1];
+            new_member->next = NULL;
+            ASTNode *curr = head;
+            while(curr->next != NULL){ curr = curr->next; }
+            curr->next = new_member;
+            free(popped_nodes[1]);
+            return head;
+        }
+        case 31: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        }
+        case 32: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        }
+        case 33: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        }
+        case 34: {  //parser rule 34 ( ͡° ͜ʖ ͡°)
+            ASTNode *node = popped_nodes[0];
+            node->type_info.pointer_level++;
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 35: {
+            ASTNode *node = popped_nodes[0];
+            node->type_info.flag |= F_REFERENCE;
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 36: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_TERNARY_EXPR;
+                ASTNode *ternary_body = calloc(1, sizeof(ASTNode));
+                ternary_body->type = AST_TERNARY_BODY;
+                ternary_body->left = popped_nodes[2];
+                ternary_body->right = popped_nodes[4];
+            node->left = popped_nodes[0];
+            node->right=ternary_body;
+            free(popped_nodes[1]);
+            free(popped_nodes[3]);
+            return node;
+        }
+        case 37: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        }
+        case 38: {
+           ASTNode *node = popped_nodes[1];
+           node->type_info.flag |= F_CHANNEL;
+           free(popped_nodes[0]);
+           return node;
+        }
+        case 39: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_INT;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 40: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_SHORT;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 41: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_LONG;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 42: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_BYTE;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 43: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_FLOAT;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 44: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_DOUBLE;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 45: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_CHAR;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 46: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_STRING;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 47: {
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        }
+        case 48: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_BOOL;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 49: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_STRUCT;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 50: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_ENUM;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 51: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_UNION;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 52: {
+            ASTNode *mod_node = popped_nodes[0];
+                ASTNode *node = calloc(1, sizeof(ASTNode));
+                node->type = AST_TYPE;
+                node->type_info.p_type = PT_VOID;
+            if(mod_node != NULL){
+                node->type_info.modifier |= mod_node->type_info.modifier;
+                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                free(mod_node);
+            }
+            free(popped_nodes[1]);
+            return node;
         }
         default: { break; }
     }
@@ -202,7 +548,7 @@ ASTNode *fetch_tokens(TokenStream *stream){
 
         }else if(IS_REDUCE(act)){
             int rule_id = GET_REDUCE_RULE(act);
-            int rhs_len = RULE_RHS_LEN[rule_id];
+            int rhs_len = RULE_RHS_LENGTHS[rule_id];
             int lhs_nonterm = RULE_LHS_NONTERMINALS[rule_id];
 
             ASTNode *popped_nodes[64];
