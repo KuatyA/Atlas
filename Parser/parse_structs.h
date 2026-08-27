@@ -21,6 +21,9 @@
 
 #define SET_TYPE(p, p_type) make_type(p[0], p[1], p_type)
 #define SET_SIMPLE_TYPE(p, p_type) make_type(NULL, p[0], p_type)
+#define MUTATE_AST_TERMINAL(p, new_type) (p[0], p[0]->type = (new_type))
+
+#define FREE_NULL(p) (free(p[0]), (ASTNode *)NULL)
 
 static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNodeType t, Operations op){
     ASTNode *n = calloc(1, sizeof(ASTNode));
@@ -66,6 +69,7 @@ static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type)
     free(kw);
     return node;
 }
+
 
 typedef enum{
     NT_PROGRAM  = 1000,
@@ -514,6 +518,7 @@ typedef enum{
 
     AST_FUNC_DETAILS,
     AST_TERNARY_BODY,
+    AST_FUNC_BODY,
 
     AST_PARAM,
     AST_TYPE,
@@ -588,7 +593,8 @@ typedef enum{
     OP_MOD,
     OP_ASSIGN,
     OP_LSHIFT_ASSIGN,
-    OP_RSHIFT_ASSIGN
+    OP_RSHIFT_ASSIGN,
+    OP_OR
 }Operations;
 
 typedef struct{
