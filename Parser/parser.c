@@ -1,5 +1,6 @@
 #include "parser.h"
 #include <stdio.h>
+
 #include <string.h>
 
 #define CURRENT_STATE(stack_ptr) ((stack_ptr)->items[(stack_ptr)->top].state)

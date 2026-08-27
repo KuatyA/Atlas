@@ -11,7 +11,7 @@
 #define PASS_FREE_L(p) (free(p[0]), p[1])
 #define PASS_CLEAR_NEXT(p) (p[0] ? (p[0]->next = NULL, p[0]) : NULL)
 
-#define BINARY(p, t, o)    make_bin(p[0], p[2], p[1], t, o)
+#define BINARY(p, t, o) make_bin(p[0], p[2], p[1], t, o)
 #define ASSIGN(p, o) make_bin(p[0], p[2], p[1], AST_ASSIGNMENT, o)
 
 #define MODIFIER_Q(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
@@ -21,55 +21,9 @@
 
 #define SET_TYPE(p, p_type) make_type(p[0], p[1], p_type)
 #define SET_SIMPLE_TYPE(p, p_type) make_type(NULL, p[0], p_type)
-#define MUTATE_AST_TERMINAL(p, new_type) (p[0], p[0]->type = (new_type))
+#define MUTATE_AST_TERMINAL(p, new_type) (p[0]->type = (new_type), p[0])
 
 #define FREE_NULL(p) (free(p[0]), (ASTNode *)NULL)
-
-static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNodeType t, Operations op){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
-        n->type = t; n->left = l; n->right = r; n->op = op;
-        free(op_tok);
-        return n;
-}
-static inline ASTNode *make_mod_q(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
-        n->type = t; n->type_info.qualifiers = t_info;
-        free(p);
-        return n;
-}
-static inline ASTNode *make_mod_v(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
-        n->type = t; n->type_info.visibility = t_info;
-        free(p);
-        return n;
-}
-static inline ASTNode *make_mod_sc(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
-        n->type = t; n->type_info.storage_class = t_info;
-        free(p);
-        return n;
-}
-static inline ASTNode *make_mod_m(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
-        n->type = t; n->type_info.modifier = t_info;
-        free(p);
-        return n;
-}
-
-static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type){
-    ASTNode *mod_node = mn;
-        ASTNode *node = calloc(1, sizeof(ASTNode));
-        node->type = AST_TYPE;
-        node->type_info.p_type = p_type;
-    if(mod_node != NULL){
-        node->type_info.modifier |= mod_node->type_info.modifier;
-        node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-        free(mod_node);
-    }
-    free(kw);
-    return node;
-}
-
 
 typedef enum{
     NT_PROGRAM  = 1000,
@@ -597,7 +551,7 @@ typedef enum{
     OP_OR
 }Operations;
 
-typedef struct{
+typedef struct ASTNode{
     ASTNodeType type;
     TypeInfo type_info;
     Operations op;
@@ -628,5 +582,50 @@ typedef struct{
     int top;
     size_t capacity;
 }ParserStack;
+
+static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNodeType t, Operations op){
+    ASTNode *n = calloc(1, sizeof(ASTNode));
+        n->type = t; n->left = l; n->right = r; n->op = op;
+        free(op_tok);
+        return n;
+}
+static inline ASTNode *make_mod_q(ASTNode *p, ASTNodeType t, uint32_t t_info){
+    ASTNode *n = calloc(1, sizeof(ASTNode));
+        n->type = t; n->type_info.qualifiers = t_info;
+        free(p);
+        return n;
+}
+static inline ASTNode *make_mod_v(ASTNode *p, ASTNodeType t, uint32_t t_info){
+    ASTNode *n = calloc(1, sizeof(ASTNode));
+        n->type = t; n->type_info.visibility = t_info;
+        free(p);
+        return n;
+}
+static inline ASTNode *make_mod_sc(ASTNode *p, ASTNodeType t, uint32_t t_info){
+    ASTNode *n = calloc(1, sizeof(ASTNode));
+        n->type = t; n->type_info.storage_class = t_info;
+        free(p);
+        return n;
+}
+static inline ASTNode *make_mod_m(ASTNode *p, ASTNodeType t, uint32_t t_info){
+    ASTNode *n = calloc(1, sizeof(ASTNode));
+        n->type = t; n->type_info.modifier = t_info;
+        free(p);
+        return n;
+}
+
+static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type){
+    ASTNode *mod_node = mn;
+        ASTNode *node = calloc(1, sizeof(ASTNode));
+        node->type = AST_TYPE;
+        node->type_info.p_type = p_type;
+    if(mod_node != NULL){
+        node->type_info.modifier |= mod_node->type_info.modifier;
+        node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+        free(mod_node);
+    }
+    free(kw);
+    return node;
+}
 
 #endif
