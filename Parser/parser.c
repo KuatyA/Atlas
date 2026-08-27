@@ -1,6 +1,6 @@
 #include "parser.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
 #define CURRENT_STATE(stack_ptr) ((stack_ptr)->items[(stack_ptr)->top].state)
 
@@ -9,7 +9,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
 
     //SWITCH STATEMENT OF DOOM AND DESPAIR
     switch (rule_id){
-        case 0: return popped_nodes[0];
+        case 0: PASS(popped_nodes);
         case 1: { 
             ASTNode *prog = calloc(1, sizeof(ASTNode)); 
             prog->type = AST_PROGRAM;
@@ -18,22 +18,9 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             prog->next = NULL;
             return prog;
          }
-         case 2: {
-            popped_nodes[0]->next = NULL;
-            free(popped_nodes[1]);
-            return popped_nodes[0];
-         }
-         case 3: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_ASSIGNMENT;
-            node->left = popped_nodes[0];
-            node->right = popped_nodes[2];
-            node->op = OP_LSHIFT_ASSIGN;
-            node->next = NULL;
-            free(popped_nodes[1]);
-            return node;
-         }
-         case 4: { //enum member list(long)
+        case 2: return PASS_FREE_R(popped_nodes);
+        case 3: return ASSIGN(popped_nodes, OP_LSHIFT_ASSIGN);
+        case 4: { //enum member list(long)
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[2];
             new_member->next = NULL;
@@ -43,11 +30,11 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return head;
          }
-         case 5: { //enum member list(base)
+        case 5: { //enum member list(base)
             popped_nodes[0]->next = NULL;
             return popped_nodes[0];
          }
-         case 6: {
+        case 6: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_UNION_DECL;
             node->type_info.p_type = PT_UNION;
@@ -60,7 +47,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[5]);
             return node;
          }
-         case 7: {
+        case 7: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_UNION_DECL;
             node->type_info.p_type = PT_UNION;
@@ -71,7 +58,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[3]);
             return node;
          }
-         case 8: {//union member list(long)
+        case 8: {//union member list(long)
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[1];
             new_member->next = NULL;
@@ -80,7 +67,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             curr->next = new_member;
             return head;
          }
-         case 9: {//union member list(base)
+        case 9: {//union member list(base)
             popped_nodes[0]->next = NULL;
             return popped_nodes[0];
             }
@@ -118,16 +105,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[2]);
             return var_decl;
         }
-        case 14: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_ASSIGNMENT;
-            node->left = popped_nodes[0];
-            node->right = popped_nodes[2];
-            node->op = OP_RSHIFT_ASSIGN;
-            node->next = NULL;
-            free(popped_nodes[1]);
-            return node;
-        }
+        case 14: return ASSIGN(popped_nodes, OP_RSHIFT_ASSIGN);
         case 15: {
             ASTNode *var_decl = calloc(1, sizeof(ASTNode));
             var_decl->type = AST_VAR_DECL;
@@ -219,66 +197,15 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[4]);
             return node;
         }
-        case 21: { // 9 + 10
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.qualifiers = TQ_CONST;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 22: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.qualifiers = TQ_MUT;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 23: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.storage_class = SC_STATIC;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 24: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.qualifiers = TQ_VOLATILE;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 25: {
-            popped_nodes[0]->next = NULL;
-            return popped_nodes[0];
-        }
-        case 26: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.storage_class = SC_ATOMIC;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 27: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.visibility = VS_SHARED;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 28: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.visibility = VS_PRIVATE;
-            free(popped_nodes[0]);
-            return node;
-        }
-        case 29: {
-            ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_MODIFIER;
-            node->type_info.visibility = VS_PUBLIC;
-            free(popped_nodes[0]);
-            return node;
-        }
+        case 21: return MODIFIER_Q(popped_nodes, TQ_CONST);// 9 + 10   
+        case 22: return MODIFIER_Q(popped_nodes, TQ_MUT);
+        case 23: return MODIFIER_SC(popped_nodes, SC_STATIC);
+        case 24: return MODIFIER_Q(popped_nodes, TQ_VOLATILE);
+        case 25: PASS_CLEAR_NEXT(popped_nodes);
+        case 26: return MODIFIER_SC(popped_nodes, SC_ATOMIC);
+        case 27: return MODIFIER_VS(popped_nodes, VS_SHARED);
+        case 28: return MODIFIER_VS(popped_nodes, VS_PRIVATE);
+        case 29: return MODIFIER_VS(popped_nodes, VS_PUBLIC);
         case 30: {
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[1];
@@ -289,18 +216,9 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return head;
         }
-        case 31: {
-            popped_nodes[0]->next = NULL;
-            return popped_nodes[0];
-        }
-        case 32: {
-            popped_nodes[0]->next = NULL;
-            return popped_nodes[0];
-        }
-        case 33: {
-            popped_nodes[0]->next = NULL;
-            return popped_nodes[0];
-        }
+        case 31: PASS_CLEAR_NEXT(popped_nodes);
+        case 32: PASS_CLEAR_NEXT(popped_nodes);
+        case 33: PASS_CLEAR_NEXT(popped_nodes);
         case 34: {  //parser rule 34 ( ͡° ͜ʖ ͡°)
             ASTNode *node = popped_nodes[0];
             node->type_info.pointer_level++;
@@ -326,21 +244,36 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[3]);
             return node;
         }
-        case 37: {
-            popped_nodes[0]->next = NULL;
-            return popped_nodes[0];
-        }
+        case 37: PASS_CLEAR_NEXT(popped_nodes);
         case 38: {
            ASTNode *node = popped_nodes[1];
            node->type_info.flag |= F_CHANNEL;
            free(popped_nodes[0]);
            return node;
         }
-        case 39: {
+        case 39: return SET_TYPE(popped_nodes, PT_INT);
+        case 40: return SET_TYPE(popped_nodes, PT_SHORT);
+        case 41: return SET_TYPE(popped_nodes, PT_LONG);
+        case 42: return SET_TYPE(popped_nodes, PT_BYTE);
+        case 43: return SET_TYPE(popped_nodes, PT_FLOAT);
+        case 44: return SET_TYPE(popped_nodes, PT_DOUBLE);
+        case 45: return SET_TYPE(popped_nodes, PT_CHAR);
+        case 46: return SET_TYPE(popped_nodes, PT_STRING);
+        case 47: return PASS_CLEAR_NEXT(popped_nodes);
+        case 48: return SET_TYPE(popped_nodes, PT_BOOL);
+        case 49: return SET_TYPE(popped_nodes, PT_STRUCT);
+        case 50: return SET_TYPE(popped_nodes, PT_ENUM);
+        case 51: return SET_TYPE(popped_nodes, PT_UNION);
+        case 52: return SET_TYPE(popped_nodes, PT_VOID);
+        case 53: return SET_SIMPLE_TYPE(popped_nodes, PT_MUTEX);
+        case 54: {
             ASTNode *mod_node = popped_nodes[0];
                 ASTNode *node = calloc(1, sizeof(ASTNode));
                 node->type = AST_TYPE;
-                node->type_info.p_type = PT_INT;
+                node->type_info.p_type = PT_CUSTOM;
+                if(popped_nodes[1] && popped_nodes[1]->name){
+                    node->name = strdup(popped_nodes[1]->name);
+                }
             if(mod_node != NULL){
                 node->type_info.modifier |= mod_node->type_info.modifier;
                 node->type_info.qualifiers |= mod_node->type_info.qualifiers;
@@ -349,172 +282,26 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return node;
         }
-        case 40: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_SHORT;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 41: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_LONG;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 42: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_BYTE;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 43: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_FLOAT;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 44: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_DOUBLE;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 45: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_CHAR;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 46: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_STRING;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 47: {
-            popped_nodes[0]->next = NULL;
-            return popped_nodes[0];
-        }
-        case 48: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_BOOL;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 49: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_STRUCT;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 50: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_ENUM;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 51: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_UNION;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
-        case 52: {
-            ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
-                node->type_info.p_type = PT_VOID;
-            if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-                free(mod_node);
-            }
-            free(popped_nodes[1]);
-            return node;
-        }
+        case 55: 
         default: { break; }
     }
     
 }
 ASTNode *make_terminal_ast(TokenStruct *tokens){
-
+    ASTNode *node = calloc(1, sizeof(ASTNode));
+    node->type = AST_TERMINAL;
+    node->op = tokens->token;
+    node->line = tokens->line;
+    node->col = tokens->column;
+    switch (tokens->token){
+        case TOKEN_IDENTIFIER: { if(tokens->lexeme) node->name = strdup(tokens->lexeme); break; }
+        case TOKEN_STRING_LITERAL: { if(tokens->lexeme) node->name = strdup(tokens->lexeme); break; }
+        case TOKEN_CHAR_LITERAL: { if(tokens->lexeme) node->name = strdup(tokens->lexeme); break; }
+        case TOKEN_INT_LITERAL: { node->int_val = strtoll(tokens->lexeme, NULL, 0); break;}
+        case TOKEN_BOOL_LITERAL:{ node->int_val = strtoll(tokens->lexeme, NULL, 0); break; }
+        case TOKEN_FLOAT_LITERAL:{node->float_val = strtod(tokens->lexeme, 0); break; }
+        default: break;
+    }
 }
 
 ParserStack create_stack(int32_t initial_stack){
@@ -570,14 +357,16 @@ ASTNode *fetch_tokens(TokenStream *stream){
             ASTNode *final_ast_node = stack.items[stack.top].node;
 
             free(stack.items);
+            free(stream->tokens);
 
             return final_ast_node;
         }else{
            fprintf(stderr, "[!] Syntax error at line %d near token '%s'\n", 
                     current_token->line, current_token->lexeme);
                     free(stack.items);
+                    free(stream->tokens);
                     return NULL;
         }
     }
-    free(stream->tokens);
+    
 }
