@@ -332,6 +332,10 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             return node;
         }
         case 71: return (free(popped_nodes[0]), free(popped_nodes[1]), (ASTNode *)NULL);
+        case 72: return case_match_default_block(popped_nodes[1], popped_nodes[2], popped_nodes[0], popped_nodes[3], AST_CASE_BLOCK);
+        case 73: return case_match_default_block(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_CASE_BLOCK);
+        case 74: return case_match_default_block(popped_nodes[1], popped_nodes[2], popped_nodes[0], popped_nodes[3], AST_MATCH_BLOCK);
+        case 75: return case_match_default_block(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_MATCH_BLOCK);
         default: { break; }
     }
     

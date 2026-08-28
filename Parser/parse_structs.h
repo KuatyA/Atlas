@@ -19,6 +19,10 @@
 #define MODIFIER_SC(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
 #define MODIFIER_M(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
 
+/*#define CASE_MATCH_DEFAULT_BLOCK(p, t) case_match_default_block(p[1], p[2], p[0], p[3], t)
+#define CASE_MATCH_BLOCK(p, t) case_match_block(p[1], p[0], p[2], t)
+#define PASS_FREE_OUTER(p) (free(p[0]), free(p[2]), p[1])*/
+
 #define SET_TYPE(p, p_type) make_type(p[0], p[1], p_type)
 #define SET_SIMPLE_TYPE(p, p_type) make_type(NULL, p[0], p_type)
 #define MUTATE_AST_TERMINAL(p, new_type) (p[0]->type = (new_type), p[0])
@@ -481,6 +485,8 @@ typedef enum{
     AST_INITIALIZER,
     AST_ELSE,
     AST_BLOCK,
+    AST_CASE_BLOCK,
+    AST_MATCH_BLOCK,
 
     AST_INT_LITERAL,
     AST_FLOAT_LITERAL,
@@ -589,6 +595,7 @@ static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNode
         free(op_tok);
         return n;
 }
+
 static inline ASTNode *make_mod_q(ASTNode *p, ASTNodeType t, uint32_t t_info){
     ASTNode *n = calloc(1, sizeof(ASTNode));
         n->type = t; n->type_info.qualifiers = t_info;
@@ -628,4 +635,11 @@ static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type)
     return node;
 }
 
+static inline ASTNode *case_match_default_block(ASTNode *l, ASTNode *r, ASTNode *trash1, ASTNode *trash2, ASTNodeType t){
+    ASTNode *node = calloc(1, sizeof(ASTNode));
+    node->left = l; node->right = r; node->type = t;
+    free(trash1);
+    free(trash2);
+    return node;
+}
 #endif
