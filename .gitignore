@@ -6,3 +6,4 @@ parsetab.py
 parser.out
 parser_tables.log
 .idea
+__pycache__/
