@@ -10,15 +10,15 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
 
     //SWITCH STATEMENT OF DOOM AND DESPAIR
     switch (rule_id){
-        case 0: PASS(popped_nodes);
+        case 0: return PASS(popped_nodes);
         case 1: { 
             ASTNode *prog = calloc(1, sizeof(ASTNode)); 
             prog->type = AST_PROGRAM;
             prog->left = popped_nodes[0];
             free(popped_nodes[1]); //free eof
             prog->next = NULL;
-            return prog;
-         }
+            return prog; 
+        }
         case 2: return PASS_FREE_R(popped_nodes);
         case 3: return ASSIGN(popped_nodes, OP_LSHIFT_ASSIGN);
         case 4: { //enum member list(long)
@@ -30,7 +30,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             curr->next = new_member;
             free(popped_nodes[1]);
             return head;
-         }
+        }
         case 5: return PASS_CLEAR_NEXT(popped_nodes); //enum member list(base)
         case 6: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
@@ -44,7 +44,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[4]);
             free(popped_nodes[5]);
             return node;
-         }
+        }
         case 7: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_UNION_DECL;
@@ -55,7 +55,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[0]);
             free(popped_nodes[3]);
             return node;
-         }
+        }
         case 8: {//union member list(long)
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[1];
@@ -64,7 +64,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_member;
             return head;
-         }
+        }
         case 9: return PASS_CLEAR_NEXT(popped_nodes); //union member list(base)
         case 10: {
             ASTNode *list = popped_nodes[0];
@@ -144,7 +144,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->right = details;
             free(popped_nodes[0]);
             free(popped_nodes[3]);
-            free;(popped_nodes[5]);
+            free(popped_nodes[5]);
             return func_decl;
         }
         case 18: {
@@ -196,7 +196,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 22: return MODIFIER_Q(popped_nodes, TQ_MUT);
         case 23: return MODIFIER_SC(popped_nodes, SC_STATIC);
         case 24: return MODIFIER_Q(popped_nodes, TQ_VOLATILE);
-        case 25: PASS_CLEAR_NEXT(popped_nodes);
+        case 25: return PASS_CLEAR_NEXT(popped_nodes);
         case 26: return MODIFIER_SC(popped_nodes, SC_ATOMIC);
         case 27: return MODIFIER_VS(popped_nodes, VS_SHARED);
         case 28: return MODIFIER_VS(popped_nodes, VS_PRIVATE);
@@ -302,9 +302,9 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return node;
         }
-        case 65: PASS(popped_nodes);
+        case 65: return PASS(popped_nodes);
         case 66: return NULL;
-        case 67: PASS(popped_nodes);
+        case 67: return PASS(popped_nodes);
         case 68: {
             ASTNode *head = popped_nodes[0];
             ASTNode *new_param = popped_nodes[2];
@@ -315,7 +315,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return head;
         }
-        case 69: PASS(popped_nodes);
+        case 69: return PASS(popped_nodes);
         case 70: return use_2_trash_2(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_BLOCK);
         case 71: return (free(popped_nodes[0]), free(popped_nodes[1]), (ASTNode *)NULL);
         case 72: return use_2_trash_2(popped_nodes[1], popped_nodes[2], popped_nodes[0], popped_nodes[3], AST_CASE_BLOCK);
@@ -446,7 +446,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[4]);
             return popped_nodes[2];
         }
-        default: break;
+        default: return NULL;
     }
 }
 ASTNode *make_terminal_ast(TokenStruct *tokens){
@@ -462,7 +462,7 @@ ASTNode *make_terminal_ast(TokenStruct *tokens){
         case TOKEN_INT_LITERAL: { node->int_val = strtoll(tokens->lexeme, NULL, 0); break;}
         case TOKEN_BOOL_LITERAL:{ node->int_val = strtoll(tokens->lexeme, NULL, 0); break; }
         case TOKEN_FLOAT_LITERAL:{node->float_val = strtod(tokens->lexeme, 0); break; }
-        default: break;
+        default: return NULL;
     }
 }
 

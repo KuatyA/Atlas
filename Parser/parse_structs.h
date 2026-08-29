@@ -590,32 +590,32 @@ typedef struct{
 }ParserStack;
 
 static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNodeType t, Operations op){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
         n->type = t; n->left = l; n->right = r; n->op = op;
         free(op_tok);
         return n;
 }
 
 static inline ASTNode *make_mod_q(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
         n->type = t; n->type_info.qualifiers = t_info;
         free(p);
         return n;
 }
 static inline ASTNode *make_mod_v(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
         n->type = t; n->type_info.visibility = t_info;
         free(p);
         return n;
 }
 static inline ASTNode *make_mod_sc(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
         n->type = t; n->type_info.storage_class = t_info;
         free(p);
         return n;
 }
 static inline ASTNode *make_mod_m(ASTNode *p, ASTNodeType t, uint32_t t_info){
-    ASTNode *n = calloc(1, sizeof(ASTNode));
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
         n->type = t; n->type_info.modifier = t_info;
         free(p);
         return n;
@@ -623,7 +623,7 @@ static inline ASTNode *make_mod_m(ASTNode *p, ASTNodeType t, uint32_t t_info){
 
 static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type){
     ASTNode *mod_node = mn;
-        ASTNode *node = calloc(1, sizeof(ASTNode));
+        ASTNode *node = (ASTNode *)calloc(1, sizeof(ASTNode));
         node->type = AST_TYPE;
         node->type_info.p_type = p_type;
     if(mod_node != NULL){
@@ -636,7 +636,7 @@ static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type)
 }
 
 static inline ASTNode *use_2_trash_2(ASTNode *l, ASTNode *r, ASTNode *trash1, ASTNode *trash2, ASTNodeType t){
-    ASTNode *node = calloc(1, sizeof(ASTNode));
+    ASTNode *node = (ASTNode *)calloc(1, sizeof(ASTNode));
     node->left = l; node->right = r; node->type = t;
     free(trash1);
     free(trash2);
