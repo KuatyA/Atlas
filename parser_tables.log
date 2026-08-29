@@ -117,7 +117,7 @@ Rule 107   return_stmt -> TOKEN_KW_RETURN TOKEN_SEMICOLON
 Rule 108   match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
 Rule 109   default_match_stmt -> TOKEN_KW_DEFAULT TOKEN_FAT_ARROW block TOKEN_SEMICOLON
 Rule 110   defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-Rule 111   import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+Rule 111   import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
 Rule 112   module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
 Rule 113   expr -> assignment
 Rule 114   xor -> bit_and
@@ -306,6 +306,7 @@ TOKEN_OR             : 58
 TOKEN_PLUS           : 137 144
 TOKEN_PLUS_EQ        : 154
 TOKEN_QUESTION       : 36
+TOKEN_QUOTATION      : 111 111
 TOKEN_RBRACE         : 6 63 70 71 72 73 74 75 83 117 118 203 207
 TOKEN_RBRACKET       : 79 81 82 155
 TOKEN_RPAREN         : 17 18 19 88 94 95 96 98 108 110 118 122 153 163
@@ -8520,7 +8521,7 @@ state 246
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -8823,7 +8824,7 @@ state 253
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -9062,7 +9063,7 @@ state 254
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -10581,7 +10582,7 @@ state 287
 
 state 288
 
-    (111) import_stmt -> TOKEN_GT . TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> TOKEN_GT . TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
 
     TOKEN_KW_IMPORT shift and go to state 314
 
@@ -10918,7 +10919,7 @@ state 298
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -12029,9 +12030,9 @@ state 313
 
 state 314
 
-    (111) import_stmt -> TOKEN_GT TOKEN_KW_IMPORT . TOKEN_IDENTIFIER
+    (111) import_stmt -> TOKEN_GT TOKEN_KW_IMPORT . TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
 
-    TOKEN_IDENTIFIER shift and go to state 334
+    TOKEN_QUOTATION shift and go to state 334
 
 
 state 315
@@ -12409,54 +12410,9 @@ state 333
 
 state 334
 
-    (111) import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .
+    (111) import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION . TOKEN_IDENTIFIER TOKEN_QUOTATION
 
-    TOKEN_RBRACE    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_IF     reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_WHILE  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_DO     reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_FOR    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_SWITCH reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_RETURN reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_BREAK  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_CONTINUE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_MATCH  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_DEFER  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_GT        reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_MODULE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_TRY    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_CATCH  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_RAISE  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_SPAWN  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_SELECT reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_LOCK   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_LBRACE    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_CAST   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_CHAN   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_MUTEX  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_PLUS      reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_MINUS     reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_NOT       reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_BIT_NOT   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_AMPERSAND reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_STAR      reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_AWAIT  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_CONST  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_MUT    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_STATIC reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_VOLATILE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_ATOMIC reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_SHARED reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_PRIVATE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_PUBLIC reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_IDENTIFIER reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_LPAREN    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_KW_NULL   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_INT_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_FLOAT_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_CHAR_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_STRING_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
-    TOKEN_BOOL_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER .)
+    TOKEN_IDENTIFIER shift and go to state 353
 
 
 state 335
@@ -12515,7 +12471,7 @@ state 336
 
     (115) module_list -> module_list TOKEN_SCOPE_RES . TOKEN_IDENTIFIER
 
-    TOKEN_IDENTIFIER shift and go to state 353
+    TOKEN_IDENTIFIER shift and go to state 354
 
 
 state 337
@@ -12560,7 +12516,7 @@ state 337
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -12711,7 +12667,7 @@ state 337
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    stmt_list                      shift and go to state 354
+    stmt_list                      shift and go to state 355
     catch_stmt                     shift and go to state 271
     stmt                           shift and go to state 255
     var_decl                       shift and go to state 256
@@ -12761,7 +12717,7 @@ state 338
 
     (118) catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER . TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
 
-    TOKEN_RPAREN    shift and go to state 355
+    TOKEN_RPAREN    shift and go to state 356
 
 
 state 339
@@ -12876,12 +12832,12 @@ state 341
     (100) default_stmt -> . TOKEN_KW_DEFAULT TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
     (99) case_stmt -> . TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
 
-    TOKEN_RBRACE    shift and go to state 357
-    TOKEN_KW_DEFAULT shift and go to state 359
+    TOKEN_RBRACE    shift and go to state 358
+    TOKEN_KW_DEFAULT shift and go to state 360
     TOKEN_KW_CASE   shift and go to state 343
 
-    default_stmt                   shift and go to state 356
-    case_stmt                      shift and go to state 358
+    default_stmt                   shift and go to state 357
+    case_stmt                      shift and go to state 359
 
 state 342
 
@@ -12976,7 +12932,7 @@ state 343
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    expr                           shift and go to state 360
+    expr                           shift and go to state 361
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -12997,7 +12953,7 @@ state 344
 
     (122) lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr . TOKEN_RPAREN block
 
-    TOKEN_RPAREN    shift and go to state 361
+    TOKEN_RPAREN    shift and go to state 362
 
 
 state 345
@@ -13008,7 +12964,7 @@ state 345
 
     TOKEN_LBRACE    shift and go to state 253
 
-    block                          shift and go to state 362
+    block                          shift and go to state 363
 
 state 346
 
@@ -13050,7 +13006,7 @@ state 346
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -13202,7 +13158,7 @@ state 346
     TOKEN_BOOL_LITERAL shift and go to state 100
 
     expr                           shift and go to state 277
-    stmt                           shift and go to state 363
+    stmt                           shift and go to state 364
     var_decl                       shift and go to state 256
     expr_stmt                      shift and go to state 257
     if_stmt                        shift and go to state 258
@@ -13330,7 +13286,7 @@ state 347
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    expr                           shift and go to state 364
+    expr                           shift and go to state 365
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -13387,7 +13343,7 @@ state 348
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -13538,7 +13494,7 @@ state 348
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    stmt                           shift and go to state 365
+    stmt                           shift and go to state 366
     var_decl                       shift and go to state 256
     expr_stmt                      shift and go to state 257
     if_stmt                        shift and go to state 258
@@ -13587,7 +13543,7 @@ state 349
 
     (97) for_init -> type TOKEN_IDENTIFIER . TOKEN_ASSIGN expr TOKEN_COMMA expr TOKEN_COMMA expr
 
-    TOKEN_ASSIGN    shift and go to state 366
+    TOKEN_ASSIGN    shift and go to state 367
 
 
 state 350
@@ -13598,23 +13554,30 @@ state 350
 
     TOKEN_LBRACE    shift and go to state 322
 
-    case_block                     shift and go to state 367
+    case_block                     shift and go to state 368
 
 state 351
 
     (108) match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN . TOKEN_COLON match_block
 
-    TOKEN_COLON     shift and go to state 368
+    TOKEN_COLON     shift and go to state 369
 
 
 state 352
 
     (110) defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN . TOKEN_SEMICOLON
 
-    TOKEN_SEMICOLON shift and go to state 369
+    TOKEN_SEMICOLON shift and go to state 370
 
 
 state 353
+
+    (111) import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER . TOKEN_QUOTATION
+
+    TOKEN_QUOTATION shift and go to state 371
+
+
+state 354
 
     (115) module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER .
 
@@ -13622,7 +13585,7 @@ state 353
     TOKEN_SCOPE_RES reduce using rule 115 (module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER .)
 
 
-state 354
+state 355
 
     (117) try_stmt -> TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list . TOKEN_RBRACE catch_stmt
     (193) stmt_list -> stmt_list . stmt
@@ -13663,7 +13626,7 @@ state 354
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -13768,7 +13731,7 @@ state 354
     (141) multiplicative -> . multiplicative TOKEN_SLASH unary
     (142) multiplicative -> . multiplicative TOKEN_MOD unary
 
-    TOKEN_RBRACE    shift and go to state 370
+    TOKEN_RBRACE    shift and go to state 372
     TOKEN_KW_IF     shift and go to state 278
     TOKEN_KW_WHILE  shift and go to state 279
     TOKEN_KW_DO     shift and go to state 280
@@ -13860,21 +13823,21 @@ state 354
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 355
+state 356
 
     (118) catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN . TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
 
-    TOKEN_COLON     shift and go to state 371
-
-
-state 356
-
-    (72) case_block -> TOKEN_LBRACE case_list default_stmt . TOKEN_RBRACE
-
-    TOKEN_RBRACE    shift and go to state 372
+    TOKEN_COLON     shift and go to state 373
 
 
 state 357
+
+    (72) case_block -> TOKEN_LBRACE case_list default_stmt . TOKEN_RBRACE
+
+    TOKEN_RBRACE    shift and go to state 374
+
+
+state 358
 
     (73) case_block -> TOKEN_LBRACE case_list TOKEN_RBRACE .
 
@@ -13926,7 +13889,7 @@ state 357
     TOKEN_BOOL_LITERAL reduce using rule 73 (case_block -> TOKEN_LBRACE case_list TOKEN_RBRACE .)
 
 
-state 358
+state 359
 
     (104) case_list -> case_list case_stmt .
 
@@ -13935,21 +13898,21 @@ state 358
     TOKEN_KW_CASE   reduce using rule 104 (case_list -> case_list case_stmt .)
 
 
-state 359
+state 360
 
     (100) default_stmt -> TOKEN_KW_DEFAULT . TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
 
-    TOKEN_COLON     shift and go to state 373
-
-
-state 360
-
-    (99) case_stmt -> TOKEN_KW_CASE expr . TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
-
-    TOKEN_COLON     shift and go to state 374
+    TOKEN_COLON     shift and go to state 375
 
 
 state 361
+
+    (99) case_stmt -> TOKEN_KW_CASE expr . TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON
+
+    TOKEN_COLON     shift and go to state 376
+
+
+state 362
 
     (122) lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN . block
     (70) block -> . TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -13957,9 +13920,9 @@ state 361
 
     TOKEN_LBRACE    shift and go to state 253
 
-    block                          shift and go to state 375
+    block                          shift and go to state 377
 
-state 362
+state 363
 
     (88) if_stmt -> TOKEN_KW_IF TOKEN_LPAREN expr TOKEN_RPAREN block . else
     (89) else -> . TOKEN_KW_ELSE block
@@ -13967,7 +13930,7 @@ state 362
     (92) lower_than_else -> . TOKEN_KW_ELSE if_stmt
     (93) lower_than_else -> .
 
-    TOKEN_KW_ELSE   shift and go to state 377
+    TOKEN_KW_ELSE   shift and go to state 379
     TOKEN_RBRACE    reduce using rule 93 (lower_than_else -> .)
     TOKEN_KW_IF     reduce using rule 93 (lower_than_else -> .)
     TOKEN_KW_WHILE  reduce using rule 93 (lower_than_else -> .)
@@ -14015,10 +13978,10 @@ state 362
     TOKEN_STRING_LITERAL reduce using rule 93 (lower_than_else -> .)
     TOKEN_BOOL_LITERAL reduce using rule 93 (lower_than_else -> .)
 
-    else                           shift and go to state 376
-    lower_than_else                shift and go to state 378
+    else                           shift and go to state 378
+    lower_than_else                shift and go to state 380
 
-state 363
+state 364
 
     (94) while_stmt -> TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN stmt .
 
@@ -14070,14 +14033,14 @@ state 363
     TOKEN_BOOL_LITERAL reduce using rule 94 (while_stmt -> TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN stmt .)
 
 
-state 364
+state 365
 
     (95) do_stmt -> TOKEN_KW_DO block TOKEN_KW_WHILE TOKEN_LPAREN expr . TOKEN_RPAREN TOKEN_SEMICOLON
 
-    TOKEN_RPAREN    shift and go to state 379
+    TOKEN_RPAREN    shift and go to state 381
 
 
-state 365
+state 366
 
     (96) for_stmt -> TOKEN_KW_FOR TOKEN_LPAREN for_init TOKEN_RPAREN stmt .
 
@@ -14129,7 +14092,7 @@ state 365
     TOKEN_BOOL_LITERAL reduce using rule 96 (for_stmt -> TOKEN_KW_FOR TOKEN_LPAREN for_init TOKEN_RPAREN stmt .)
 
 
-state 366
+state 367
 
     (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN . expr TOKEN_COMMA expr TOKEN_COMMA expr
     (113) expr -> . assignment
@@ -14213,7 +14176,7 @@ state 366
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    expr                           shift and go to state 380
+    expr                           shift and go to state 382
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -14230,7 +14193,7 @@ state 366
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 367
+state 368
 
     (98) switch_stmt -> TOKEN_KW_SWITCH TOKEN_LPAREN expr TOKEN_RPAREN case_block .
 
@@ -14282,17 +14245,17 @@ state 367
     TOKEN_BOOL_LITERAL reduce using rule 98 (switch_stmt -> TOKEN_KW_SWITCH TOKEN_LPAREN expr TOKEN_RPAREN case_block .)
 
 
-state 368
+state 369
 
     (108) match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON . match_block
     (74) match_block -> . TOKEN_LBRACE match_list default_match_stmt TOKEN_RBRACE
     (75) match_block -> . TOKEN_LBRACE match_list TOKEN_RBRACE
 
-    TOKEN_LBRACE    shift and go to state 382
+    TOKEN_LBRACE    shift and go to state 384
 
-    match_block                    shift and go to state 381
+    match_block                    shift and go to state 383
 
-state 369
+state 370
 
     (110) defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON .
 
@@ -14344,23 +14307,75 @@ state 369
     TOKEN_BOOL_LITERAL reduce using rule 110 (defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON .)
 
 
-state 370
+state 371
+
+    (111) import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .
+
+    TOKEN_RBRACE    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_IF     reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_WHILE  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_DO     reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_FOR    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_SWITCH reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_RETURN reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_BREAK  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_CONTINUE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_MATCH  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_DEFER  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_GT        reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_MODULE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_TRY    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_CATCH  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_RAISE  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_SPAWN  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_SELECT reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_LOCK   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_LBRACE    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_CAST   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_CHAN   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_MUTEX  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_PLUS      reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_MINUS     reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_NOT       reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_BIT_NOT   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_AMPERSAND reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_STAR      reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_AWAIT  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_CONST  reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_MUT    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_STATIC reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_VOLATILE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_ATOMIC reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_SHARED reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_PRIVATE reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_PUBLIC reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_IDENTIFIER reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_LPAREN    reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_KW_NULL   reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_INT_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_FLOAT_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_CHAR_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_STRING_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+    TOKEN_BOOL_LITERAL reduce using rule 111 (import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION .)
+
+
+state 372
 
     (117) try_stmt -> TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE . catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
 
     TOKEN_KW_CATCH  shift and go to state 291
 
-    catch_stmt                     shift and go to state 383
+    catch_stmt                     shift and go to state 385
 
-state 371
+state 373
 
     (118) catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON . TOKEN_LBRACE stmt_list TOKEN_RBRACE
 
-    TOKEN_LBRACE    shift and go to state 384
+    TOKEN_LBRACE    shift and go to state 386
 
 
-state 372
+state 374
 
     (72) case_block -> TOKEN_LBRACE case_list default_stmt TOKEN_RBRACE .
 
@@ -14412,7 +14427,7 @@ state 372
     TOKEN_BOOL_LITERAL reduce using rule 72 (case_block -> TOKEN_LBRACE case_list default_stmt TOKEN_RBRACE .)
 
 
-state 373
+state 375
 
     (100) default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON . block TOKEN_KW_BREAK TOKEN_SEMICOLON
     (70) block -> . TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -14420,9 +14435,9 @@ state 373
 
     TOKEN_LBRACE    shift and go to state 253
 
-    block                          shift and go to state 385
+    block                          shift and go to state 387
 
-state 374
+state 376
 
     (99) case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON . block TOKEN_KW_BREAK TOKEN_SEMICOLON
     (70) block -> . TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -14430,9 +14445,9 @@ state 374
 
     TOKEN_LBRACE    shift and go to state 253
 
-    block                          shift and go to state 386
+    block                          shift and go to state 388
 
-state 375
+state 377
 
     (122) lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block .
 
@@ -14484,7 +14499,7 @@ state 375
     TOKEN_BOOL_LITERAL reduce using rule 122 (lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block .)
 
 
-state 376
+state 378
 
     (88) if_stmt -> TOKEN_KW_IF TOKEN_LPAREN expr TOKEN_RPAREN block else .
 
@@ -14536,7 +14551,7 @@ state 376
     TOKEN_BOOL_LITERAL reduce using rule 88 (if_stmt -> TOKEN_KW_IF TOKEN_LPAREN expr TOKEN_RPAREN block else .)
 
 
-state 377
+state 379
 
     (89) else -> TOKEN_KW_ELSE . block
     (92) lower_than_else -> TOKEN_KW_ELSE . if_stmt
@@ -14547,10 +14562,10 @@ state 377
     TOKEN_LBRACE    shift and go to state 253
     TOKEN_KW_IF     shift and go to state 278
 
-    block                          shift and go to state 387
-    if_stmt                        shift and go to state 388
+    block                          shift and go to state 389
+    if_stmt                        shift and go to state 390
 
-state 378
+state 380
 
     (90) else -> lower_than_else .
 
@@ -14602,21 +14617,21 @@ state 378
     TOKEN_BOOL_LITERAL reduce using rule 90 (else -> lower_than_else .)
 
 
-state 379
+state 381
 
     (95) do_stmt -> TOKEN_KW_DO block TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN . TOKEN_SEMICOLON
 
-    TOKEN_SEMICOLON shift and go to state 389
+    TOKEN_SEMICOLON shift and go to state 391
 
 
-state 380
+state 382
 
     (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr . TOKEN_COMMA expr TOKEN_COMMA expr
 
-    TOKEN_COMMA     shift and go to state 390
+    TOKEN_COMMA     shift and go to state 392
 
 
-state 381
+state 383
 
     (108) match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block .
 
@@ -14668,7 +14683,7 @@ state 381
     TOKEN_BOOL_LITERAL reduce using rule 108 (match_stmt -> TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block .)
 
 
-state 382
+state 384
 
     (74) match_block -> TOKEN_LBRACE . match_list default_match_stmt TOKEN_RBRACE
     (75) match_block -> TOKEN_LBRACE . match_list TOKEN_RBRACE
@@ -14756,9 +14771,9 @@ state 382
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    match_list                     shift and go to state 391
-    match_arm                      shift and go to state 392
-    expr                           shift and go to state 393
+    match_list                     shift and go to state 393
+    match_arm                      shift and go to state 394
+    expr                           shift and go to state 395
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -14775,7 +14790,7 @@ state 382
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 383
+state 385
 
     (117) try_stmt -> TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt .
 
@@ -14827,7 +14842,7 @@ state 383
     TOKEN_BOOL_LITERAL reduce using rule 117 (try_stmt -> TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt .)
 
 
-state 384
+state 386
 
     (118) catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE . stmt_list TOKEN_RBRACE
     (193) stmt_list -> . stmt_list stmt
@@ -14869,7 +14884,7 @@ state 384
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -15020,7 +15035,7 @@ state 384
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    stmt_list                      shift and go to state 394
+    stmt_list                      shift and go to state 396
     stmt                           shift and go to state 255
     var_decl                       shift and go to state 256
     expr_stmt                      shift and go to state 257
@@ -15066,21 +15081,21 @@ state 384
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 385
+state 387
 
     (100) default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON block . TOKEN_KW_BREAK TOKEN_SEMICOLON
 
-    TOKEN_KW_BREAK  shift and go to state 395
+    TOKEN_KW_BREAK  shift and go to state 397
 
 
-state 386
+state 388
 
     (99) case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block . TOKEN_KW_BREAK TOKEN_SEMICOLON
 
-    TOKEN_KW_BREAK  shift and go to state 396
+    TOKEN_KW_BREAK  shift and go to state 398
 
 
-state 387
+state 389
 
     (89) else -> TOKEN_KW_ELSE block .
 
@@ -15132,7 +15147,7 @@ state 387
     TOKEN_BOOL_LITERAL reduce using rule 89 (else -> TOKEN_KW_ELSE block .)
 
 
-state 388
+state 390
 
     (92) lower_than_else -> TOKEN_KW_ELSE if_stmt .
 
@@ -15184,7 +15199,7 @@ state 388
     TOKEN_BOOL_LITERAL reduce using rule 92 (lower_than_else -> TOKEN_KW_ELSE if_stmt .)
 
 
-state 389
+state 391
 
     (95) do_stmt -> TOKEN_KW_DO block TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON .
 
@@ -15236,7 +15251,7 @@ state 389
     TOKEN_BOOL_LITERAL reduce using rule 95 (do_stmt -> TOKEN_KW_DO block TOKEN_KW_WHILE TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON .)
 
 
-state 390
+state 392
 
     (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA . expr TOKEN_COMMA expr
     (113) expr -> . assignment
@@ -15320,7 +15335,7 @@ state 390
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    expr                           shift and go to state 397
+    expr                           shift and go to state 399
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -15337,7 +15352,7 @@ state 390
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 391
+state 393
 
     (74) match_block -> TOKEN_LBRACE match_list . default_match_stmt TOKEN_RBRACE
     (75) match_block -> TOKEN_LBRACE match_list . TOKEN_RBRACE
@@ -15408,8 +15423,8 @@ state 391
     (141) multiplicative -> . multiplicative TOKEN_SLASH unary
     (142) multiplicative -> . multiplicative TOKEN_MOD unary
 
-    TOKEN_RBRACE    shift and go to state 399
-    TOKEN_KW_DEFAULT shift and go to state 401
+    TOKEN_RBRACE    shift and go to state 401
+    TOKEN_KW_DEFAULT shift and go to state 403
     TOKEN_KW_CAST   shift and go to state 78
     TOKEN_PLUS      shift and go to state 81
     TOKEN_MINUS     shift and go to state 82
@@ -15427,9 +15442,9 @@ state 391
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    default_match_stmt             shift and go to state 398
-    match_arm                      shift and go to state 400
-    expr                           shift and go to state 393
+    default_match_stmt             shift and go to state 400
+    match_arm                      shift and go to state 402
+    expr                           shift and go to state 395
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -15446,7 +15461,7 @@ state 391
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 392
+state 394
 
     (77) match_list -> match_arm .
 
@@ -15470,14 +15485,14 @@ state 392
     TOKEN_BOOL_LITERAL reduce using rule 77 (match_list -> match_arm .)
 
 
-state 393
+state 395
 
     (78) match_arm -> expr . TOKEN_FAT_ARROW block TOKEN_SEMICOLON
 
-    TOKEN_FAT_ARROW shift and go to state 402
+    TOKEN_FAT_ARROW shift and go to state 404
 
 
-state 394
+state 396
 
     (118) catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list . TOKEN_RBRACE
     (193) stmt_list -> stmt_list . stmt
@@ -15518,7 +15533,7 @@ state 394
     (101) continue_stmt -> . TOKEN_KW_CONTINUE TOKEN_SEMICOLON
     (108) match_stmt -> . TOKEN_KW_MATCH TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_COLON match_block
     (110) defer_stmt -> . TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON
-    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER
+    (111) import_stmt -> . TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION
     (112) module_stmt -> . TOKEN_KW_MODULE module_list TOKEN_SEMICOLON
     (117) try_stmt -> . TOKEN_KW_TRY TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE catch_stmt
     (118) catch_stmt -> . TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -15623,7 +15638,7 @@ state 394
     (141) multiplicative -> . multiplicative TOKEN_SLASH unary
     (142) multiplicative -> . multiplicative TOKEN_MOD unary
 
-    TOKEN_RBRACE    shift and go to state 403
+    TOKEN_RBRACE    shift and go to state 405
     TOKEN_KW_IF     shift and go to state 278
     TOKEN_KW_WHILE  shift and go to state 279
     TOKEN_KW_DO     shift and go to state 280
@@ -15715,35 +15730,35 @@ state 394
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 395
+state 397
 
     (100) default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON block TOKEN_KW_BREAK . TOKEN_SEMICOLON
 
-    TOKEN_SEMICOLON shift and go to state 404
-
-
-state 396
-
-    (99) case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK . TOKEN_SEMICOLON
-
-    TOKEN_SEMICOLON shift and go to state 405
-
-
-state 397
-
-    (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr . TOKEN_COMMA expr
-
-    TOKEN_COMMA     shift and go to state 406
+    TOKEN_SEMICOLON shift and go to state 406
 
 
 state 398
 
-    (74) match_block -> TOKEN_LBRACE match_list default_match_stmt . TOKEN_RBRACE
+    (99) case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK . TOKEN_SEMICOLON
 
-    TOKEN_RBRACE    shift and go to state 407
+    TOKEN_SEMICOLON shift and go to state 407
 
 
 state 399
+
+    (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr . TOKEN_COMMA expr
+
+    TOKEN_COMMA     shift and go to state 408
+
+
+state 400
+
+    (74) match_block -> TOKEN_LBRACE match_list default_match_stmt . TOKEN_RBRACE
+
+    TOKEN_RBRACE    shift and go to state 409
+
+
+state 401
 
     (75) match_block -> TOKEN_LBRACE match_list TOKEN_RBRACE .
 
@@ -15795,7 +15810,7 @@ state 399
     TOKEN_BOOL_LITERAL reduce using rule 75 (match_block -> TOKEN_LBRACE match_list TOKEN_RBRACE .)
 
 
-state 400
+state 402
 
     (76) match_list -> match_list match_arm .
 
@@ -15819,14 +15834,14 @@ state 400
     TOKEN_BOOL_LITERAL reduce using rule 76 (match_list -> match_list match_arm .)
 
 
-state 401
+state 403
 
     (109) default_match_stmt -> TOKEN_KW_DEFAULT . TOKEN_FAT_ARROW block TOKEN_SEMICOLON
 
-    TOKEN_FAT_ARROW shift and go to state 408
+    TOKEN_FAT_ARROW shift and go to state 410
 
 
-state 402
+state 404
 
     (78) match_arm -> expr TOKEN_FAT_ARROW . block TOKEN_SEMICOLON
     (70) block -> . TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -15834,9 +15849,9 @@ state 402
 
     TOKEN_LBRACE    shift and go to state 253
 
-    block                          shift and go to state 409
+    block                          shift and go to state 411
 
-state 403
+state 405
 
     (118) catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE .
 
@@ -15888,14 +15903,14 @@ state 403
     TOKEN_BOOL_LITERAL reduce using rule 118 (catch_stmt -> TOKEN_KW_CATCH TOKEN_LPAREN TOKEN_IDENTIFIER TOKEN_RPAREN TOKEN_COLON TOKEN_LBRACE stmt_list TOKEN_RBRACE .)
 
 
-state 404
+state 406
 
     (100) default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON .
 
     TOKEN_RBRACE    reduce using rule 100 (default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON .)
 
 
-state 405
+state 407
 
     (99) case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON .
 
@@ -15904,7 +15919,7 @@ state 405
     TOKEN_KW_CASE   reduce using rule 99 (case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON .)
 
 
-state 406
+state 408
 
     (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr TOKEN_COMMA . expr
     (113) expr -> . assignment
@@ -15988,7 +16003,7 @@ state 406
     TOKEN_STRING_LITERAL shift and go to state 99
     TOKEN_BOOL_LITERAL shift and go to state 100
 
-    expr                           shift and go to state 410
+    expr                           shift and go to state 412
     assignment                     shift and go to state 77
     unary                          shift and go to state 79
     ternary                        shift and go to state 80
@@ -16005,7 +16020,7 @@ state 406
     additive                       shift and go to state 105
     multiplicative                 shift and go to state 106
 
-state 407
+state 409
 
     (74) match_block -> TOKEN_LBRACE match_list default_match_stmt TOKEN_RBRACE .
 
@@ -16057,7 +16072,7 @@ state 407
     TOKEN_BOOL_LITERAL reduce using rule 74 (match_block -> TOKEN_LBRACE match_list default_match_stmt TOKEN_RBRACE .)
 
 
-state 408
+state 410
 
     (109) default_match_stmt -> TOKEN_KW_DEFAULT TOKEN_FAT_ARROW . block TOKEN_SEMICOLON
     (70) block -> . TOKEN_LBRACE stmt_list TOKEN_RBRACE
@@ -16065,30 +16080,30 @@ state 408
 
     TOKEN_LBRACE    shift and go to state 253
 
-    block                          shift and go to state 411
+    block                          shift and go to state 413
 
-state 409
+state 411
 
     (78) match_arm -> expr TOKEN_FAT_ARROW block . TOKEN_SEMICOLON
 
-    TOKEN_SEMICOLON shift and go to state 412
+    TOKEN_SEMICOLON shift and go to state 414
 
 
-state 410
+state 412
 
     (97) for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr TOKEN_COMMA expr .
 
     TOKEN_RPAREN    reduce using rule 97 (for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr TOKEN_COMMA expr .)
 
 
-state 411
+state 413
 
     (109) default_match_stmt -> TOKEN_KW_DEFAULT TOKEN_FAT_ARROW block . TOKEN_SEMICOLON
 
-    TOKEN_SEMICOLON shift and go to state 413
+    TOKEN_SEMICOLON shift and go to state 415
 
 
-state 412
+state 414
 
     (78) match_arm -> expr TOKEN_FAT_ARROW block TOKEN_SEMICOLON .
 
@@ -16112,7 +16127,7 @@ state 412
     TOKEN_BOOL_LITERAL reduce using rule 78 (match_arm -> expr TOKEN_FAT_ARROW block TOKEN_SEMICOLON .)
 
 
-state 413
+state 415
 
     (109) default_match_stmt -> TOKEN_KW_DEFAULT TOKEN_FAT_ARROW block TOKEN_SEMICOLON .
 

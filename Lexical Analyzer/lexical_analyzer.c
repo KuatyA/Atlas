@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include <ctype.h>
 #include "lexical_analyzer.h"
 #include <stdatomic.h>
 #include <threads.h>
@@ -474,7 +473,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         (*col)++;
                         return tok;
                 break;
-                case '\'':
+                case '\'':;
                     const char *char_start = *cursor;
                     (*cursor)++;
                     (*col)++;

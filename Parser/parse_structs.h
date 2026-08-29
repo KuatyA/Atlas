@@ -9,7 +9,7 @@
 #define PASS(p) (p[0])
 #define PASS_FREE_R(p) (free(p[1]), p[0])
 #define PASS_FREE_L(p) (free(p[0]), p[1])
-#define PASS_CLEAR_NEXT(p) (p[0] ? (p[0]->next = NULL, p[0]) : NULL)
+#define PASS_CLEAR_NEXT(p) (p[0] ? (p[0]->next = NULL, p[0]) : (ASTNode *)NULL)
 
 #define BINARY(p, t, o) make_bin(p[0], p[2], p[1], t, o)
 #define ASSIGN(p, o) make_bin(p[0], p[2], p[1], AST_ASSIGNMENT, o)
@@ -18,10 +18,6 @@
 #define MODIFIER_VS(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
 #define MODIFIER_SC(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
 #define MODIFIER_M(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
-
-/*#define CASE_MATCH_DEFAULT_BLOCK(p, t) case_match_default_block(p[1], p[2], p[0], p[3], t)
-#define CASE_MATCH_BLOCK(p, t) case_match_block(p[1], p[0], p[2], t)
-#define PASS_FREE_OUTER(p) (free(p[0]), free(p[2]), p[1])*/
 
 #define SET_TYPE(p, p_type) make_type(p[0], p[1], p_type)
 #define SET_SIMPLE_TYPE(p, p_type) make_type(NULL, p[0], p_type)
@@ -385,7 +381,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_DEFER_STATEMENT, 5, "defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
    
-    {NT_IMPORT_STATEMENT, 3, "import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER"},
+    {NT_IMPORT_STATEMENT, 5, "import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION"},
     {NT_MODULE_STATEMENT, 3, "module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON"},
     {NT_MODULE_LIST, 3, "module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER"},
     {NT_MODULE_LIST, 1, "module_list -> TOKEN_IDENTIFIER"},
@@ -554,7 +550,8 @@ typedef enum{
     OP_LSHIFT_ASSIGN,
     OP_RSHIFT_ASSIGN,
     OP_OR,
-    OP_AND
+    OP_AND,
+    OP_BIT_OR
 }Operations;
 
 typedef struct ASTNode{
@@ -641,5 +638,12 @@ static inline ASTNode *use_2_trash_2(ASTNode *l, ASTNode *r, ASTNode *trash1, AS
     free(trash1);
     free(trash2);
     return node;
+}
+static inline ASTNode *continue_break_return(ASTNode *trash1, ASTNode *trash2, ASTNodeType t){
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
+    n->type = t;
+    free(trash1);
+    free(trash2);
+    return n;
 }
 #endif
