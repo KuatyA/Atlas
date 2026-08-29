@@ -483,7 +483,6 @@ typedef enum{
     AST_MODIFIER,
     AST_IDENTIFIER,
     AST_INITIALIZER,
-    AST_ELSE,
     AST_BLOCK,
     AST_CASE_BLOCK,
     AST_MATCH_BLOCK,
@@ -554,7 +553,8 @@ typedef enum{
     OP_ASSIGN,
     OP_LSHIFT_ASSIGN,
     OP_RSHIFT_ASSIGN,
-    OP_OR
+    OP_OR,
+    OP_AND
 }Operations;
 
 typedef struct ASTNode{
@@ -635,7 +635,7 @@ static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type)
     return node;
 }
 
-static inline ASTNode *case_match_default_block(ASTNode *l, ASTNode *r, ASTNode *trash1, ASTNode *trash2, ASTNodeType t){
+static inline ASTNode *use_2_trash_2(ASTNode *l, ASTNode *r, ASTNode *trash1, ASTNode *trash2, ASTNodeType t){
     ASTNode *node = calloc(1, sizeof(ASTNode));
     node->left = l; node->right = r; node->type = t;
     free(trash1);
