@@ -166,6 +166,7 @@ typedef struct{
     TokenStruct *tokens;
     size_t capacity;
     size_t count;
+    size_t read_idx;
 }TokenStream;
 
 typedef struct {

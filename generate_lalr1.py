@@ -140,7 +140,7 @@ def generate_lalr1_tables(header_path: str, token_header_path: str = "Lexical An
             p_rule.__module__ = "grammar_mod"
             return p_rule
 
-        mod_dict[f"p_rule_{idx}"] = make_handler(doc_string)
+        mod_dict[f"p_rule_{idx:04d}"] = make_handler(doc_string)
 
     grammar_mod.__dict__.update(mod_dict)
 

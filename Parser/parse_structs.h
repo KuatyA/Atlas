@@ -272,6 +272,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_UNION_MEMBER_LIST, 1, "union_member_list -> var_decl"},
 
     {NT_DECLARATION_LIST, 2, "decl_list -> decl_list decl"},
+    {NT_DECLARATION_LIST, 1, "decl_list -> decl"},
     {NT_DECLARATION_LIST, 0, "decl_list -> "}, /*empty*/
 
     {NT_VAR_DECLARATION, 5, "var_decl -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_SEMICOLON"},
@@ -294,7 +295,8 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PRIVATE"},
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PUBLIC"},
     {NT_MODIFIER_LIST, 2, "modifier_list -> modifier_list modifier"},
-    {NT_MODIFIER_LIST, 1, "modifier_list -> modifier"}, /*empty*/
+    {NT_MODIFIER_LIST, 1, "modifier_list -> modifier"},
+    {NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
 
     {NT_TYPE, 1, "type -> channel_type"},
     {NT_TYPE, 1, "type -> pointer_type"},
@@ -580,6 +582,7 @@ typedef struct ASTNode{
     Operations op;
     uint32_t line;
     uint32_t col;
+    const char *lexeme;
 
     struct ASTNode *left;
     struct ASTNode *middle;
@@ -609,7 +612,9 @@ typedef struct{
 static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNodeType t, Operations op){
     ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
         n->type = t; n->left = l; n->right = r; n->op = op;
+        if(!op_tok){
         free(op_tok);
+    }
         return n;
 }
 
@@ -647,15 +652,19 @@ static inline ASTNode *make_mod_m(ASTNode *p, ASTNodeType t, uint32_t t_info){
 
 static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type){
     ASTNode *mod_node = mn;
-        ASTNode *node = (ASTNode *)calloc(1, sizeof(ASTNode));
-        node->type = AST_TYPE;
-        node->type_info.p_type = p_type;
+    ASTNode *node = (ASTNode *)calloc(1, sizeof(ASTNode));
+    node->type = AST_TYPE;
+    node->type_info.p_type = p_type;
     if(mod_node != NULL){
         node->type_info.modifier |= mod_node->type_info.modifier;
         node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-        free(mod_node);
+        if (mod_node != kw) {
+            free(mod_node);
+        }
     }
-    free(kw);
+    if (kw != NULL && kw != mod_node) {
+        free(kw);
+    }
     return node;
 }
 

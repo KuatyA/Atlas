@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -16,11 +18,11 @@ static thread_local uint32_t lex_error_count = 0;
 /*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
 make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
 in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/
-void lexer(const char *filetype /*would 'filetype' be accurate? idk might change it later(probably never)*/){
+void lexer(const char *filename /*would 'filetype' be accurate? idk might change it later(probably never)*/){
     lex_error_count = 0;
     LexerContext ctx = {0};
     //open the files
-    FILE *atl_file = fopen(filetype, "rb");
+    FILE *atl_file = fopen(filename, "rb");
     //check empty
     if(atl_file == NULL){
         fprintf(stderr, "ERROR: Could not open file!");
@@ -64,6 +66,7 @@ void lexer(const char *filetype /*would 'filetype' be accurate? idk might change
        }
        TokenStruct tok = generate_token(&src, &line, &col);
 
+       if (tok.token == TOKEN_COMMENT) continue;
        if(tok.token == TOKEN_UNKNOWN){
             lex_error_handler(&ctx, tok);
        }
@@ -75,14 +78,23 @@ void lexer(const char *filetype /*would 'filetype' be accurate? idk might change
     append_token(&stream, eof_tok); 
 
     int status = lex_error_handler(&ctx, eof_tok);
+    
 
     if (status != 0) {
         free(stream.tokens);
         free(src_buf);
         return; 
     }
+    stream.read_idx = 0;
+
+    if (stream.count == 0) {
+        fprintf(stderr, "[!] Error: File '%s' is empty or could not be read.\n", filename);
+        free(stream.tokens);
+        return;
+    }
+    
     //free memory(for now).
-    fetch_tokens(&stream);
+    ASTNode *ast = fetch_tokens(&stream);
     free(src_buf);
 }
 

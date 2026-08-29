@@ -10,5 +10,14 @@
 ASTNode *fetch_tokens(TokenStream *stream);
 ASTNode *make_ast(int rule_id, ASTNode **opped_nodes);
 ASTNode *make_terminal_ast(TokenStruct *tokens);
+TokenStruct *get_current_token(TokenStream *stream);
+
+static TokenStruct EOF_TOKEN = {
+    .token = TOKEN_EOF,
+    .lexeme = "EOF",
+    .length = 3,
+    .line = 1,
+    .column = 1,
+};
 
 #endif
