@@ -12,6 +12,7 @@
 #define PASS_CLEAR_NEXT(p) (p[0] ? (p[0]->next = NULL, p[0]) : (ASTNode *)NULL)
 
 #define BINARY(p, t, o) make_bin(p[0], p[2], p[1], t, o)
+#define UNARY(p, t, o) make_un(p[0], p[1], t, o)
 #define ASSIGN(p, o) make_bin(p[0], p[2], p[1], AST_ASSIGNMENT, o)
 
 #define MODIFIER_Q(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
@@ -135,8 +136,6 @@ typedef struct{
 }GrammarRule;
 
 static GrammarRule GRAMMAR_RULES[] = {
-    {0, 0, "INVALID_RULE"},
-
     {NT_PROGRAM, 2, "program -> decl_list TOKEN_EOF"},
 
     {NT_EXPRESSION_STATEMENT, 2, "expr_stmt -> expr TOKEN_SEMICOLON"},
@@ -541,17 +540,38 @@ typedef enum{
 
 typedef enum{
     NO_OP,
-    OP_ADD,
-    OP_SUB,
-    OP_MUL,
-    OP_DIV,
+    OP_PLUS,
+    OP_MINUS,
+    OP_STAR,
+    OP_SLASH,
     OP_MOD,
+    OP_UPLUS,
+    OP_UMINUS,
     OP_ASSIGN,
     OP_LSHIFT_ASSIGN,
     OP_RSHIFT_ASSIGN,
     OP_OR,
+    OP_XOR,
     OP_AND,
-    OP_BIT_OR
+    OP_ADDR_OF,
+    OP_DEREF,
+    OP_NAND,
+    OP_NOT,
+    OP_BIT_NOT,
+    OP_BIT_OR,
+    OP_BIT_AND,
+    OP_EQ,
+    OP_NEQ,
+    OP_LT,
+    OP_GT,
+    OP_GE,
+    OP_LE,
+    OP_PLUS_EQ,
+    OP_MINUS_EQ,
+    OP_STAR_EQ,
+    OP_SLASH_EQ,
+    OP_MOD_EQ,
+    OP_AWAIT
 }Operations;
 
 typedef struct ASTNode{
@@ -591,6 +611,13 @@ static inline ASTNode *make_bin(ASTNode *l, ASTNode *r, ASTNode *op_tok, ASTNode
         n->type = t; n->left = l; n->right = r; n->op = op;
         free(op_tok);
         return n;
+}
+
+static inline ASTNode *make_un(ASTNode *trash, ASTNode *l, ASTNodeType t, Operations o){
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
+    n->type = t; n->left = l; n->op = o;
+    free(trash);
+    return n;
 }
 
 static inline ASTNode *make_mod_q(ASTNode *p, ASTNodeType t, uint32_t t_info){
