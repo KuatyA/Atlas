@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 #include <stdlib.h>
-#include <string.h>
 
 #define CURRENT_STATE(stack_ptr) ((stack_ptr)->items[(stack_ptr)->top].state)
 
@@ -50,7 +49,9 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 14: return PASS(popped_nodes);
         case 15: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_OR);
+        case 16: return PASS(popped_nodes);
         case 17: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_AND);
+        case 18: return PASS(popped_nodes);
         case 19: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_BIT_OR);
         case 20: return PASS(popped_nodes);
         case 21: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_XOR);
@@ -72,8 +73,8 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 37: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_STAR);
         case 38: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_SLASH);
         case 39: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_MOD);
-        case 40: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_UPLUS);
-        case 41: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_UMINUS);
+        case 40: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_PLUS);
+        case 41: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_MINUS);
         case 42: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_NOT);
         case 43: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_BIT_NOT);
         case 44: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_ADDR_OF);
@@ -81,8 +82,46 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 46: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_AWAIT);
         case 47: return PASS(popped_nodes);
         case 48: return PASS(popped_nodes);
+        case 49: return use_2_trash_2(popped_nodes[0], popped_nodes[2], popped_nodes[1], popped_nodes[3], AST_POSTFIX);
+        case 50: return use_2_trash_2(popped_nodes[0], popped_nodes[2], popped_nodes[1], popped_nodes[3], AST_POSTFIX);
+        case 51: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_DOT);
+        case 52: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_SCOPE_RES);
+        case 53: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_ARROW);
+        case 54: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_LEFT_ARROW);
+        case 55: return use_2_trash_2(popped_nodes[1], popped_nodes[3], popped_nodes[0], popped_nodes[2], AST_CAST_EXPR);
+        case 56: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_PRIMARY;
+            node->lexeme = strdup(popped_nodes[0]->lexeme);
+            return node;
+        }
         case 57: return PASS(popped_nodes);
-        
+        case 58: return use_2_trash_2(popped_nodes[1],NULL, popped_nodes[0], popped_nodes[2], AST_PRIMARY);
+        case 59: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_NULL_LITERAL;
+            node->op = OP_NULL;
+            node->lexeme = strdup("NULL");
+            node->left = NULL;
+            node->right = NULL;
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 60: return PASS(popped_nodes);
+        case 61: return NULL;
+        case 62: return PASS_CLEAR_NEXT(popped_nodes);
+        case 63: {
+            ASTNode *head = popped_nodes[0];
+            ASTNode *new_member = popped_nodes[2];
+            if (!new_member) { free(popped_nodes[1]); return head; }
+            new_member->next = NULL;
+            if (!head) { free(popped_nodes[1]); return new_member; }
+            ASTNode *curr = head;
+            while(curr->next != NULL){ curr = curr->next; }
+            curr->next = new_member;
+            free(popped_nodes[1]);
+            return head;
+        }
         case 64: return PASS(popped_nodes);
         case 65: return PASS(popped_nodes);
         case 66: return PASS(popped_nodes);
@@ -114,6 +153,84 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_member;
             return head;
+        }
+        case 86: return PASS_CLEAR_NEXT(popped_nodes);
+        case 87: return PASS(popped_nodes);
+        case 88: return PASS(popped_nodes);
+        case 89: return PASS(popped_nodes);
+        case 90: return PASS(popped_nodes);
+        case 91: return PASS(popped_nodes);
+        case 92: return PASS(popped_nodes);
+        case 93: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_STRUCT_DECL;
+            ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->lexeme = strdup(popped_nodes[1]->lexeme);
+            name->left = NULL;
+            name->right = NULL;
+            node->left = name;
+            node->right = popped_nodes[2];
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 94: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->left = popped_nodes[1];
+            free(popped_nodes[0]);
+            free(popped_nodes[2]);
+            free(popped_nodes[3]);
+            return node;
+        }
+        case 95: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->lexeme = strdup(popped_nodes[0]->lexeme);
+            node->left = NULL;
+            node->right = NULL;
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            return node;
+        }
+        case 96: { //struct member list(long)
+            ASTNode *head = popped_nodes[0];
+            ASTNode *new_member = popped_nodes[1];
+            if (!new_member) { free(popped_nodes[1]); return head; }
+            new_member->next = NULL;
+            if (!head) { free(popped_nodes[1]); return new_member; }
+            ASTNode *curr = head;
+            while(curr->next != NULL){ curr = curr->next; }
+            curr->next = new_member;
+            return head;
+        }
+        case 97: return PASS_CLEAR_NEXT(popped_nodes);
+        case 98: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_ENUM_DECL;
+            ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->lexeme = strdup(popped_nodes[1]->lexeme);
+            node->left = name;
+            node->right = popped_nodes[3];
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
+            free(popped_nodes[4]);
+            free(popped_nodes[5]);
+            return node;
+        }
+        case 99: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_ENUM_DECL;
+            ASTNode *l_name, *r_name = calloc(1, sizeof(ASTNode));
+            l_name->lexeme = strdup(popped_nodes[1]->lexeme);
+            r_name->lexeme = strdup(popped_nodes[2]->lexeme);
+            l_name->left = r_name->left = l_name->right = r_name->right = NULL;
+            node->left = l_name;
+            node->right = r_name;
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
+            free(popped_nodes[3]);
+            return node;
         }
         case 100: { //enum member list(long)
             ASTNode *head = popped_nodes[0];
@@ -175,6 +292,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             curr->next = new_decl;
             return list;
         }
+        case 107: return PASS_CLEAR_NEXT(popped_nodes);
         case 108: return NULL;
         case 109: {
             ASTNode *var_decl = calloc(1, sizeof(ASTNode));
@@ -583,19 +701,87 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 200: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_IMPORT_STMT;
+            ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->lexeme = strdup(popped_nodes[3]->lexeme);
+            name->left = name->right = NULL;
+            node->left = name;
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[3]);
+            free(popped_nodes[2]);
+            free(popped_nodes[4]);
+            return node;
+        }
+        case 201:  {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODULE_STMT;
+            node->left = popped_nodes[1];
+            free(popped_nodes[0]);
+            free(popped_nodes[2]);
+            return node;
+        }
+        case 202: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODULE_LIST;
+            node->op = OP_SCOPE_RES;
+            ASTNode *field_node = calloc(1, sizeof(ASTNode));
+            field_node->lexeme = strdup(popped_nodes[2]->lexeme);
+            field_node->left = field_node->right = NULL;
+            node->left = popped_nodes[0];
+            node->right = field_node;
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
+            return node;
+        }
+        case 203: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_MODULE_LIST;
+            node->lexeme = strdup(popped_nodes[0]->lexeme);
+            node->left = node->right = NULL;
+            return node;
+        }
+        case 204: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_TRY_STMT;
             node->left = popped_nodes[3];
+            node->right = popped_nodes[5];
             free(popped_nodes[0]);
             free(popped_nodes[1]);
             free(popped_nodes[2]);
             free(popped_nodes[4]);
             return node;
         }
-
-
-
-
-
-
+        case 205: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_CATCH_STMT;
+            ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->lexeme = strdup(popped_nodes[2]->lexeme);
+            name->left = name->right = NULL;
+            node->left = name;
+            node->right = popped_nodes[6];
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
+            free(popped_nodes[3]);
+            free(popped_nodes[4]);
+            free(popped_nodes[5]);
+            free(popped_nodes[7]);
+            return node;
+        }
+        case 206: return use_2_trash_2(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_RAISE_STMT);
+        case 207: return use_2_trash_2(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_SPAWN_STMT);
+        case 208: return use_2_trash_2(popped_nodes[1], NULL, popped_nodes[0], NULL, AST_SELECT_STMT);
+        case 209: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_LOCK_STMT;
+            node->left = popped_nodes[2];
+            node->right = NULL;
+            node->middle = popped_nodes[4];
+            free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[3]);
+            return node;
+        }
 
         default: return NULL;
     }

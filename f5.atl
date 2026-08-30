@@ -1,1 +1,7 @@
-public int a = 12;
+struct new_struct {
+    int a;
+    float b;
+    string c; //test comment
+};
+
+async func static int e(bool f, char g); 

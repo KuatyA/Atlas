@@ -1,0 +1,3 @@
+inline func static int gcc(bool ag3, string ag4){
+    return 0;
+} //test comment

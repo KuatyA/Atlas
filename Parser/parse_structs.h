@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SYMBOL_TO_INDEX(sym) ((sym) >= NT_PROGRAM ? (TOKEN_COMMENT + 1 + ((sym) - NT_PROGRAM)) : (sym))
 
@@ -475,6 +476,9 @@ typedef enum{
     AST_TERNARY_BODY,
     AST_FUNC_BODY,
 
+    AST_POSTFIX,
+    AST_PRIMARY,
+
     AST_PARAM,
     AST_TYPE,
     AST_MODIFIER,
@@ -547,8 +551,10 @@ typedef enum{
     OP_STAR,
     OP_SLASH,
     OP_MOD,
-    OP_UPLUS,
-    OP_UMINUS,
+    OP_DOT,
+    OP_SCOPE_RES,
+    OP_ARROW,
+    OP_LEFT_ARROW,
     OP_ASSIGN,
     OP_LSHIFT_ASSIGN,
     OP_RSHIFT_ASSIGN,
@@ -573,7 +579,8 @@ typedef enum{
     OP_STAR_EQ,
     OP_SLASH_EQ,
     OP_MOD_EQ,
-    OP_AWAIT
+    OP_AWAIT,
+    OP_NULL
 }Operations;
 
 typedef struct ASTNode{
@@ -681,5 +688,24 @@ static inline ASTNode *continue_break_return(ASTNode *trash1, ASTNode *trash2, A
     free(trash1);
     free(trash2);
     return n;
+}
+static inline ASTNode *postfix_node(ASTNode *l, ASTNode *r, ASTNode *trash, ASTNodeType t, Operations op){
+    ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
+    n->type = t; n->op = op; n->left = l;
+    ASTNode *field_node = (ASTNode *)calloc(1,  sizeof(ASTNode));
+    field_node->lexeme = strdup(r->lexeme);
+    n->right = field_node;
+    free(trash);
+    return n;
+}
+static inline ASTNode *make_lists(ASTNode *h, ASTNode *nm){
+    ASTNode *head = h; ASTNode *new_member = nm;
+    if (!new_member) { free(nm); return head; }
+    new_member->next = NULL;
+    if (!head) { free(nm); return new_member; }
+    ASTNode *curr = head;
+    while(curr->next != NULL){ curr = curr->next; }
+    curr->next = new_member;
+    return head;
 }
 #endif
