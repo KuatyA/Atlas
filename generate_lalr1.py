@@ -159,8 +159,11 @@ def generate_lalr1_tables(header_path: str, token_header_path: str = "Lexical An
 
     for state_idx, actions in parser.action.items():
         for token, act_val in actions.items():
-            if token in term_map:
-                t_idx = term_map[token]
+
+            target_token = "TOKEN_EOF" if token == '$end' else token
+
+            if target_token in term_map:
+                t_idx = term_map[target_token]
                 if act_val > 0:
                     action_table[state_idx][t_idx] = act_val + 1  # Shift
                 elif act_val < 0:

@@ -137,7 +137,7 @@ typedef struct{
 }GrammarRule;
 
 static GrammarRule GRAMMAR_RULES[] = {
-    {NT_PROGRAM, 2, "program -> decl_list TOKEN_EOF"},
+    {NT_PROGRAM, 1, "program -> decl_list"},
 
     {NT_EXPRESSION_STATEMENT, 2, "expr_stmt -> expr TOKEN_SEMICOLON"},
 
@@ -297,7 +297,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PUBLIC"},
     {NT_MODIFIER_LIST, 2, "modifier_list -> modifier_list modifier"},
     {NT_MODIFIER_LIST, 1, "modifier_list -> modifier"},
-    {NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
+    //{NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
 
     {NT_TYPE, 1, "type -> channel_type"},
     {NT_TYPE, 1, "type -> pointer_type"},
@@ -468,6 +468,7 @@ typedef enum{
     AST_CASE_LIST,
     AST_MATCH_LIST,
     AST_MODULE_LIST,
+    AST_STRUCT_BODY,
 
     AST_ASSIGNMENT,
     AST_ARRAY_ASSIGN,

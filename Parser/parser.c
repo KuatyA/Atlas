@@ -176,6 +176,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 94: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_STRUCT_BODY;
             node->left = popped_nodes[1];
             free(popped_nodes[0]);
             free(popped_nodes[2]);
@@ -184,6 +185,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 95: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_STRUCT_BODY;
             node->lexeme = strdup(popped_nodes[0]->lexeme);
             node->left = NULL;
             node->right = NULL;
@@ -193,6 +195,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 96: { //struct member list(long)
             ASTNode *head = popped_nodes[0];
+            head->type = AST_STRUCT_MEMBER_LIST;
             ASTNode *new_member = popped_nodes[1];
             if (!new_member) { free(popped_nodes[1]); return head; }
             new_member->next = NULL;
@@ -783,7 +786,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             return node;
         }
 
-        default: return NULL;
+        default: printf("DEFAULTED!"); return NULL;
     }
 }
 ASTNode *make_terminal_ast(TokenStruct *tokens){
@@ -869,7 +872,7 @@ ASTNode *fetch_tokens(TokenStream *stream){
             stack.top++;
             stack.items[stack.top].state = goto_state;
             stack.items[stack.top].node = reduced_node;
-        }else if(act == ACTION_ACCEPT || (current_token->token == TOKEN_EOF && stack.top >= 0 && stack.items[stack.top].node != NULL)){
+        }else if(act == ACTION_ACCEPT /*|| (current_token->token == TOKEN_EOF && stack.top >= 0 && stack.items[stack.top].node != NULL)*/){
             printf("[+] Parsing successful!\n");
             printf("accepted\n");
 
@@ -877,7 +880,6 @@ ASTNode *fetch_tokens(TokenStream *stream){
 
             free(stack.items);
             free(stream->tokens);
-           
             return final_ast_node;
         }else{
            fprintf(stderr, "[!] Syntax error at line %d near token '%s'\n", 
