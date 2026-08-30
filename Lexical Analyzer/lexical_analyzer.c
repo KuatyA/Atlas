@@ -16,15 +16,17 @@ void append_token(TokenStream *stream, TokenStruct token);
 static thread_local uint32_t lex_error_count = 0;
 
 void print_ast(ASTNode *ast, int depth){
-   if(!ast) return;
+   for (ASTNode *curr = ast; curr != NULL; curr = curr->next) {
+        printf("%*sType: %d", depth * 2, "", curr->type);
+        if (curr->lexeme) {
+            printf(" (%s)", curr->lexeme);
+        }
+        printf("\n");
 
-   printf("%*sType: %d \n", depth * 2, "", ast->type);
-
-   print_ast(ast->left, depth + 1);
-   print_ast(ast->right, depth + 1);
-   print_ast(ast->middle, depth + 1);
-   print_ast(ast->next, depth +1);
-
+        print_ast(curr->left, depth + 1);
+        print_ast(curr->right, depth + 1);
+        print_ast(curr->middle, depth + 1);
+    }
 }
 
 /*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),

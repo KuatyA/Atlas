@@ -165,6 +165,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_STRUCT_DECL;
             ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->type = AST_IDENTIFIER;
             name->lexeme = strdup(popped_nodes[1]->lexeme);
             name->left = NULL;
             name->right = NULL;
@@ -195,7 +196,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 96: { //struct member list(long)
             ASTNode *head = popped_nodes[0];
-            head->type = AST_STRUCT_MEMBER_LIST;
+            //head->type = AST_STRUCT_MEMBER_LIST;
             ASTNode *new_member = popped_nodes[1];
             if (!new_member) { free(popped_nodes[1]); return head; }
             new_member->next = NULL;
@@ -205,7 +206,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             curr->next = new_member;
             return head;
         }
-        case 97: return PASS_CLEAR_NEXT(popped_nodes);
+        case 97: return PASS(popped_nodes);
         case 98: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_ENUM_DECL;
@@ -302,6 +303,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             var_decl->type = AST_VAR_DECL;
                 ASTNode *assignment = calloc(1, sizeof(ASTNode));
                 assignment->type = AST_ASSIGNMENT;
+                popped_nodes[1]->type = AST_IDENTIFIER;      
                 assignment->left = popped_nodes[1];
                 assignment->right = popped_nodes[3];
                 assignment->op = OP_ASSIGN;
@@ -315,6 +317,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *var_decl = calloc(1, sizeof(ASTNode));
             var_decl->type = AST_VAR_DECL;
             var_decl->left = popped_nodes[0];
+            popped_nodes[1]->type = AST_IDENTIFIER;
             var_decl->right = popped_nodes[1];
             free(popped_nodes[2]);
             return var_decl;
@@ -328,6 +331,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
                     array_assign->type = AST_ARRAY_ASSIGN;
                     array_assign->left = popped_nodes[2];
                     array_assign->right = popped_nodes[4];
+                popped_nodes[1]->type = AST_IDENTIFIER;
                 assignment->left = popped_nodes[1];
                 assignment->right = array_assign;
                 assignment->op = OP_ASSIGN;
@@ -342,6 +346,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             var_decl->type = AST_VAR_DECL;
                 ASTNode *assignment = calloc(1, sizeof(ASTNode));
                 assignment->type = AST_ASSIGNMENT;
+                popped_nodes[1]->type = AST_IDENTIFIER;
                 assignment->left = popped_nodes[1];
                 assignment->right = popped_nodes[2];
                 assignment->op = OP_ASSIGN;
@@ -355,6 +360,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->type = AST_FUNC_DECL;
                 ASTNode *details = calloc(1, sizeof(ASTNode));
                 details->type = AST_FUNC_DETAILS;
+                popped_nodes[2]->type = AST_IDENTIFIER;
                 details->left = popped_nodes[2];
                 details->right = popped_nodes[4];
                 details->middle = popped_nodes[6];
@@ -370,6 +376,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->type = AST_FUNC_DECL;
                 ASTNode *details = calloc(1, sizeof(ASTNode));
                 details->type = AST_FUNC_DETAILS;
+                popped_nodes[3]->type = AST_IDENTIFIER;
                 details->left = popped_nodes[3];
                 details->right = popped_nodes[5];
                 details->middle = popped_nodes[7];
@@ -387,6 +394,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->type = AST_FUNC_DECL;
                 ASTNode *details = calloc(1, sizeof(ASTNode));
                 details->type = AST_FUNC_DETAILS;
+                popped_nodes[3]->type = AST_IDENTIFIER;
                 details->left = popped_nodes[3];
                 details->right = popped_nodes[5];
                 details->middle = popped_nodes[7];
@@ -501,15 +509,15 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_PARAM;
             node->left = popped_nodes[0];
-            if(popped_nodes[1] && popped_nodes[1]->name){
-                    node->name = strdup(popped_nodes[1]->name);
+            if(popped_nodes[1] && popped_nodes[1]->lexeme){
+                    node->lexeme = strdup(popped_nodes[1]->lexeme);
                 }
             free(popped_nodes[1]);
             return node;
         }
         case 158: return PASS(popped_nodes);
         case 159: return NULL;
-        case 160: return PASS(popped_nodes);
+        case 160: return PASS_CLEAR_NEXT(popped_nodes);
         case 161: {
             ASTNode *head = popped_nodes[0];
             ASTNode *new_param = popped_nodes[2];
