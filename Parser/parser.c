@@ -869,23 +869,17 @@ ASTNode *fetch_tokens(TokenStream *stream){
             stack.top++;
             stack.items[stack.top].state = goto_state;
             stack.items[stack.top].node = reduced_node;
-        }else if(act == ACTION_ACCEPT){
+        }else if(act == ACTION_ACCEPT || (current_token->token == TOKEN_EOF && stack.top >= 0 && stack.items[stack.top].node != NULL)){
             printf("[+] Parsing successful!\n");
+            printf("accepted\n");
 
             ASTNode *final_ast_node = stack.items[stack.top].node;
 
             free(stack.items);
             free(stream->tokens);
-
+           
             return final_ast_node;
         }else{
-            if (current_token->token == TOKEN_EOF && stack.top >= 0 && stack.items[stack.top].node != NULL) {
-                printf("[+] Parsing successful!\n");
-                ASTNode *final_ast_node = stack.items[stack.top].node;
-                free(stack.items);
-                free(stream->tokens);
-                return final_ast_node;
-            }
            fprintf(stderr, "[!] Syntax error at line %d near token '%s'\n", 
                     current_token->line, current_token->lexeme);
                     free(stack.items);
