@@ -792,6 +792,11 @@ ASTNode *make_terminal_ast(TokenStruct *tokens){
     node->op = (Operations)tokens->token;
     node->line = tokens->line;
     node->col = tokens->column;
+    if(tokens && tokens->lexeme){
+        node->lexeme = strdup(tokens->lexeme);
+    }else{
+        node->lexeme = NULL;
+    }
     switch (tokens->token){
         case TOKEN_IDENTIFIER: { if(tokens->lexeme) node->name = strdup(tokens->lexeme); break; }
         case TOKEN_STRING_LITERAL: { if(tokens->lexeme) node->name = strndup(tokens->lexeme, tokens->length); break; }
@@ -830,8 +835,6 @@ ASTNode *fetch_tokens(TokenStream *stream){
     stack.top = 0;
     stack.items[stack.top].state = 0;
     stack.items[stack.top].node = NULL;
-
-    
 
     for(;;){
         TokenStruct *current_token = get_current_token(stream);
