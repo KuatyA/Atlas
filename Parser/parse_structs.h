@@ -274,7 +274,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_DECLARATION_LIST, 2, "decl_list -> decl_list decl"},
     {NT_DECLARATION_LIST, 1, "decl_list -> decl"},
-    {NT_DECLARATION_LIST, 0, "decl_list -> "}, /*empty*/
+    {NT_DECLARATION, 1, "decl -> expr_stmt"},
 
     {NT_VAR_DECLARATION, 5, "var_decl -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_SEMICOLON"},
     {NT_VAR_DECLARATION, 3, "var_decl -> type TOKEN_IDENTIFIER TOKEN_SEMICOLON"},
@@ -297,7 +297,6 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_PUBLIC"},
     {NT_MODIFIER_LIST, 2, "modifier_list -> modifier_list modifier"},
     {NT_MODIFIER_LIST, 1, "modifier_list -> modifier"},
-    //{NT_MODIFIER_LIST, 0, "modifier_list -> "}, /*empty*/
 
     {NT_TYPE, 1, "type -> channel_type"},
     {NT_TYPE, 1, "type -> pointer_type"},
@@ -395,7 +394,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_SPAWN_STATEMENT, 3, "spawn_stmt -> TOKEN_KW_SPAWN expr TOKEN_SEMICOLON"},
     {NT_SELECT_STATEMENT, 2, "select_stmt -> TOKEN_KW_SELECT case_block"},
     {NT_LOCK_STATEMENT, 6, "lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block"},
-
+    {NT_PROGRAM, 0, "program -> "}
 };
 
 typedef enum{
