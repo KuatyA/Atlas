@@ -234,7 +234,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_STATEMENT, 1, "stmt -> defer_stmt"},
 
-    {NT_STATEMENT, 1, "stmt -> import_stmt"},
+    {NT_DECLARATION, 1, "decl->import_stmt"},
     {NT_STATEMENT, 1, "stmt -> module_stmt"},
 
     {NT_STATEMENT, 1, "stmt -> try_stmt"},
@@ -281,9 +281,9 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_VAR_DECLARATION, 6, "var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_ASSIGN array_init TOKEN_SEMICOLON"},
     {NT_VAR_DECLARATION, 4, "var_decl -> type TOKEN_IDENTIFIER array_struct TOKEN_SEMICOLON"},
 
-    {NT_FUNC_DECLARATION, 7, "func_decl -> TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
-    {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_ASYNC TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
-    {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_INLINE TOKEN_KW_FUNCTION type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
+    {NT_FUNC_DECLARATION, 7, "func_decl -> type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
+    {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_ASYNC type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
+    {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_INLINE type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
 
     {NT_TYPEALIAS_DECLARATION, 5, "typealias_decl -> TOKEN_KW_TYPEALIAS TOKEN_IDENTIFIER TOKEN_ASSIGN type TOKEN_SEMICOLON"},
 
@@ -382,7 +382,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_DEFER_STATEMENT, 5, "defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
    
-    {NT_IMPORT_STATEMENT, 5, "import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_QUOTATION TOKEN_IDENTIFIER TOKEN_QUOTATION"},
+    {NT_IMPORT_STATEMENT, 3, "import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER"},
     {NT_MODULE_STATEMENT, 3, "module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON"},
     {NT_MODULE_LIST, 3, "module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER"},
     {NT_MODULE_LIST, 1, "module_list -> TOKEN_IDENTIFIER"},

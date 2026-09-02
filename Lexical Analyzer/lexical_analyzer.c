@@ -245,20 +245,27 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     const char *start_str = *cursor;
 
                     while (**cursor != '"' && **cursor != '\0' && **cursor != '\n') {
-                        (*cursor)++;
-                        (*col)++;
+                       if (**cursor == '\\' && (*cursor)[1] != '\0') {
+                            (*cursor) += 2;
+                            (*col) += 2;
+                        } else {
+                            (*cursor)++;
+                            (*col)++;
+                        }
                     }
 
                     if (**cursor == '"') {
+                        uint32_t len = (uint32_t)(*cursor - start_str);
                         tok.token = TOKEN_STRING_LITERAL;
-                        tok.lexeme = start_str;
-                        tok.length = (uint32_t)(*cursor - start_str);
+                        tok.lexeme = strndup(start_str, len);
+                        tok.length = len;
                         (*cursor)++;
                         (*col)++;
                     } else {
+                        uint32_t len = (uint32_t)(*cursor - start_str);
                         tok.token = TOKEN_UNKNOWN;
-                        tok.lexeme = quote_start; // Safe pointer
-                        tok.length = (uint32_t)(*cursor - quote_start);
+                        tok.lexeme = strndup(quote_start, len); // Safe pointer
+                        tok.length = len;
                     }
                     return tok;
                 }
@@ -304,6 +311,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     }
                         tok.token = TOKEN_PLUS;
                         tok.length = 1;
+                        tok.lexeme = strndup(start, 1);
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -312,18 +320,21 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '='){
                         tok.token = TOKEN_MINUS_EQ;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }else if(start[1] == '>'){
                         tok.token = TOKEN_ARROW;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_MINUS;
                         tok.length = 1;
+                        tok.lexeme = strndup(start, 1);
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -332,12 +343,14 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '='){
                         tok.token = TOKEN_STAR_EQ;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_STAR;
-                        tok.length = 1;        
+                        tok.length = 1;   
+                        tok.lexeme = strndup(start, 1);     
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -346,6 +359,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if (start[1] == '=') {
                     tok.token = TOKEN_SLASH_EQ;
                     tok.length = 2;
+                    tok.lexeme = strndup(start, 2);
                     *cursor += 2;
                     *col += 2;
                     return tok;
@@ -356,10 +370,12 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     }
                     tok.token = TOKEN_COMMENT; 
                     tok.length = (uint32_t)(*cursor - start);
+                    tok.lexeme = strndup(start, tok.length);
                     return tok;
                 }
                     tok.token = TOKEN_SLASH;
                     tok.length = 1;
+                    tok.lexeme = strndup(start, 1);
                     (*cursor)++;
                     (*col)++;
                     return tok;
@@ -368,12 +384,14 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '='){
                         tok.token = TOKEN_MOD_EQ;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_MOD;
                         tok.length = 1;
+                        tok.lexeme = strndup(start, 1);
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -382,30 +400,35 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '<' && start[2] == '='){
                         tok.token = TOKEN_LSHIFT_ASSIGN;
                         tok.length = 3;
+                        tok.lexeme = strndup(start, 3);
                         *cursor += 3;
                         *col += 3;
                         return tok;
                     }else if(start[1] == '<'){
                         tok.token = TOKEN_LSHIFT;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }else if(start[1] == '='){
                         tok.token = TOKEN_LE;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }else if(start[1] == '-'){
                         tok.token = TOKEN_LEFT_ARROW;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_LT;
                         tok.length = 1;
+                        tok.lexeme = strndup(start, 1);
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -414,24 +437,28 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '>' && start[2] == '='){
                         tok.token = TOKEN_RSHIFT_ASSIGN;
                         tok.length = 3;
+                        tok.lexeme = strndup(start, 3);
                         *cursor += 3;
                         *col += 3;
                         return tok;
                     }else if(start[1] == '>'){
                         tok.token = TOKEN_RSHIFT;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }else if(start[1] == '='){
                         tok.token = TOKEN_GE;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_GT;
                         tok.length = 1;
+                        tok.lexeme = strndup(start, 1);
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -439,7 +466,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                 case '^':
                     tok.token = TOKEN_XOR;
                     tok.length = 1;
-                    
+                    tok.lexeme = strndup(start, 1);
                     (*cursor)++;
                     (*col)++;
                     return tok;
@@ -448,18 +475,21 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '&'){
                         tok.token = TOKEN_NAND;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }else if(start[1] == '='){
                         tok.token = TOKEN_NEQ;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_NOT;
                         tok.length = 1;
+                        tok.lexeme = strndup(start, 1);
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -467,7 +497,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                 case '~':
                     tok.token = TOKEN_BIT_NOT;
                     tok.length = 1;
-                    
+                    tok.lexeme = strndup(start, 1);
                     (*cursor)++;
                     (*col)++;
                     return tok;
@@ -475,7 +505,7 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                 case '?':
                     tok.token = TOKEN_QUESTION;
                     tok.length = 1;
-                    
+                    tok.lexeme = strndup(start, 1);
                     (*cursor)++;
                     (*col)++;
                     return tok;
@@ -484,12 +514,14 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '&'){
                         tok.token = TOKEN_AND;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_AMPERSAND;
-                        tok.length = 1;    
+                        tok.length = 1;
+                        tok.lexeme = strndup(start, 1);  
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -498,12 +530,14 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                     if(start[1] == '|'){
                         tok.token = TOKEN_OR;
                         tok.length = 2;
+                        tok.lexeme = strndup(start, 2);
                         *cursor += 2;
                         *col += 2;
                         return tok;
                     }
                         tok.token = TOKEN_BIT_OR;
-                        tok.length = 1;    
+                        tok.length = 1;
+                        tok.lexeme = strndup(start, 1);    
                         (*cursor)++;
                         (*col)++;
                         return tok;
@@ -715,7 +749,6 @@ void initialize_hash_table(void){
     insert_keyword("break", TOKEN_KW_BREAK, 5);
     insert_keyword("continue", TOKEN_KW_CONTINUE, 8);
     insert_keyword("match", TOKEN_KW_MATCH, 5);
-    insert_keyword("func", TOKEN_KW_FUNCTION, 4);
 
     //memory thingys
     insert_keyword("NULL", TOKEN_KW_NULL, 4);

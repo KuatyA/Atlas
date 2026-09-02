@@ -19,7 +19,6 @@ int main(int argc, char* argv[]){
         fprintf(stderr, "ERROR: Unknown file type %s\n Expected file type: \".atl\"\n", argv[1]);
         return 1;
     }
-
     //initialize the tables
     initialize_char_table();
     initialize_hash_table();

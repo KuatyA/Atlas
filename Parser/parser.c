@@ -360,15 +360,14 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->type = AST_FUNC_DECL;
                 ASTNode *details = calloc(1, sizeof(ASTNode));
                 details->type = AST_FUNC_DETAILS;
-                popped_nodes[2]->type = AST_IDENTIFIER;
-                details->left = popped_nodes[2];
-                details->right = popped_nodes[4];
-                details->middle = popped_nodes[6];
-            func_decl->left = popped_nodes[1];
+                popped_nodes[1]->type = AST_IDENTIFIER;
+                details->left = popped_nodes[1];
+                details->right = popped_nodes[3];
+                details->middle = popped_nodes[5];
+            func_decl->left = popped_nodes[0];
             func_decl->right = details;
-            free(popped_nodes[0]);
-            free(popped_nodes[3]);
-            free(popped_nodes[5]);
+            free(popped_nodes[2]);
+            free(popped_nodes[4]);
             return func_decl;
         }
         case 114: {
@@ -376,17 +375,16 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->type = AST_FUNC_DECL;
                 ASTNode *details = calloc(1, sizeof(ASTNode));
                 details->type = AST_FUNC_DETAILS;
-                popped_nodes[3]->type = AST_IDENTIFIER;
-                details->left = popped_nodes[3];
-                details->right = popped_nodes[5];
-                details->middle = popped_nodes[7];
-            func_decl->left = popped_nodes[2];
+                popped_nodes[2]->type = AST_IDENTIFIER;
+                details->left = popped_nodes[2];
+                details->right = popped_nodes[4];
+                details->middle = popped_nodes[6];
+            func_decl->left = popped_nodes[1];
             func_decl->right = details;
             func_decl->type_info.flag |= F_ASYNC;
             free(popped_nodes[0]);
-            free(popped_nodes[1]);
-            free(popped_nodes[4]);
-            free(popped_nodes[6]);
+            free(popped_nodes[3]);
+            free(popped_nodes[5]);
             return func_decl;
         }
         case 115: {
@@ -394,17 +392,16 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             func_decl->type = AST_FUNC_DECL;
                 ASTNode *details = calloc(1, sizeof(ASTNode));
                 details->type = AST_FUNC_DETAILS;
-                popped_nodes[3]->type = AST_IDENTIFIER;
-                details->left = popped_nodes[3];
-                details->right = popped_nodes[5];
-                details->middle = popped_nodes[7];
-            func_decl->left = popped_nodes[2];
+                popped_nodes[2]->type = AST_IDENTIFIER;
+                details->left = popped_nodes[2];
+                details->right = popped_nodes[4];
+                details->middle = popped_nodes[6];
+            func_decl->left = popped_nodes[1];
             func_decl->right = details;
             func_decl->type_info.flag |= F_INLINE;
             free(popped_nodes[0]);
-            free(popped_nodes[1]);
-            free(popped_nodes[4]);
-            free(popped_nodes[6]);
+            free(popped_nodes[3]);
+            free(popped_nodes[5]);
             return func_decl;
         }
         case 116: {
@@ -712,14 +709,13 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_IMPORT_STMT;
             ASTNode *name = calloc(1, sizeof(ASTNode));
-            name->lexeme = strdup(popped_nodes[3]->lexeme);
+            name->type = AST_IDENTIFIER;
+            name->lexeme = strdup(popped_nodes[2]->lexeme);
             name->left = name->right = NULL;
             node->left = name;
             free(popped_nodes[0]);
             free(popped_nodes[1]);
-            free(popped_nodes[3]);
             free(popped_nodes[2]);
-            free(popped_nodes[4]);
             return node;
         }
         case 200:  {

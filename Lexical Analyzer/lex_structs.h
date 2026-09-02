@@ -41,7 +41,6 @@ typedef enum Tokens{
     TOKEN_KW_BREAK, //break a block of code from executing further
     TOKEN_KW_CONTINUE, //skip that specific iteration
     TOKEN_KW_MATCH, //to match the structure of data
-    TOKEN_KW_FUNCTION, //function keyword
 
     TOKEN_KW_NULL, //null pointer
     TOKEN_KW_DEFER, //defer / procrastinate an arenas destruction
