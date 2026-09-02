@@ -15,20 +15,6 @@ void append_token(TokenStream *stream, TokenStruct token);
 
 static thread_local uint32_t lex_error_count = 0;
 
-void print_ast(ASTNode *ast, int depth){
-   for (ASTNode *curr = ast; curr != NULL; curr = curr->next) {
-        printf("%*sType: %d", depth * 2, "", curr->type);
-        if (curr->lexeme) {
-            printf(" (%s)", curr->lexeme);
-        }
-        printf("\n");
-
-        print_ast(curr->left, depth + 1);
-        print_ast(curr->right, depth + 1);
-        print_ast(curr->middle, depth + 1);
-    }
-}
-
 /*Ok so lets start with the main function. Its called the "parse_file". I want it to parse(obviously),
 make up each of the strings and send them to the "generate_tokens" function. I want to avoid doing anything else 
 in this function. No error handlings or logic to differentiate identifiers from other syntax just parsing and sending.*/

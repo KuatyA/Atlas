@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "lex_structs.h"
 #include "../Parser/parser.h"
+#include "../Semantic Analyzer/semantic_analyzer.h"
 
 extern FileQueue queue;
 extern TokenStruct token_struct;
