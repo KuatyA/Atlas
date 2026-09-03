@@ -886,8 +886,8 @@ ASTNode *fetch_tokens(TokenStream *stream){
             free(stream->tokens);
             return final_ast_node;
         }else{
-           fprintf(stderr, "[!] Syntax error at line %d near token '%s'\n", 
-                    current_token->line, current_token->lexeme);
+           fprintf(stderr, "[!] Syntax error at line %d, column %d, near token '%s'\n", 
+                    current_token->line, current_token->column, current_token->lexeme);
                     free(stack.items);
                     free(stream->tokens);
                     return NULL;

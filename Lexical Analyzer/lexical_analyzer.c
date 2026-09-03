@@ -67,9 +67,6 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
        TokenStruct tok = generate_token(&src, &line, &col);
 
        if (tok.token == TOKEN_COMMENT) continue;
-       if(tok.token == TOKEN_UNKNOWN){
-            lex_error_handler(&ctx, tok);
-       }
 
         append_token(&stream, tok);
     }
@@ -77,14 +74,7 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
     TokenStruct eof_tok = { .token = TOKEN_EOF, .lexeme = src, .length = 0, .line = line, .column = col };
     append_token(&stream, eof_tok); 
 
-    int status = lex_error_handler(&ctx, eof_tok);
-    
-
-    if (status != 0) {
-        free(stream.tokens);
-        free(src_buf);
-        return; 
-    }
+   
     stream.read_idx = 0;
 
     if (stream.count == 0) {
@@ -99,29 +89,6 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
     print_ast(ast, 0);
 }
 
-/*lets continue with the error handler, the name speaks for itself. It will handle errors(shocking!). The main idea is that
-when a string gets flagged as a TOKEN_UNKNOWN, i will check what error it has and print an error message. HOWEVER, the handler 
-will not stop the program immediately.Instead, it will have a counter system. It will wait until it receives the TOKEN_EOF
-and if the counter is bigger than 0, it will exit with 1.*/
-int lex_error_handler(LexerContext *ctx,TokenStruct tok){
-    ctx->error_count++;
-    if (tok.token == TOKEN_UNKNOWN) {
-        lex_error_count++;
-        fprintf(stderr, "Lexical Error [%u:%u]: Unrecognized character '%.*s' (0x%02X)\n", 
-                tok.line, tok.column, tok.length, tok.lexeme, (unsigned char)*tok.lexeme);
-        return 0;
-    }
-
-    if (tok.token == TOKEN_EOF) {
-        if (lex_error_count > 0) {
-            fprintf(stderr, "Lexing failed with %u errors.\n", lex_error_count);
-            return 1; // Signal failure to the caller
-        }
-        return 0; // Clean exit
-    }
-
-    return 0;
-}
 
 /*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
 just be a little confusing at worst. IDEK if string_buf is the way to go tbh.(update, string_buf was NOT the way to go)*/
