@@ -234,7 +234,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_STATEMENT, 1, "stmt -> defer_stmt"},
 
-    {NT_DECLARATION, 1, "decl->import_stmt"},
+    {NT_STATEMENT, 1, "stmt->import_stmt"},
     {NT_STATEMENT, 1, "stmt -> module_stmt"},
 
     {NT_STATEMENT, 1, "stmt -> try_stmt"},
@@ -285,7 +285,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_ASYNC type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
     {NT_FUNC_DECLARATION, 8, "func_decl -> TOKEN_KW_INLINE type TOKEN_IDENTIFIER TOKEN_LPAREN param_list TOKEN_RPAREN func_suffix"},
 
-    {NT_TYPEALIAS_DECLARATION, 5, "typealias_decl -> TOKEN_KW_TYPEALIAS TOKEN_IDENTIFIER TOKEN_ASSIGN type TOKEN_SEMICOLON"},
+    {NT_TYPEALIAS_DECLARATION, 5, "typealias_decl -> TOKEN_KW_TYPEALIAS TOKEN_TYPE_IDENTIFIER TOKEN_ASSIGN type TOKEN_SEMICOLON"},
 
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_CONST"},
     {NT_MODIFIER, 1, "modifier -> TOKEN_KW_MUT"},
@@ -321,7 +321,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_BASE_TYPE, 2, "base_type -> modifier_list TOKEN_KW_UNION"},
     {NT_BASE_TYPE, 2, "base_type -> modifier_list TOKEN_KW_VOID"},
     {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_MUTEX"},
-    {NT_BASE_TYPE, 2, "base_type -> modifier_list TOKEN_IDENTIFIER"},
+    {NT_BASE_TYPE, 2, "base_type -> modifier_list TOKEN_TYPE_IDENTIFIER"},
 
     {NT_FACTOR, 1, "factor -> TOKEN_INT_LITERAL"},
     {NT_FACTOR, 1, "factor -> TOKEN_FLOAT_LITERAL"},
@@ -382,7 +382,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_DEFER_STATEMENT, 5, "defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
    
-    {NT_IMPORT_STATEMENT, 3, "import_stmt -> TOKEN_GT TOKEN_KW_IMPORT TOKEN_IDENTIFIER"},
+    {NT_IMPORT_STATEMENT, 3, "import_stmt -> TOKEN_HASH TOKEN_KW_IMPORT TOKEN_IDENTIFIER"},
     {NT_MODULE_STATEMENT, 3, "module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON"},
     {NT_MODULE_LIST, 3, "module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER"},
     {NT_MODULE_LIST, 1, "module_list -> TOKEN_IDENTIFIER"},
@@ -394,7 +394,25 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_SPAWN_STATEMENT, 3, "spawn_stmt -> TOKEN_KW_SPAWN expr TOKEN_SEMICOLON"},
     {NT_SELECT_STATEMENT, 2, "select_stmt -> TOKEN_KW_SELECT case_block"},
     {NT_LOCK_STATEMENT, 6, "lock_stmt -> TOKEN_KW_LOCK TOKEN_LPAREN expr TOKEN_RPAREN block"},
-    {NT_PROGRAM, 0, "program -> "}
+    {NT_PROGRAM, 0, "program -> "},
+
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_INT"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_SHORT"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_LONG"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_BYTE"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_FLOAT"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_DOUBLE"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_CHAR"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_STRING"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_BOOL"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_KW_VOID"},
+    {NT_BASE_TYPE, 1, "base_type -> TOKEN_TYPE_IDENTIFIER"},
+
+    {NT_DECLARATION, 1, "decl -> import_stmt"},
+    {NT_STATEMENT, 1, "stmt -> typealias_decl"},
+
+    {NT_ASSIGNMENT, 3, "assignment -> unary TOKEN_LSHIFT assignment"},
+    {NT_ASSIGNMENT, 3, "assignment -> unary TOKEN_RSHIFT assignment"},
 };
 
 typedef enum{
@@ -483,6 +501,7 @@ typedef enum{
     AST_TYPE,
     AST_MODIFIER,
     AST_IDENTIFIER,
+    AST_TYPE_IDENTIFIER,
     AST_INITIALIZER,
     AST_BLOCK,
     AST_CASE_BLOCK,
@@ -556,6 +575,8 @@ typedef enum{
     OP_ARROW,
     OP_LEFT_ARROW,
     OP_ASSIGN,
+    OP_LSHIFT,
+    OP_RSHIFT,
     OP_LSHIFT_ASSIGN,
     OP_RSHIFT_ASSIGN,
     OP_OR,
@@ -693,6 +714,7 @@ static inline ASTNode *postfix_node(ASTNode *l, ASTNode *r, ASTNode *trash, ASTN
     ASTNode *n = (ASTNode *)calloc(1, sizeof(ASTNode));
     n->type = t; n->op = op; n->left = l;
     ASTNode *field_node = (ASTNode *)calloc(1,  sizeof(ASTNode));
+    field_node->type = AST_IDENTIFIER;
     field_node->lexeme = strdup(r->lexeme);
     n->right = field_node;
     free(trash);

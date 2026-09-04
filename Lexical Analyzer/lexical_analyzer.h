@@ -14,7 +14,7 @@ extern TokenStruct token_struct;
 
 //initialize the functions except the helpers here.
 void lexer(const char *filetype);
-TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col);
+TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, TokenStream *stream);
 
 //initialize hashing functions here.
 static uint32_t hash_string(const char *string, uint32_t len);

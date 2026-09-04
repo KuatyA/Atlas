@@ -91,7 +91,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 55: return use_2_trash_2(popped_nodes[1], popped_nodes[3], popped_nodes[0], popped_nodes[2], AST_CAST_EXPR);
         case 56: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
-            node->type = AST_PRIMARY;
+            node->type = AST_IDENTIFIER;
             node->lexeme = strdup(popped_nodes[0]->lexeme);
             return node;
         }
@@ -407,6 +407,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 116: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_TYPEALIAS_DECL;
+            popped_nodes[1]->type = AST_TYPE_IDENTIFIER;
             node->left = popped_nodes[1];
             node->right = popped_nodes[3];
             node->op = OP_ASSIGN;
@@ -473,7 +474,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 147: {
             ASTNode *mod_node = popped_nodes[0];
                 ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE;
+                node->type = AST_TYPE_IDENTIFIER;
                 node->type_info.p_type = PT_CUSTOM;
                 if(popped_nodes[1] && popped_nodes[1]->name){
                     node->name = strdup(popped_nodes[1]->name);
@@ -789,6 +790,30 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             return node;
         }
         case 209: return NULL;
+        case 210: return SET_SIMPLE_TYPE(popped_nodes, PT_INT);
+        case 211: return SET_SIMPLE_TYPE(popped_nodes, PT_SHORT);
+        case 212: return SET_SIMPLE_TYPE(popped_nodes, PT_LONG);
+        case 213: return SET_SIMPLE_TYPE(popped_nodes, PT_BYTE);
+        case 214: return SET_SIMPLE_TYPE(popped_nodes, PT_FLOAT);
+        case 215: return SET_SIMPLE_TYPE(popped_nodes, PT_DOUBLE);
+        case 216: return SET_SIMPLE_TYPE(popped_nodes, PT_CHAR);
+        case 217: return SET_SIMPLE_TYPE(popped_nodes, PT_STRING);
+        case 218: return SET_SIMPLE_TYPE(popped_nodes, PT_BOOL);
+        case 219: return SET_SIMPLE_TYPE(popped_nodes, PT_VOID);
+        case 220: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_TYPE_IDENTIFIER;
+            node->type_info.p_type = PT_CUSTOM;
+            if(popped_nodes[0] && popped_nodes[0]->lexeme){
+                node->lexeme = strdup(popped_nodes[0]->lexeme);
+            }
+            free(popped_nodes[0]);
+            return node;
+        }
+        case 221: return PASS(popped_nodes);
+        case 222: return PASS(popped_nodes);
+        case 223: return ASSIGN(popped_nodes, OP_LSHIFT);
+        case 224: return ASSIGN(popped_nodes, OP_RSHIFT);
 
         default: printf("DEFAULTED!"); return NULL;
     }

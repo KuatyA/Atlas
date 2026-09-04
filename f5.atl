@@ -1,3 +1,6 @@
-priite int a(float arg1, arg3){
-    
+typealias a = int;
+
+void func(){
+ a ident = 0;
+ a + b;
 }

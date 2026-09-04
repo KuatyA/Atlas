@@ -1,3 +1,4 @@
+#include "lex_structs.h"
 #define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
@@ -64,7 +65,7 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
         src++;
         continue;
        }
-       TokenStruct tok = generate_token(&src, &line, &col);
+       TokenStruct tok = generate_token(&src, &line, &col, &stream);
 
        if (tok.token == TOKEN_COMMENT) continue;
 
@@ -92,7 +93,8 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
 
 /*idk if returning int for the generate_token will work but i have and enum structure for the tokens table so maybe it will 
 just be a little confusing at worst. IDEK if string_buf is the way to go tbh.(update, string_buf was NOT the way to go)*/
-TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
+TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, TokenStream *stream){
+        TokenStruct previous_token = stream->tokens[stream->count - 1];
         TokenStruct tok;
         const char *start = *cursor;
         char c = *start;
@@ -527,6 +529,18 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         while(char_table[(unsigned char)*p] & (CHAR_ALPHA | CHAR_DIGIT)){
                             p++;
                         }
+                        if(previous_token.token == TOKEN_KW_TYPEALIAS){
+                        printf("checked");
+                        uint32_t len = (uint32_t)(p - start);
+                        TokenType kw = lookup_token(start, len);
+                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_TYPE_IDENTIFIER;
+                        tok.length = len;
+                        tok.lexeme = strndup(start, len);
+                        *cursor += len;
+                        *col += len;
+                        return tok;
+                        }else if(previous_token.token == TOKEN_IDENTIFIER){
+                        stream->tokens[stream->count -1].token = TOKEN_TYPE_IDENTIFIER;
                         uint32_t len = (uint32_t)(p - start);
                         TokenType kw = lookup_token(start, len);
                         tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
@@ -535,6 +549,16 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col){
                         *cursor += len;
                         *col += len;
                         return tok;
+                        }else{
+                        uint32_t len = (uint32_t)(p - start);
+                        TokenType kw = lookup_token(start, len);
+                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
+                        tok.length = len;
+                        tok.lexeme = strndup(start, len);
+                        *cursor += len;
+                        *col += len;
+                        return tok; 
+                        }
                     }
                     if(char_table[(unsigned char)c] & CHAR_DIGIT){
                         const char *p = start;

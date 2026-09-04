@@ -8,6 +8,7 @@ typedef enum Tokens{
     TOKEN_EOF, //end of file
     TOKEN_UNKNOWN, //unknown string / character
     TOKEN_IDENTIFIER, //identifiers ex: function names, variable names
+    TOKEN_TYPE_IDENTIFIER,
 
     TOKEN_KW_INT, //int keyword
     TOKEN_KW_SHORT, //short keyword
