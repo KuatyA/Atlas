@@ -87,7 +87,8 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
     //free memory(for now).
     ASTNode *ast = fetch_tokens(&stream);
     free(src_buf);
-    print_ast(ast, 0);
+    semantics(ast);
+    
 }
 
 

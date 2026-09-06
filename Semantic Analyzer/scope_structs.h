@@ -2,7 +2,6 @@
 #define SCOPE_STRUCTS
 
 #include "../Parser/parse_structs.h"
-#include <regex>
 
 typedef enum{
     SYM_VAR,
@@ -22,6 +21,7 @@ typedef struct{
 typedef struct Scope{
     SymbolTable *symbols;
     struct Scope *parent;
+    uint32_t block_level;
     enum { SCOPE_GLOBAL, SCOPE_LOCAL, SCOPE_FUNCTION, SCOPE_BLOCK }ScopeLevel;
 }Scope;
 

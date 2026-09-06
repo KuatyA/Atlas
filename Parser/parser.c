@@ -238,7 +238,11 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 100: { //enum member list(long)
             ASTNode *head = popped_nodes[0];
+            head->type = AST_ENUM_MEMBER;
+            head->lexeme = strdup(popped_nodes[0]->lexeme);
             ASTNode *new_member = popped_nodes[2];
+            new_member->type = AST_ENUM_MEMBER;
+            new_member->lexeme = strdup(popped_nodes[2]->lexeme);
             if (!new_member) { free(popped_nodes[1]); return head; }
             new_member->next = NULL;
             if (!head) { free(popped_nodes[1]); return new_member; }
@@ -248,7 +252,11 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             free(popped_nodes[1]);
             return head;
         }
-        case 101: return PASS_CLEAR_NEXT(popped_nodes); //enum member list(base)
+        case 101: {
+            popped_nodes[0]->type = AST_ENUM_MEMBER;
+            popped_nodes[0]->next = NULL;
+            return popped_nodes[0];
+        } //enum member list(base)
         case 102: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_UNION_DECL;
