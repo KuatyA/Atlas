@@ -446,7 +446,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 126: return PASS(popped_nodes);
         case 127: return PASS(popped_nodes);
         case 128: return PASS(popped_nodes);
-        case 129: {  //parser rule 34 ( ͡° ͜ʖ ͡°)
+        case 129: {
             ASTNode *node = popped_nodes[0];
             node->type_info.pointer_level++;
             free(popped_nodes[1]);
@@ -481,18 +481,32 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 146: return SET_SIMPLE_TYPE(popped_nodes, PT_MUTEX);
         case 147: {
             ASTNode *mod_node = popped_nodes[0];
-                ASTNode *node = calloc(1, sizeof(ASTNode));
-                node->type = AST_TYPE_IDENTIFIER;
-                node->type_info.p_type = PT_CUSTOM;
-                if(popped_nodes[1] && popped_nodes[1]->name){
-                    node->name = strdup(popped_nodes[1]->name);
-                }
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            ASTNode *curr = mod_node;
+            node->type = AST_TYPE_IDENTIFIER;
+            node->type_info.p_type = PT_CUSTOM;
+            if(popped_nodes[1] && popped_nodes[1]->name){
+                node->name = strdup(popped_nodes[1]->name);
+            }
             if(mod_node != NULL){
-                node->type_info.modifier |= mod_node->type_info.modifier;
-                node->type_info.qualifiers |= mod_node->type_info.qualifiers;
+                while(curr != NULL){
+                    ASTNode *next = curr->next;
+                    if(curr->type_info.qualifiers){
+                        node->type_info.qualifiers |= curr->type_info.qualifiers;
+                    }
+                    if(curr->type_info.storage_class){
+                        node->type_info.storage_class |= curr->type_info.storage_class;
+                    }
+                    if(curr->type_info.visibility){
+                        node->type_info.visibility |= curr->type_info.visibility;
+                    }
+                    if(curr != popped_nodes[1]) free(curr);
+                curr = next;
+            }
                 free(mod_node);
             }
             free(popped_nodes[1]);
+            free(curr);
             return node;
         }
         case 148: return MUTATE_AST_TERMINAL(popped_nodes, AST_INT_LITERAL);

@@ -7,6 +7,14 @@ void print_ast(ASTNode *ast, int depth){
         if (curr->lexeme) {
             printf(" (%s)", curr->lexeme);
         }
+        if(curr->type_info.flag || curr->type_info.qualifiers ||
+           curr->type_info.visibility || curr->type_info.storage_class){
+            printf(" Flag:(%d) Qualifier:(%d) Visibility:(%d) Storage Class:(%d)", 
+                curr->type_info.flag,
+                curr->type_info.qualifiers,
+                curr->type_info.visibility,
+                curr->type_info.storage_class);
+        }
         printf("\n");
 
         print_ast(curr->left, depth + 1);
@@ -15,7 +23,49 @@ void print_ast(ASTNode *ast, int depth){
     }
 
 }
-
+const char *primitive_type_to_string(PrimitiveType pt){
+    switch(pt){
+        case PT_INT: return "'int'";
+        case PT_SHORT: return "'short'";
+        case PT_LONG: return "'long'";
+        case PT_BYTE: return "'byte'";
+        case PT_FLOAT: return "'float'";
+        case PT_DOUBLE: return "'double'";
+        case PT_CHAR: return "'char'";
+        case PT_STRING: return "'string'";
+        case PT_BOOL: return "'bool'";
+        case PT_STRUCT: return "'struct'";
+        case PT_UNION: return "'union'";
+        case PT_ENUM: return "'enum'";
+        case PT_VOID: return "'void'";
+        case PT_MUTEX: return "'mutex'";
+        case PT_CUSTOM: return "'custom'";
+    }
+}
+const char *flag_to_string(Flags f){
+    switch(f){
+        case F_NONE: return NULL;
+        case F_ASYNC: return "'async'";
+        case F_CHANNEL: return "'channel'";
+        case F_INLINE: return "'inline'";
+        case F_REFERENCE: return "'reference'";
+    }
+}
+const char *storage_class_to_string(StorageClass sc){
+    switch(sc){
+        case SC_NONE: return NULL;
+        case SC_ATOMIC: return "'atomic'";
+        case SC_STATIC: return "'static'";
+    }
+}
+const char *visibility_to_string(VisibilitySpecifiers vs){
+    switch(vs){
+        case VS_NONE: return NULL;
+        case VS_PRIVATE: return "'private'";
+        case VS_PUBLIC: return "'public'";
+        case VS_SHARED: return "'shared'";
+    }
+}
 const char *type_to_string(ASTNodeType type){
     switch(type){
         case AST_PROGRAM: return "program";
@@ -92,8 +142,21 @@ const char *type_to_string(ASTNodeType type){
           break;
         }
 }
+const char *type_qualifier_to_string(TypeQualfiers q){
+    switch(q){
+        case TQ_CONST: return "'const'";
+        case TQ_MUT: return "'mut'";
+        case TQ_VOLATILE: return "'voaltile'";
+        case TQ_NONE: return NULL;
+    }
+}
 CompilationUnit *handle_module(ASTNode *node){
    VisibilitySpecifiers level = node->type_info.visibility;
+   switch(level){
+    case VS_PRIVATE: {
+        
+    }
+   }
 }
 void semantics(ASTNode *root_ast){
 

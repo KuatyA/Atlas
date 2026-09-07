@@ -17,9 +17,9 @@
 #define ASSIGN(p, o) make_bin(p[0], p[2], p[1], AST_ASSIGNMENT, o)
 
 #define MODIFIER_Q(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
-#define MODIFIER_VS(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
-#define MODIFIER_SC(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
-#define MODIFIER_M(p, t_info) make_mod_q(p[0], AST_MODIFIER, t_info)
+#define MODIFIER_VS(p, t_info) make_mod_v(p[0], AST_MODIFIER, t_info)
+#define MODIFIER_SC(p, t_info) make_mod_sc(p[0], AST_MODIFIER, t_info)
+#define MODIFIER_M(p, t_info) make_mod_m(p[0], AST_MODIFIER, t_info)
 
 #define SET_TYPE(p, p_type) make_type(p[0], p[1], p_type)
 #define SET_SIMPLE_TYPE(p, p_type) make_type(NULL, p[0], p_type)
@@ -678,15 +678,24 @@ static inline ASTNode *make_mod_m(ASTNode *p, ASTNodeType t, uint32_t t_info){
 static inline ASTNode *make_type(ASTNode *mn, ASTNode *kw, PrimitiveType p_type){
     ASTNode *mod_node = mn;
     ASTNode *node = (ASTNode *)calloc(1, sizeof(ASTNode));
+    ASTNode *curr = mn;
     node->type = AST_TYPE;
     node->type_info.p_type = p_type;
-    if(mod_node != NULL){
-        node->type_info.modifier |= mod_node->type_info.modifier;
-        node->type_info.qualifiers |= mod_node->type_info.qualifiers;
-        if (mod_node != kw) {
-            free(mod_node);
-        }
+        while(curr != NULL){
+            ASTNode *next = curr->next;
+            if(curr->type_info.qualifiers){
+                node->type_info.qualifiers |= curr->type_info.qualifiers;
+            }
+            if(curr->type_info.storage_class){
+                node->type_info.storage_class |= curr->type_info.storage_class;
+            }
+            if(curr->type_info.visibility){
+                node->type_info.visibility |= curr->type_info.visibility;
+            }
+            if(curr != kw) free(curr);
+        curr = next;
     }
+
     if (kw != NULL && kw != mod_node) {
         free(kw);
     }

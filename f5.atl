@@ -1,6 +1,6 @@
 typealias a = int;
 
-void func(){
+async volatile static private void func(){
  a ident = 0;
  a + b;
 }
