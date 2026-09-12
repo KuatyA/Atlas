@@ -22,7 +22,6 @@ int main(int argc, char* argv[]){
     //initialize the tables
     initialize_char_table();
     initialize_hash_table();
-
     //start making queue
     queue.files = &argv[1];
     queue.total_files = argc - 1;

@@ -25,6 +25,8 @@
 #define SET_SIMPLE_TYPE(p, p_type) make_type(NULL, p[0], p_type)
 #define MUTATE_AST_TERMINAL(p, new_type) (p[0]->type = (new_type), p[0])
 
+#define CREMENT(p, op) crement(p[0], p[1], p[2], op)
+
 #define FREE_NULL(p) (free(p[0]), (ASTNode *)NULL)
 
 typedef enum{
@@ -126,8 +128,6 @@ typedef enum{
     NT_SELECT_STATEMENT,
     NT_LOCK_STATEMENT,
 
-
-
 }NonTerminal;
 
 typedef struct{
@@ -208,7 +208,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_POSTFIX, 3, "postfix -> postfix TOKEN_ARROW TOKEN_IDENTIFIER"},
     {NT_POSTFIX, 3, "postfix -> postfix TOKEN_LEFT_ARROW TOKEN_IDENTIFIER"},
 
-    {NT_EXPRESSION, 4, "expr -> TOKEN_KW_CAST type TOKEN_ARROW expr"},
+    {NT_ASSIGNMENT, 4, "assignment -> TOKEN_KW_CAST type TOKEN_CAST_ARROW assignment"},
 
     {NT_PRIMARY, 1, "primary -> TOKEN_IDENTIFIER"},
     {NT_PRIMARY, 1, "primary -> factor"},
@@ -369,8 +369,8 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_FOR_STATEMENT, 5, "for_stmt -> TOKEN_KW_FOR TOKEN_LPAREN for_init TOKEN_RPAREN stmt"},
     {NT_FOR_INIT, 8, "for_init -> type TOKEN_IDENTIFIER TOKEN_ASSIGN expr TOKEN_COMMA expr TOKEN_COMMA expr"},
     {NT_SWITCH_STATEMENT, 5, "switch_stmt -> TOKEN_KW_SWITCH TOKEN_LPAREN expr TOKEN_RPAREN case_block"},
-    {NT_CASE_STATEMENT, 6, "case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON"},
-    {NT_DEFAULT_STMT, 5, "default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON block TOKEN_KW_BREAK TOKEN_SEMICOLON"},
+    {NT_CASE_STATEMENT, 4, "case_stmt -> TOKEN_KW_CASE expr TOKEN_COLON stmt_list"},
+    {NT_DEFAULT_STMT, 3, "default_stmt -> TOKEN_KW_DEFAULT TOKEN_COLON stmt_list"},
     {NT_CONTINUE_STATEMENT, 2, "continue_stmt -> TOKEN_KW_CONTINUE TOKEN_SEMICOLON"},
     {NT_BREAK_STATEMENT, 2, "break_stmt -> TOKEN_KW_BREAK TOKEN_SEMICOLON"},
     {NT_CASE_LIST, 2, "case_list -> case_list case_stmt"},
@@ -413,6 +413,11 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_ASSIGNMENT, 3, "assignment -> unary TOKEN_LSHIFT assignment"},
     {NT_ASSIGNMENT, 3, "assignment -> unary TOKEN_RSHIFT assignment"},
+
+    {NT_BIT_OR, 4, "bit_or -> bit_or TOKEN_BIT_OR TOKEN_ASSIGN xor"},
+    {NT_ADDITIVE, 3, "additive -> additive TOKEN_PLUS TOKEN_PLUS"},
+    {NT_ADDITIVE, 3, "additive -> additive TOKEN_MINUS TOKEN_MINUS"},
+
 };
 
 typedef enum{
@@ -598,7 +603,10 @@ typedef enum{
     OP_SLASH_EQ,
     OP_MOD_EQ,
     OP_AWAIT,
-    OP_NULL
+    OP_NULL,
+    OP_BIT_OR_ASSIGN,
+    OP_PLUS_PLUS,
+    OP_MINUS_MINUS,
 }Operations;
 
 typedef struct ASTNode{
@@ -735,5 +743,12 @@ static inline ASTNode *make_lists(ASTNode *h, ASTNode *nm){
     while(curr->next != NULL){ curr = curr->next; }
     curr->next = new_member;
     return head;
+}
+static inline ASTNode *crement(ASTNode *l, ASTNode *trash1, ASTNode *trash2, Operations op){
+    ASTNode *node = (ASTNode *)calloc(1, sizeof(ASTNode));
+    node->type = AST_UNARY_EXPR; node->op = op; node->left = l;
+    free(trash1);
+    free(trash2);
+    return node;
 }
 #endif

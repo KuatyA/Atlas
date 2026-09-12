@@ -87,7 +87,7 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
     //free memory(for now).
     ASTNode *ast = fetch_tokens(&stream);
     free(src_buf);
-    print_ast(ast, 0);
+    //print_ast(ast, 0);
     semantics(ast);
     
 }
@@ -274,7 +274,14 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, T
                         return tok;
                 break;
                 case '-':
-                    if(start[1] == '='){
+                    if(start[1] == '>' && start[2] == '>'){
+                        tok.token = TOKEN_CAST_ARROW;
+                        tok.length = 3;
+                        tok.lexeme = strndup(start, 3);
+                        *cursor += 3;
+                        *col += 3;
+                        return tok;
+                    }else if(start[1] == '='){
                         tok.token = TOKEN_MINUS_EQ;
                         tok.length = 2;
                         tok.lexeme = strndup(start, 2);
@@ -531,35 +538,48 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, T
                         while(char_table[(unsigned char)*p] & (CHAR_ALPHA | CHAR_DIGIT)){
                             p++;
                         }
-                        if(previous_token.token == TOKEN_KW_TYPEALIAS){
-                        printf("checked");
-                        uint32_t len = (uint32_t)(p - start);
-                        TokenType kw = lookup_token(start, len);
-                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_TYPE_IDENTIFIER;
-                        tok.length = len;
-                        tok.lexeme = strndup(start, len);
-                        *cursor += len;
-                        *col += len;
-                        return tok;
-                        }else if(previous_token.token == TOKEN_IDENTIFIER){
-                        stream->tokens[stream->count -1].token = TOKEN_TYPE_IDENTIFIER;
-                        uint32_t len = (uint32_t)(p - start);
-                        TokenType kw = lookup_token(start, len);
-                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
-                        tok.length = len;
-                        tok.lexeme = strndup(start, len);
-                        *cursor += len;
-                        *col += len;
-                        return tok;
-                        }else{
-                        uint32_t len = (uint32_t)(p - start);
-                        TokenType kw = lookup_token(start, len);
-                        tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
-                        tok.length = len;
-                        tok.lexeme = strndup(start, len);
-                        *cursor += len;
-                        *col += len;
-                        return tok; 
+                        switch(previous_token.token){
+                            case TOKEN_KW_TYPEALIAS: {
+                                uint32_t len = (uint32_t)(p - start);
+                                TokenType kw = lookup_token(start, len);
+                                tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_TYPE_IDENTIFIER;
+                                tok.length = len;
+                                tok.lexeme = strndup(start, len);
+                                *cursor += len;
+                                *col += len;
+                                return tok;
+                            }
+                            case TOKEN_IDENTIFIER:{
+                                stream->tokens[stream->count -1].token = TOKEN_TYPE_IDENTIFIER;
+                                uint32_t len = (uint32_t)(p - start);
+                                TokenType kw = lookup_token(start, len);
+                                tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
+                                tok.length = len;
+                                tok.lexeme = strndup(start, len);
+                                *cursor += len;
+                                *col += len;
+                                return tok;
+                            }
+                            case TOKEN_KW_CAST:{
+                                uint32_t len = (uint32_t)(p - start);
+                                TokenType kw = lookup_token(start, len);
+                                tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_TYPE_IDENTIFIER;
+                                tok.length = len;
+                                tok.lexeme = strndup(start, len);
+                                *cursor += len;
+                                *col += len;
+                                return tok;
+                            }
+                            default:{
+                                uint32_t len = (uint32_t)(p - start);
+                                TokenType kw = lookup_token(start, len);
+                                tok.token = (kw != TOKEN_UNKNOWN) ? kw : TOKEN_IDENTIFIER;
+                                tok.length = len;
+                                tok.lexeme = strndup(start, len);
+                                *cursor += len;
+                                *col += len;
+                                return tok; 
+                            }
                         }
                     }
                     if(char_table[(unsigned char)c] & CHAR_DIGIT){

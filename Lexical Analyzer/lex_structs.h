@@ -125,6 +125,7 @@ typedef enum Tokens{
     TOKEN_ARROW, // "->"
     TOKEN_FAT_ARROW, // "=>" used in match arms ex: 5 => return
     TOKEN_LEFT_ARROW, // use to send or receive on a channel "<-"
+    TOKEN_CAST_ARROW, // "->>"
     
     TOKEN_COMMENT
 }TokenType;

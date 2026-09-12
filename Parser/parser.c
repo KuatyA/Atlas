@@ -670,8 +670,6 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             node->right = popped_nodes[3];
             free(popped_nodes[0]);
             free(popped_nodes[2]);
-            free(popped_nodes[4]);
-            free(popped_nodes[5]);
             return node;
         }
         case 189: {
@@ -680,8 +678,6 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             node->left = popped_nodes[2];
             free(popped_nodes[0]);
             free(popped_nodes[1]);
-            free(popped_nodes[3]);
-            free(popped_nodes[4]);
             return node;
         }
         case 190: return continue_break_return(popped_nodes[0], popped_nodes[1], AST_CONTINUE_STMT);
@@ -836,6 +832,18 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 222: return PASS(popped_nodes);
         case 223: return ASSIGN(popped_nodes, OP_LSHIFT);
         case 224: return ASSIGN(popped_nodes, OP_RSHIFT);
+        case 225: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_BINARY_EXPR;
+            node->left = popped_nodes[0];
+            node->right = popped_nodes[3];
+            node->op = OP_BIT_OR_ASSIGN;
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
+            return node;
+        }
+       case 226: return CREMENT(popped_nodes, OP_PLUS_PLUS);
+       case 227: return CREMENT(popped_nodes, OP_MINUS_MINUS);
 
         default: printf("DEFAULTED!"); return NULL;
     }
