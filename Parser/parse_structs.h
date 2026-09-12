@@ -382,7 +382,7 @@ static GrammarRule GRAMMAR_RULES[] = {
 
     {NT_DEFER_STATEMENT, 5, "defer_stmt -> TOKEN_KW_DEFER TOKEN_LPAREN expr TOKEN_RPAREN TOKEN_SEMICOLON"},
    
-    {NT_IMPORT_STATEMENT, 3, "import_stmt -> TOKEN_HASH TOKEN_KW_IMPORT TOKEN_IDENTIFIER"},
+    {NT_IMPORT_STATEMENT, 5, "import_stmt -> TOKEN_HASH TOKEN_KW_IMPORT TOKEN_IMPORT_PATH"}, // the rule is #import "library_name" NOT #import library_name
     {NT_MODULE_STATEMENT, 3, "module_stmt -> TOKEN_KW_MODULE module_list TOKEN_SEMICOLON"},
     {NT_MODULE_LIST, 3, "module_list -> module_list TOKEN_SCOPE_RES TOKEN_IDENTIFIER"},
     {NT_MODULE_LIST, 1, "module_list -> TOKEN_IDENTIFIER"},
@@ -417,7 +417,7 @@ static GrammarRule GRAMMAR_RULES[] = {
     {NT_BIT_OR, 4, "bit_or -> bit_or TOKEN_BIT_OR TOKEN_ASSIGN xor"},
     {NT_ADDITIVE, 3, "additive -> additive TOKEN_PLUS TOKEN_PLUS"},
     {NT_ADDITIVE, 3, "additive -> additive TOKEN_MINUS TOKEN_MINUS"},
-
+    {NT_PARAM, 3, "param -> type TOKEN_IDENTIFIER array_struct"},
 };
 
 typedef enum{
@@ -507,6 +507,7 @@ typedef enum{
     AST_MODIFIER,
     AST_IDENTIFIER,
     AST_TYPE_IDENTIFIER,
+    AST_IMPORT_PATH,
     AST_BLOCK,
     AST_CASE_BLOCK,
     AST_MATCH_BLOCK,

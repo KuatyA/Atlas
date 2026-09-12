@@ -728,7 +728,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_IMPORT_STMT;
             ASTNode *name = calloc(1, sizeof(ASTNode));
-            name->type = AST_IDENTIFIER;
+            name->type = AST_IMPORT_PATH;
             name->lexeme = strdup(popped_nodes[2]->lexeme);
             name->left = name->right = NULL;
             node->left = name;
@@ -844,6 +844,19 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
        case 226: return CREMENT(popped_nodes, OP_PLUS_PLUS);
        case 227: return CREMENT(popped_nodes, OP_MINUS_MINUS);
+       case 288: {
+            ASTNode *node = calloc(1, sizeof(ASTNode));
+            node->type = AST_PARAM;
+            node->left = popped_nodes[0];
+            ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->type = AST_IDENTIFIER;
+            name->lexeme = strdup(popped_nodes[1]->lexeme);
+            node->right = name;
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
+            free(popped_nodes[3]);
+            return node;
+       }
 
         default: printf("DEFAULTED!"); return NULL;
     }

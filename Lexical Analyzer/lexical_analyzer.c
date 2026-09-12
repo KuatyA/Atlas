@@ -1,5 +1,4 @@
 #include "lex_structs.h"
-#define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -87,7 +86,7 @@ void lexer(const char *filename /*would 'filetype' be accurate? idk might change
     //free memory(for now).
     ASTNode *ast = fetch_tokens(&stream);
     free(src_buf);
-    //print_ast(ast, 0);
+    print_ast(ast, 0);
     semantics(ast);
     
 }
@@ -211,14 +210,21 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, T
                         }
                     }
 
-                    if (**cursor == '"') {
+                    if (**cursor == '"' && previous_token.token == TOKEN_KW_IMPORT) {
+                        uint32_t len = (uint32_t)(*cursor - start_str);
+                        tok.token = TOKEN_IMPORT_PATH;
+                        tok.lexeme = strndup(start_str, len);
+                        tok.length = len;
+                        (*cursor)++;
+                        (*col)++;
+                    } else if(**cursor == '"'){
                         uint32_t len = (uint32_t)(*cursor - start_str);
                         tok.token = TOKEN_STRING_LITERAL;
                         tok.lexeme = strndup(start_str, len);
                         tok.length = len;
                         (*cursor)++;
                         (*col)++;
-                    } else {
+                    }else{
                         uint32_t len = (uint32_t)(*cursor - start_str);
                         tok.token = TOKEN_UNKNOWN;
                         tok.lexeme = strndup(quote_start, len); // Safe pointer
