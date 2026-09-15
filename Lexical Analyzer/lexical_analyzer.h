@@ -8,13 +8,14 @@
 #include "lex_structs.h"
 #include "../Parser/parser.h"
 #include "../Semantic Analyzer/semantic_analyzer.h"
+#include "../Prescanner/prescanner.h"
 
 extern FileQueue queue;
 extern TokenStruct token_struct;
 
 //initialize the functions except the helpers here.
 void lexer(const char *filetype);
-TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, TokenStream *stream);
+TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, TokenStream *stream, IdentifierTable *table);
 
 //initialize hashing functions here.
 static uint32_t hash_string(const char *string, uint32_t len);

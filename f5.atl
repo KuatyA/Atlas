@@ -1,11 +1,6 @@
-#import "../Parser/randomlib.atl"
 
-int main(int args, int argv[]){
-    private int a = 10;
-    private int b;
-    for(int i = 0, i < a, i++){
-        a = a + b;
-    }
-    print(a);
-    return 0;
-}
+union Onion{
+    int a;
+    string b;
+    char c;
+};

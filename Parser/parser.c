@@ -1,4 +1,5 @@
-#define _POSIX_C_SOURCE 200809L
+#include <string.h>
+
 
 #include "parser.h"
 #include "parse_structs.h"
@@ -67,7 +68,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 31: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_LE);
         case 32: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_GE);
         case 33: return PASS(popped_nodes);
-        case 34: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_PLUS);
+        case 34: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_PLUS); // ( ͡° ͜ʖ ͡°)
         case 35: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_MINUS);
         case 36: return PASS(popped_nodes);
         case 37: return BINARY(popped_nodes, AST_BINARY_EXPR, OP_STAR);
@@ -154,7 +155,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             curr->next = new_member;
             return head;
         }
-        case 86: return PASS_CLEAR_NEXT(popped_nodes);
+        case 86: return PASS_CLEAR_NEXT(popped_nodes); //bad apple
         case 87: return PASS(popped_nodes);
         case 88: return PASS(popped_nodes);
         case 89: return PASS(popped_nodes);
@@ -165,7 +166,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_STRUCT_DECL;
             ASTNode *name = calloc(1, sizeof(ASTNode));
-            name->type = AST_IDENTIFIER;
+            name->type = AST_TYPE_IDENTIFIER;
             name->lexeme = strdup(popped_nodes[1]->lexeme);
             name->left = NULL;
             name->right = NULL;
@@ -211,6 +212,7 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_ENUM_DECL;
             ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->type = AST_TYPE_IDENTIFIER;
             name->lexeme = strdup(popped_nodes[1]->lexeme);
             node->left = name;
             node->right = popped_nodes[3];
@@ -225,6 +227,8 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_ENUM_DECL;
             ASTNode *l_name, *r_name = calloc(1, sizeof(ASTNode));
+            l_name->type = AST_TYPE_IDENTIFIER;
+            r_name->type = AST_IDENTIFIER;
             l_name->lexeme = strdup(popped_nodes[1]->lexeme);
             r_name->lexeme = strdup(popped_nodes[2]->lexeme);
             l_name->left = r_name->left = l_name->right = r_name->right = NULL;
@@ -260,11 +264,15 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 102: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_UNION_DECL;
+            ASTNode *name = calloc(1, sizeof(ASTNode));
+            name->type = AST_TYPE_IDENTIFIER;
+            name->lexeme = strdup(popped_nodes[1]->lexeme);
             node->type_info.p_type = PT_UNION;
-            node->left = popped_nodes[1];
+            node->left = name;
             node->right = popped_nodes[3];
             node->next = NULL;
             free(popped_nodes[0]);
+            free(popped_nodes[1]);
             free(popped_nodes[2]);
             free(popped_nodes[4]);
             free(popped_nodes[5]);
@@ -274,10 +282,18 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_UNION_DECL;
             node->type_info.p_type = PT_UNION;
-            node->left = popped_nodes[1];
-            node->right = popped_nodes[2];
-            node->next = NULL;
+            ASTNode *l_name = calloc(1, sizeof(ASTNode));
+            ASTNode *r_name = calloc(1, sizeof(ASTNode));
+            l_name->type = AST_TYPE_IDENTIFIER;
+            r_name->type = AST_IDENTIFIER;
+            l_name->lexeme = strdup(popped_nodes[1]->lexeme);
+            r_name->lexeme = strdup(popped_nodes[2]->lexeme);
+            l_name->left = r_name->left = l_name->right = r_name->right = NULL;
+            node->left = l_name;
+            node->right = r_name;
             free(popped_nodes[0]);
+            free(popped_nodes[1]);
+            free(popped_nodes[2]);
             free(popped_nodes[3]);
             return node;
         }
@@ -844,17 +860,13 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
        case 226: return CREMENT(popped_nodes, OP_PLUS_PLUS);
        case 227: return CREMENT(popped_nodes, OP_MINUS_MINUS);
-       case 288: {
+       case 228: {
             ASTNode *node = calloc(1, sizeof(ASTNode));
             node->type = AST_PARAM;
             node->left = popped_nodes[0];
-            ASTNode *name = calloc(1, sizeof(ASTNode));
-            name->type = AST_IDENTIFIER;
-            name->lexeme = strdup(popped_nodes[1]->lexeme);
-            node->right = name;
+            node->lexeme = strdup(popped_nodes[1]->lexeme);
+            node->right = popped_nodes[2];
             free(popped_nodes[1]);
-            free(popped_nodes[2]);
-            free(popped_nodes[3]);
             return node;
        }
 
