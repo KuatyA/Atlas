@@ -37,5 +37,17 @@ typedef struct{
     Scope *global_sym_table;
 }CompilationUnit;
 
+typedef enum{
+    LEFT,
+    MIDDLE,
+    RIGHT,
+    NEXT,
+}Position;
+
+typedef struct{
+    Position pos;
+    ASTNodeType type;
+}Expectations;
+
 
 #endif

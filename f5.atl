@@ -1,6 +1,12 @@
-
-union Onion{
-    int a;
-    string b;
-    char c;
-};
+int main(){
+    if(a + b == 8){
+        do_something_function(some_param, another_param);
+        return 0;
+    }else if(a + b == 3 && c != 'b'){
+        do_another_thing(some_param);
+        return 0;
+    }else{
+        do_new_thing(some_param);
+        return 0;
+    }
+}

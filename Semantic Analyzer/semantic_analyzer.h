@@ -2,6 +2,7 @@
 #define SEMANTICS_H
 
 #include "scope_structs.h"
+#include <stdbool.h>
 
 void print_ast(ASTNode *ast, int depth);
 void semantics(ASTNode *root_node);
@@ -19,5 +20,10 @@ const char *type_to_string(ASTNodeType type);
 const char *primitive_type_to_string(PrimitiveType pt);
 //handle the node to determine its scope
 CompilationUnit *handle_module(ASTNode *node);
+
+bool expects_implementation(const ASTNode *node, Expectations *rules, size_t count);
+
+#define EXPECTED_NODE_COUNT(...) (sizeof((Expectations[]){__VA_ARGS__})/sizeof(Expectations))
+#define expects(node, ...) expects_implementation((node), (Expectations[]){__VA_ARGS__}, EXPECTED_NODE_COUNT(__VA_ARGS__))
 
 #endif

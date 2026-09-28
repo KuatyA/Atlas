@@ -498,9 +498,11 @@ typedef enum{
     AST_FUNC_DETAILS,
     AST_TERNARY_BODY,
     AST_FUNC_BODY,
+    AST_FUNC_CALL,
 
     AST_POSTFIX,
     AST_PRIMARY,
+    AST_EXPR,
 
     AST_PARAM,
     AST_TYPE,

@@ -1,9 +1,13 @@
 #include "semantic_analyzer.h"
+#include "scope_structs.h"
 #include <stdio.h>
 
 void print_ast(ASTNode *ast, int depth){
    for (ASTNode *curr = ast; curr != NULL; curr = curr->next) {
         printf("%*sType: %d", depth * 2, "", curr->type);
+        if(curr->type == AST_TERMINAL){
+            printf(" here!");
+        }
         if (curr->lexeme) {
             printf(" (%s)", curr->lexeme);
         }
@@ -15,11 +19,14 @@ void print_ast(ASTNode *ast, int depth){
                 curr->type_info.visibility,
                 curr->type_info.storage_class);
         }
+        if(curr->next != NULL){
+            printf(" (%s)", curr->next->lexeme);
+        }
         printf("\n");
 
         print_ast(curr->left, depth + 1);
-        print_ast(curr->right, depth + 1);
         print_ast(curr->middle, depth + 1);
+        print_ast(curr->right, depth + 1);
     }
 
 }
@@ -142,6 +149,7 @@ const char *type_to_string(ASTNodeType type){
           break;
         }
 }
+
 const char *type_qualifier_to_string(TypeQualfiers q){
     switch(q){
         case TQ_CONST: return "'const'";
@@ -158,6 +166,149 @@ CompilationUnit *handle_module(ASTNode *node){
     }
    }
 }
+int level = 0;
+int err_count = 0;
 void semantics(ASTNode *root_ast){
+    if(root_ast == NULL) return;
+    ASTNodeType type = root_ast->type;
+    switch(root_ast->type){
+        case AST_PROGRAM: {
+            if(level != 0){
+                fprintf(stderr, "ERROR: Multiple instances of %s starting point found.", type_to_string(type));
+                err_count++;
+                level++;
+                semantics(root_ast->left);
+                break;
+            }else{
+                level++;
+                semantics(root_ast->left);
+                break;
+            }
 
+        }
+        case AST_TERMINAL: {
+            fprintf(stderr, "ERROR: Node type is %s", type_to_string(type));
+            err_count++;
+            level++;
+            semantics(root_ast->left);
+            semantics(root_ast->middle);
+            semantics(root_ast->right);
+            semantics(root_ast->next);
+            break;
+        }
+        case AST_ARG_LIST: {
+            bool pass = expects(root_ast,
+            (Expectations){LEFT, AST_IDENTIFIER},
+            (Expectations){LEFT, AST_INT_LITERAL},
+            (Expectations){LEFT, AST_CHAR_LITERAL},
+            (Expectations){LEFT, AST_FLOAT_LITERAL},
+            (Expectations){LEFT, AST_BOOL_LITERAL},
+            (Expectations){LEFT, AST_STRING_LITERAL},
+            (Expectations){LEFT, AST_NULL_LITERAL}
+        );
+           if(pass == true) semantics(root_ast->left);
+           else{
+            fprintf(stderr, "ERROR: Type Mismatch at line: %d, col: %d, expected %s, got %s", 
+                    root_ast->left->line, 
+                    root_ast->left->col, 
+                    type_to_string(rules[i].type), 
+                    type_to_string(acc_type));
+           }     
+        }
+        case AST_INIT_LIST:
+        case AST_PARAM_LIST:
+        case AST_DECL_LIST:
+        case AST_EXPR_LIST:
+        case AST_STMT_LIST:
+        case AST_STRUCT_MEMBER_LIST:
+        case AST_ENUM_MEMBER_LIST:
+        case AST_UNION_MEMBER_LIST:
+        case AST_CASE_LIST:
+        case AST_MATCH_LIST:
+        case AST_MODULE_LIST:
+        case AST_STRUCT_BODY:
+        case AST_ASSIGNMENT:
+        case AST_ARRAY_ASSIGN:
+        case AST_FUNC_DETAILS:
+        case AST_TERNARY_BODY:
+        case AST_FUNC_BODY:
+        case AST_POSTFIX:
+        case AST_PRIMARY:
+        case AST_PARAM:
+        case AST_TYPE:
+        case AST_MODIFIER:
+        case AST_IDENTIFIER:
+        case AST_TYPE_IDENTIFIER:
+        case AST_IMPORT_PATH:
+        case AST_BLOCK:
+        case AST_CASE_BLOCK:
+        case AST_MATCH_BLOCK:
+        case AST_INT_LITERAL:
+        case AST_FLOAT_LITERAL:
+        case AST_CHAR_LITERAL:
+        case AST_STRING_LITERAL:
+        case AST_BOOL_LITERAL:
+        case AST_NULL_LITERAL:
+        case AST_VAR_DECL:
+        case AST_FUNC_DECL:
+        case AST_STRUCT_DECL:
+        case AST_ENUM_DECL:
+        case AST_UNION_DECL:
+        case AST_TYPEALIAS_DECL:
+        case AST_BINARY_EXPR:
+        case AST_UNARY_EXPR:
+        case AST_CALL_EXPR:
+        case AST_TERNARY_EXPR:
+        case AST_CAST_EXPR:
+        case AST_ARRAY_INIT:
+        case AST_ARRAY_STRUCT:
+        case AST_FOR_INIT:
+        case AST_ENUM_MEMBER:
+        case AST_EXPR_STMT:
+        case AST_IF_STMT:
+        case AST_WHILE_STMT:
+        case AST_DO_STMT:
+        case AST_FOR_STMT:
+        case AST_SWITCH_STMT:
+        case AST_CASE_STMT:
+        case AST_RETURN_STMT:
+        case AST_BREAK_STMT:
+        case AST_DEFAULT_STMT:
+        case AST_DEFAULT_MATCH_STMT:
+        case AST_CONTINUE_STMT:
+        case AST_MATCH_STMT:
+        case AST_MATCH_ARM:
+        case AST_DEFER_STMT:
+        case AST_IMPORT_STMT:
+        case AST_MODULE_STMT:
+        case AST_TRY_STMT:
+        case AST_CATCH_STMT:
+        case AST_RAISE_STMT:
+        case AST_SPAWN_STMT:
+        case AST_SELECT_STMT:
+        case AST_LOCK_STMT:
+        case AST_FUNC_CALL:
+        case AST_EXPR:
+        default: 
+    }
+
+
+}
+bool expects_implementation(const ASTNode *node, Expectations *rules, size_t count){
+        if(!node) return false;
+        ASTNode *target = calloc(1, sizeof(ASTNode));
+        for(size_t i = 0; i < count; i++){
+            switch(rules[i].pos){
+                case LEFT: target = node->left; break;
+                case MIDDLE: target = node->middle; break;
+                case RIGHT: target = node->right; break;
+                case NEXT: target = node->next; break;
+            }
+            ASTNodeType acc_type = target->type;
+            if(acc_type != rules[i].type){
+                return false;
+            }
+        }
+        free(target);
+        return true;
 }

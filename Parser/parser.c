@@ -83,8 +83,8 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 46: return UNARY(popped_nodes, AST_UNARY_EXPR, OP_AWAIT);
         case 47: return PASS(popped_nodes);
         case 48: return PASS(popped_nodes);
-        case 49: return use_2_trash_2(popped_nodes[0], popped_nodes[2], popped_nodes[1], popped_nodes[3], AST_POSTFIX);
-        case 50: return use_2_trash_2(popped_nodes[0], popped_nodes[2], popped_nodes[1], popped_nodes[3], AST_POSTFIX);
+        case 49: return use_2_trash_2(popped_nodes[0], popped_nodes[2], popped_nodes[1], popped_nodes[3], AST_FUNC_CALL);
+        case 50: return use_2_trash_2(popped_nodes[0], popped_nodes[2], popped_nodes[1], popped_nodes[3], AST_EXPR);
         case 51: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_DOT);
         case 52: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_SCOPE_RES);
         case 53: return postfix_node(popped_nodes[0], popped_nodes[2], popped_nodes[1], AST_POSTFIX, OP_ARROW);
@@ -112,16 +112,19 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 61: return NULL;
         case 62: return PASS_CLEAR_NEXT(popped_nodes);
         case 63: {
+            ASTNode *arg_list = calloc(1, sizeof(ASTNode));
+            arg_list->type = AST_ARG_LIST;
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[2];
-            if (!new_member) { free(popped_nodes[1]); return head; }
+            if (!new_member) { free(popped_nodes[1]); arg_list->left = head; return arg_list; }
             new_member->next = NULL;
-            if (!head) { free(popped_nodes[1]); return new_member; }
+            if (!head) { free(popped_nodes[1]); arg_list->left = new_member; return arg_list; }
             ASTNode *curr = head;
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_member;
             free(popped_nodes[1]);
-            return head;
+            arg_list->left = head;
+            return arg_list;
         }
         case 64: return PASS(popped_nodes);
         case 65: return PASS(popped_nodes);

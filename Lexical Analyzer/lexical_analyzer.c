@@ -518,10 +518,12 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, T
                         (*col)++;
                         return tok;
                 break;
-                case '\'':;
-                    const char *char_start = *cursor;
+                case '\'':{
+                    const char *quote_start = *cursor;
                     (*cursor)++;
                     (*col)++;
+                    const char *char_start = *cursor;
+                    
                     while (**cursor != '\'' && **cursor != '\n' && **cursor != '\0') {
                         if (**cursor == '\\' && (*cursor)[1] != '\0') {
                             (*cursor) += 2;
@@ -532,18 +534,21 @@ TokenStruct generate_token(const char **cursor, uint32_t *line, uint32_t *col, T
                         }
                     }
                     if (**cursor == '\'') {
+                        uint32_t len = (uint32_t)(*cursor - char_start);
+                        tok.token = TOKEN_CHAR_LITERAL;
+                        tok.lexeme = strndup(char_start, len);
+                        tok.length = len;
                         (*cursor)++;
                         (*col)++;
-                        tok.token = TOKEN_CHAR_LITERAL;
-                        tok.lexeme = char_start;
-                        tok.length = (size_t)(*cursor - char_start);
                     } else {
+                        uint32_t len = (uint32_t)(*cursor - char_start);
                         tok.token = TOKEN_UNKNOWN;
-                        tok.lexeme = char_start;
-                        tok.length = 1;
+                        tok.lexeme = strndup(quote_start, len);
+                        tok.length = len;
                     }
                     return tok;
                 break;
+            }
                 default:
                     if(char_table[(unsigned char)c] & CHAR_ALPHA){
                         const char *p = start;
