@@ -158,6 +158,7 @@ const char *type_qualifier_to_string(TypeQualfiers q){
         case TQ_NONE: return NULL;
     }
 }
+
 CompilationUnit *handle_module(ASTNode *node){
    VisibilitySpecifiers level = node->type_info.visibility;
    switch(level){
@@ -204,19 +205,32 @@ void semantics(ASTNode *root_ast){
             (Expectations){LEFT, AST_FLOAT_LITERAL},
             (Expectations){LEFT, AST_BOOL_LITERAL},
             (Expectations){LEFT, AST_STRING_LITERAL},
-            (Expectations){LEFT, AST_NULL_LITERAL}
+            (Expectations){LEFT, AST_NULL_LITERAL},
+            (Expectations){LEFT, AST_BINARY_EXPR}
         );
-           if(pass == true) semantics(root_ast->left);
-           else{
-            fprintf(stderr, "ERROR: Type Mismatch at line: %d, col: %d, expected %s, got %s", 
-                    root_ast->left->line, 
-                    root_ast->left->col, 
-                    type_to_string(rules[i].type), 
-                    type_to_string(acc_type));
-           }     
+            if(pass == true) semantics(root_ast->left);
+            else {err_count++; level++;}
+            break;
         }
-        case AST_INIT_LIST:
-        case AST_PARAM_LIST:
+        case AST_INIT_LIST: {
+            bool pass = expects(root_ast,
+            (Expectations){LEFT, AST_IDENTIFIER},
+            (Expectations){LEFT, AST_INT_LITERAL},
+            (Expectations){LEFT, AST_CHAR_LITERAL},
+            (Expectations){LEFT, AST_FLOAT_LITERAL},
+            (Expectations){LEFT, AST_BOOL_LITERAL},
+            (Expectations){LEFT, AST_STRING_LITERAL},
+            (Expectations){LEFT, AST_NULL_LITERAL},
+            (Expectations){LEFT, AST_BINARY_EXPR}
+        );
+            if(pass == true) semantics(root_ast->left);
+            else {err_count++; level++;}
+            break;
+        }
+        case AST_PARAM_LIST: {
+            bool pass = expects(root_ast, 
+            );
+        }
         case AST_DECL_LIST:
         case AST_EXPR_LIST:
         case AST_STMT_LIST:
@@ -306,6 +320,11 @@ bool expects_implementation(const ASTNode *node, Expectations *rules, size_t cou
             }
             ASTNodeType acc_type = target->type;
             if(acc_type != rules[i].type){
+                fprintf(stderr, "ERROR: Type Mismatch at line: %d, col: %d, expected %s, got %s", 
+                    target->left->line, 
+                    target->left->col, 
+                    type_to_string(rules[i].type), 
+                    type_to_string(acc_type));
                 return false;
             }
         }

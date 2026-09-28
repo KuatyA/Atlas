@@ -592,16 +592,19 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 172: return use_2_trash_2(NULL, NULL, popped_nodes[0], popped_nodes[1], AST_ARRAY_STRUCT);
         case 173: return use_2_trash_2(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_ARRAY_INIT);
         case 174: {
+            ASTNode *init_list = calloc(1, sizeof(ASTNode));
+            init_list->type = AST_INIT_LIST;
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[2];
-            if (!new_member) { free(popped_nodes[1]); return head; }
+            if (!new_member) { free(popped_nodes[1]); init_list->left = head; return init_list; }
             new_member->next = NULL;
-            if (!head) { free(popped_nodes[1]); return new_member; }
+            if (!head) { free(popped_nodes[1]); init_list->left = new_member; return init_list; }
             ASTNode *curr = head;
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_member;
             free(popped_nodes[1]);
-            return head;
+            init_list->left = head;
+            return init_list;
         }
         case 175: return PASS_CLEAR_NEXT(popped_nodes);
         case 176: return PASS(popped_nodes);
