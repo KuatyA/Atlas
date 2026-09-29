@@ -148,15 +148,17 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 83: return PASS(popped_nodes);
         case 84: return PASS(popped_nodes);
         case 85: {
+            ASTNode *stmt_list = calloc(1, sizeof(ASTNode));
+            stmt_list->type = AST_STMT_LIST;
             ASTNode *head = popped_nodes[0];
             ASTNode *new_member = popped_nodes[1];
-            if (!new_member) { free(popped_nodes[1]); return head; }
+            if (!new_member) { free(popped_nodes[1]); stmt_list->left = head; return stmt_list; }
             new_member->next = NULL;
-            if (!head) { free(popped_nodes[1]); return new_member; }
+            if (!head) { free(popped_nodes[1]); stmt_list->left = new_member; return stmt_list; }
             ASTNode *curr = head;
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_member;
-            return head;
+            return stmt_list;
         }
         case 86: return PASS_CLEAR_NEXT(popped_nodes); //bad apple
         case 87: return PASS(popped_nodes);

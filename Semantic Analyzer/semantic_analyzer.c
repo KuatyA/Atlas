@@ -261,10 +261,17 @@ void semantics(ASTNode *root_ast){
         }
         case AST_EXPR_LIST: {
             bool pass = expects(root_ast, 
-            (Expectations){LEFT, AST_EXPR},
-            (Expectations){MIDDLE, AST_EXPR},
-            (Expectations){RIGHT, AST_EXPR});
-
+            (Expectations){LEFT, AST_VAR_DECL},
+            (Expectations){MIDDLE, AST_BINARY_EXPR},
+            (Expectations){RIGHT, AST_UNARY_EXPR},
+            (Expectations){RIGHT, AST_BINARY_EXPR}
+        );
+            if(pass == true) {
+                semantics(root_ast->left);
+                semantics(root_ast->middle);
+                semantics(root_ast->right);
+            }else {err_count++; level++; }
+            break;
         }
         case AST_STMT_LIST:
         case AST_STRUCT_MEMBER_LIST:
