@@ -238,10 +238,34 @@ void semantics(ASTNode *root_ast){
         case AST_DECL_LIST: {
             bool pass = expects(root_ast,
             (Expectations){LEFT, AST_VAR_DECL},
-            (Expectations){LEFT, AST_VAR_DECL},
-            (Expectations){LEFT, AST_VAR_DECL},);
+            (Expectations){LEFT, AST_FUNC_DECL},
+            (Expectations){LEFT, AST_STRUCT_DECL},
+            (Expectations){LEFT, AST_TYPEALIAS_DECL},
+            (Expectations){LEFT, AST_ENUM_DECL},
+            (Expectations){LEFT, AST_UNION_DECL},
+            (Expectations){LEFT, AST_IMPORT_STMT},
+            (Expectations){LEFT, AST_EXPR_STMT},
+            (Expectations){LEFT, AST_TERNARY_EXPR},
+            (Expectations){LEFT, AST_BINARY_EXPR},
+            (Expectations){LEFT, AST_UNARY_EXPR},
+            (Expectations){LEFT, AST_FUNC_CALL},
+            (Expectations){LEFT, AST_EXPR},
+            (Expectations){LEFT, AST_POSTFIX},
+            (Expectations){LEFT, AST_PRIMARY},
+            (Expectations){LEFT, AST_IDENTIFIER},
+            (Expectations){LEFT, AST_NULL_LITERAL}
+        );
+            if(pass == 1) semantics(root_ast->left);
+            else {err_count++; level++;}
+            break;
         }
-        case AST_EXPR_LIST:
+        case AST_EXPR_LIST: {
+            bool pass = expects(root_ast, 
+            (Expectations){LEFT, AST_EXPR},
+            (Expectations){MIDDLE, AST_EXPR},
+            (Expectations){RIGHT, AST_EXPR});
+
+        }
         case AST_STMT_LIST:
         case AST_STRUCT_MEMBER_LIST:
         case AST_ENUM_MEMBER_LIST:
