@@ -313,15 +313,17 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         }
         case 105: return PASS_CLEAR_NEXT(popped_nodes); //union member list(base)
         case 106: {
-            ASTNode *list = popped_nodes[0];
+            ASTNode *decl_list = calloc(1, sizeof(ASTNode));
+            decl_list->type = AST_DECL_LIST;
+            ASTNode *head = popped_nodes[0];
             ASTNode *new_decl = popped_nodes[1];
-            if(!new_decl){ return list; }
+            if(!new_decl){ decl_list->left = head; return decl_list; }
             new_decl->next = NULL;
-            if(!list){ return new_decl; }
+            if(!list){ decl_list->left = new_decl; return decl_list; }
             ASTNode *curr = list;
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_decl;
-            return list;
+            return decl_list;
         }
         case 107: return PASS_CLEAR_NEXT(popped_nodes);
         case 108: return PASS(popped_nodes);
@@ -557,16 +559,18 @@ ASTNode *make_ast(int rule_id, ASTNode **popped_nodes){
         case 158: return NULL;
         case 159: return PASS_CLEAR_NEXT(popped_nodes);
         case 160: {
+            ASTNode *param_list = calloc(1, sizeof(ASTNode));
+            param_list->type = AST_PARAM_LIST;
             ASTNode *head = popped_nodes[0];
             ASTNode *new_param = popped_nodes[2];
-            if (!new_param) { free(popped_nodes[1]); return head; }
+            if (!new_param) { free(popped_nodes[1]); param_list->left = head; return param_list; }
             new_param->next = NULL;
-            if (!head) { free(popped_nodes[1]); return new_param; }
+            if (!head) { free(popped_nodes[1]); param_list->left = new_param; return param_list; }
             ASTNode *curr = head;
             while(curr->next != NULL){ curr = curr->next; }
             curr->next = new_param;
             free(popped_nodes[1]);
-            return head;
+            return param_list;
         }
         case 161: return use_2_trash_2(popped_nodes[1], NULL, popped_nodes[0], popped_nodes[2], AST_BLOCK);
         case 162: return use_2_trash_2(NULL, NULL, popped_nodes[0], popped_nodes[0], AST_BLOCK);

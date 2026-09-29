@@ -229,9 +229,18 @@ void semantics(ASTNode *root_ast){
         }
         case AST_PARAM_LIST: {
             bool pass = expects(root_ast, 
-            );
+            (Expectations){LEFT, AST_VAR_DECL}
+        );
+            if(pass == true) semantics(root_ast->left);
+            else {err_count++; level++;}
+            break;
         }
-        case AST_DECL_LIST:
+        case AST_DECL_LIST: {
+            bool pass = expects(root_ast,
+            (Expectations){LEFT, AST_VAR_DECL},
+            (Expectations){LEFT, AST_VAR_DECL},
+            (Expectations){LEFT, AST_VAR_DECL},);
+        }
         case AST_EXPR_LIST:
         case AST_STMT_LIST:
         case AST_STRUCT_MEMBER_LIST:
